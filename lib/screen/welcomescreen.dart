@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:passgen/provider/avatarselector_provider.dart';
 import 'package:passgen/provider/savepass_provider.dart';
 import 'package:passgen/provider/username_provider.dart';
 import 'package:passgen/screen/addavatar.dart';
@@ -30,7 +31,7 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final avatarInfo = ref.watch(userDetailProvider);
+    final avatarInfo = ref.watch(userprofileprovider);
 
     return Scaffold(
       body: Padding(
@@ -46,13 +47,9 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
                 context: context,
                 builder: (context) => const AddAvatar(),
               ),
-              child: CircleAvatar(radius: 50, child: Image.asset(avatarInfo)
-
-                  // Icon(
-                  //   Icons.add_photo_alternate_rounded,
-                  //   size: 50,
-                  // ),
-                  ),
+              child: CircleAvatar(
+                radius: 50, child: avatarInfo,
+              ),
             ),
             const SizedBox(height: 50),
             TextField(

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:passgen/data/avatar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:passgen/provider/avatarselector_provider.dart';
+import 'package:passgen/provider/savepass_provider.dart';
 import 'package:passgen/provider/username_provider.dart';
 
 class AddAvatar extends ConsumerStatefulWidget {
@@ -12,7 +14,7 @@ class AddAvatar extends ConsumerStatefulWidget {
 
 class _AddAvatarState extends ConsumerState<AddAvatar> {
   List<Color> avatarColors = List.generate(6, (index) => Colors.blue);
-  late int selectedAvatarIndex;
+  int selectedAvatarIndex = 0;
 
   void selectAvatar(int index) {
     setState(() {
@@ -25,7 +27,7 @@ class _AddAvatarState extends ConsumerState<AddAvatar> {
 
   void _saveAvatar() {
     ref
-        .read(userDetailProvider.notifier)
+        .read(userprofileprovider.notifier)
         .getUserAvatar(availableAvatar[selectedAvatarIndex]);
   }
 
@@ -66,7 +68,10 @@ class _AddAvatarState extends ConsumerState<AddAvatar> {
             ),
           ),
           ElevatedButton(
-            onPressed: _saveAvatar,
+            onPressed: () {
+              _saveAvatar();
+              Navigator.of(context).pop();
+            },
             style: ButtonStyle(
                 backgroundColor: MaterialStatePropertyAll(
                     Theme.of(context).colorScheme.primary.withOpacity(.7)),

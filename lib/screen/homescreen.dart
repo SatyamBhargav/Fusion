@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:passgen/provider/avatarselector_provider.dart';
 import 'package:passgen/provider/savepass_provider.dart';
 import 'package:passgen/provider/username_provider.dart';
 import 'package:passgen/screen/passgenscreen.dart';
@@ -18,6 +19,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget build(BuildContext context) {
     final passwordInfo = ref.watch(passcardprovider);
     final userNameDetail = ref.watch(userDetailProvider);
+    final userAvatarDetail = ref.watch(userprofileprovider);
 
     bool showFAB = MediaQuery.of(context).viewInsets.bottom != 0;
 
@@ -39,9 +41,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   const Spacer(),
-                  const CircleAvatar(
-                    child: Icon(Icons.person_3_sharp),
-                  )
+                  CircleAvatar(
+                    radius: 35,
+                    child: userAvatarDetail,
+                  ),
                 ],
               ),
             ),
