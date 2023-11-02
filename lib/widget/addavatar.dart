@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:passgen/data/avatar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:passgen/provider/avatarselector_provider.dart';
-import 'package:passgen/provider/savepass_provider.dart';
-import 'package:passgen/provider/username_provider.dart';
+
 
 class AddAvatar extends ConsumerStatefulWidget {
   const AddAvatar({super.key});

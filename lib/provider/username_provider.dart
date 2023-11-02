@@ -1,12 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class UsernameNotifier extends StateNotifier<String> {
-  UsernameNotifier() : super('');
+  UsernameNotifier() : super('Name');
 
   void getUserName(String userDetails) {
     state = userDetails;
   }
-
 }
 
 final userDetailProvider =

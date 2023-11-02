@@ -67,7 +67,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:passgen/screen/addavatar.dart';
+import 'package:passgen/screen/tabscreen.dart';
+import 'package:passgen/widget/addavatar.dart';
 import 'package:passgen/screen/homescreen.dart';
 import 'package:passgen/screen/welcomescreen.dart';
 
@@ -88,7 +89,8 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       // home: const HomeScreen(),
-      home: WelcomeScreen(),
+      // home: TabScreen(),
+      home: const WelcomeScreen(),
       // home: PassGen(),
       // home: AddAvatar(),
     );

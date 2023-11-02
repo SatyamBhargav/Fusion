@@ -1,9 +1,4 @@
-import 'dart:io';
-
-
 class UserDetails {
-  UserDetails({required this.name, required this.image});
+  UserDetails({required this.name});
   String name;
-  File image;
 }
-

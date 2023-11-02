@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:passgen/provider/avatarselector_provider.dart';
-import 'package:passgen/provider/savepass_provider.dart';
 import 'package:passgen/provider/username_provider.dart';
-import 'package:passgen/screen/addavatar.dart';
+import 'package:passgen/screen/tabscreen.dart';
+import 'package:passgen/widget/addavatar.dart';
 import 'package:passgen/screen/homescreen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -25,7 +25,7 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
     ref.read(userDetailProvider.notifier).getUserName(namecontroller.text);
     debugPrint(namecontroller.text);
     Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => const HomeScreen(),
+      builder: (context) => const TabScreen(),
     ));
   }
 
@@ -48,11 +48,13 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
                 builder: (context) => const AddAvatar(),
               ),
               child: CircleAvatar(
-                radius: 50, child: avatarInfo,
+                radius: 50,
+                child: avatarInfo,
               ),
             ),
             const SizedBox(height: 50),
             TextField(
+              textCapitalization: TextCapitalization.words,
               controller: namecontroller,
               textAlign: TextAlign.center,
               decoration: const InputDecoration(
@@ -62,7 +64,14 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
             ),
             const SizedBox(height: 50),
             ElevatedButton(
-                onPressed: _saveDetails, child: const Text('Welcome'))
+                style: ButtonStyle(
+                    backgroundColor: MaterialStatePropertyAll(
+                        Theme.of(context).colorScheme.primary.withOpacity(.8))),
+                onPressed: _saveDetails,
+                child: const Text(
+                  'Welcome',
+                  style: TextStyle(fontSize: 20, color: Colors.white),
+                ))
           ],
         ),
       ),
