@@ -1,5 +1,5 @@
 import 'package:passgen/model/passcard.dart';
-import 'package:riverpod/riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SavePasswordNotifier extends StateNotifier<List<PasswordCard>> {
   SavePasswordNotifier() : super([]);
@@ -9,6 +9,21 @@ class SavePasswordNotifier extends StateNotifier<List<PasswordCard>> {
     final passIsAdded = state.contains(passcard);
 
     state = [passcard, ...state];
+  }
+
+  void filtername(String pName) {
+    List<PasswordCard> result = [];
+    if (pName.isEmpty) {
+      result = state;
+    } else {
+      result = state
+          .where((element) => element.platformname
+              .toString()
+              .toLowerCase()
+              .contains(pName.toLowerCase()))
+          .toList();
+    }
+    state = result;
   }
 }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:passgen/model/passcard.dart';
 
 class PasswordList extends StatelessWidget {
@@ -23,12 +24,18 @@ class PasswordList extends StatelessWidget {
           ),
           title: Text(password[index].platformname),
           subtitle: Text(password[index].userid),
-          trailing: const Row(
+          trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.copy),
-              SizedBox(width: 10),
-              Icon(Icons.more_vert),
+              IconButton(
+                  onPressed: () async {
+                    await Clipboard.setData(
+                        ClipboardData(text: password[index].generatedpassword));
+                    // ignore: use_build_context_synchronously
+                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                  },
+                  icon: const Icon(Icons.copy)),
+              // const SizedBox(width: 10),
             ],
           ),
         ),

@@ -3,7 +3,6 @@ import 'package:passgen/provider/avatarselector_provider.dart';
 import 'package:passgen/provider/username_provider.dart';
 import 'package:passgen/screen/tabscreen.dart';
 import 'package:passgen/widget/addavatar.dart';
-import 'package:passgen/screen/homescreen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class WelcomeScreen extends ConsumerStatefulWidget {

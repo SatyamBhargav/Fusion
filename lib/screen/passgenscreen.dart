@@ -235,10 +235,7 @@ class _PassGenState extends ConsumerState<PassGenScreen> {
                       onPressed: () async {
                         await Clipboard.setData(ClipboardData(text: generate));
                         // ignore: use_build_context_synchronously
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                content: Text('Copied to clipboard.')));
-                        //Fluttertoast.showToast(msg: 'Copied to clipboard.');
+                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
                       },
                       style: const ButtonStyle(
                           padding: MaterialStatePropertyAll(EdgeInsets.only(
@@ -257,8 +254,11 @@ class _PassGenState extends ConsumerState<PassGenScreen> {
                               top: 20, bottom: 20, left: 30, right: 30))),
                       onPressed: () {
                         _savePassword();
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Password Saved.')));
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text('Password Saved.'),
+                          behavior: SnackBarBehavior.floating,
+                        ));
                       },
                       icon: const Icon(
                         Icons.save_outlined,

@@ -49,9 +49,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 40),
               child: Row(
                 children: [
-                  const Expanded(
+                  Expanded(
                     child: TextField(
-                      decoration: InputDecoration(
+                      onChanged: (value) =>
+                          ref.read(passcardprovider.notifier).filtername(value),
+                      decoration: const InputDecoration(
                           hintText: 'Search',
                           border: OutlineInputBorder(
                               borderRadius:
