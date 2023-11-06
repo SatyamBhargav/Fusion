@@ -8,19 +8,26 @@ import 'package:passgen/screen/welcomescreen.dart';
 
 void main() async {
   runApp(const ProviderScope(child: MyApp()));
-  // Initialize SavePasswordNotifier
-  // final savePasswordNotifier = SavePasswordNotifier();
+  /** 
+   // To check if table is created in database or not.
+   
+  Initialize SavePasswordNotifier
+  final savePasswordNotifier = SavePasswordNotifier();
 
-  // // Call checkDatabase to verify the database and table
-  // savePasswordNotifier.checkDatabase();
-  // await savePasswordNotifier.loaddetails();
-  // final dataWritten = await savePasswordNotifier.isDataWritten();
+  Call checkDatabase to verify the database and table
+  savePasswordNotifier.checkDatabase();
 
-  // if (dataWritten) {
-  //   print("Data is written to the table.");
-  // } else {
-  //   print("No data in the table.");
-  // }
+  // To check wether data is being written into the table or not.
+
+  await savePasswordNotifier.loaddetails();
+  final dataWritten = await savePasswordNotifier.isDataWritten();
+
+  if (dataWritten) {
+    print("Data is written to the table.");
+  } else {
+    print("No data in the table.");
+  }
+  */
 }
 
 class MyApp extends StatelessWidget {

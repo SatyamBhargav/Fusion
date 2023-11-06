@@ -1,9 +1,9 @@
 import 'package:passgen/model/passcard.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-// import 'package:path_provider/path_provider.dart' as syspath;
 import 'package:path/path.dart' as path;
 import 'package:sqflite/sqflite.dart' as sql;
 import 'package:sqflite/sqlite_api.dart';
+// import 'package:path_provider/path_provider.dart' as syspath;
 
 Future<Database> _openDatabase() async {
   final dbPath = await sql.getDatabasesPath();
@@ -51,44 +51,27 @@ class SavePasswordNotifier extends StateNotifier<List<PasswordCard>> {
     state = [passcard, ...state];
   }
 
-  // Future<void> checkDatabase() async {
-  //   final db = await _openDatabase();
+  void filtername(String pName) async {
+    final db = await _openDatabase();
+    List<Map<String, dynamic>> data;
 
-  //   try {
-  //     final tables = await db.query("sqlite_master", where: "type = 'table'");
-  //     if (tables.isNotEmpty) {
-  //       for (var table in tables) {
-  //         print("Table Name: ${table['name']}");
-  //       }
-  //     } else {
-  //       print("No tables found in the database.");
-  //     }
-  //   } catch (e) {
-  //     print("Database or table does not exist: $e");
-  //   }
-  // }
-
-  // Future<bool> isDataWritten() async {
-  //   final db = await _openDatabase();
-
-  //   final data = await db.query('user_Detail');
-
-  //   return data.isNotEmpty;
-  // }
-
-  void filtername(String pName) {
-    List<PasswordCard> result = [];
     if (pName.isEmpty) {
-      result = state;
+      data = await db.query('user_Detail');
     } else {
-      result = state
-          .where((element) => element.platformname
-              .toString()
-              .toLowerCase()
-              .contains(pName.toLowerCase()))
-          .toList();
+      data = await db.query('user_Detail',
+          where: 'platformName LIKE ?', whereArgs: ['%$pName%']);
     }
-    state = result;
+
+    final details = data
+        .map((row) => PasswordCard(
+            id: row['id'] as String,
+            platformname: row['platformName'] as String,
+            userid: row['userId'] as String,
+            length: row['length'] as num,
+            generatedpassword: row['genpassword'] as String))
+        .toList();
+
+    state = details;
   }
 }
 
@@ -96,3 +79,47 @@ final passcardprovider =
     StateNotifierProvider<SavePasswordNotifier, List<PasswordCard>>((ref) {
   return SavePasswordNotifier();
 });
+
+
+/**
+In the context of SQL queries, "platformName LIKE ?" is a SQL statement that uses the LIKE operator to perform a partial string matching or pattern matching. 
+The ? is a placeholder for a parameterized value that will be provided later. 
+Here's an explanation of how it works:
+platformName is the name of the column in the database table that you want to search.
+LIKE is an SQL operator used for pattern matching. It is typically used to match a specified pattern within a text field. 
+In this case, it is used to match a pattern within the platformName column.
+? is a parameter placeholder. It's often used in parameterized queries to safely insert values into the SQL query. 
+The actual value that should match the pattern will be provided separately when you execute the query.
+When you use ? as a placeholder, you can later bind a value to it using the whereArgs parameter in your SQL query function.
+ */
+
+
+ 
+/**
+  // Code for the main.dart
+
+    Future<void> checkDatabase() async {
+    final db = await _openDatabase();
+
+    try {
+      final tables = await db.query("sqlite_master", where: "type = 'table'");
+      if (tables.isNotEmpty) {
+        for (var table in tables) {
+          print("Table Name: ${table['name']}");
+        }
+      } else {
+        print("No tables found in the database.");
+      }
+    } catch (e) {
+      print("Database or table does not exist: $e");
+    }
+  }
+
+  Future<bool> isDataWritten() async {
+    final db = await _openDatabase();
+
+    final data = await db.query('user_Detail');
+
+    return data.isNotEmpty;
+  }
+ */

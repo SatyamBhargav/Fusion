@@ -62,25 +62,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           ref.read(passcardprovider.notifier).filtername(value),
                       decoration: const InputDecoration(
                           hintText: 'Search',
+                          prefixIcon: Icon(Icons.search),
                           border: OutlineInputBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(15)))),
                     ),
                   ),
-                  const SizedBox(width: 10),
-                  Container(
-                      height: 50,
-                      decoration: BoxDecoration(
-                          // borderRadius: BorderRadius.circular(5),
-                          color: Theme.of(context)
-                              .colorScheme
-                              .primary
-                              .withOpacity(.5),
-                          shape: BoxShape.circle),
-                      child: IconButton(
-                          color: Colors.white,
-                          onPressed: () {},
-                          icon: const Icon(Icons.search)))
                 ],
               ),
             ),
