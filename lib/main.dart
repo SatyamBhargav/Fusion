@@ -1,12 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:passgen/provider/savepass_provider.dart';
 import 'package:passgen/screen/tabscreen.dart';
 import 'package:passgen/widget/addavatar.dart';
 import 'package:passgen/screen/homescreen.dart';
 import 'package:passgen/screen/welcomescreen.dart';
 
-void main() {
+void main() async {
   runApp(const ProviderScope(child: MyApp()));
+  // Initialize SavePasswordNotifier
+  // final savePasswordNotifier = SavePasswordNotifier();
+
+  // // Call checkDatabase to verify the database and table
+  // savePasswordNotifier.checkDatabase();
+  // await savePasswordNotifier.loaddetails();
+  // final dataWritten = await savePasswordNotifier.isDataWritten();
+
+  // if (dataWritten) {
+  //   print("Data is written to the table.");
+  // } else {
+  //   print("No data in the table.");
+  // }
 }
 
 class MyApp extends StatelessWidget {

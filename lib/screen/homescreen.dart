@@ -13,6 +13,13 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
+  late Future<void> _userFuture;
+  @override
+  void initState() {
+    super.initState();
+    _userFuture = ref.read(passcardprovider.notifier).loaddetails();
+  }
+
   @override
   Widget build(BuildContext context) {
     final passwordInfo = ref.watch(passcardprovider);
@@ -86,7 +93,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             Expanded(
               child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 35),
-                  child: PasswordList(password: passwordInfo)),
+                  child: FutureBuilder(
+                      future: _userFuture,
+                      builder: (context, snapshot) =>
+                          snapshot.connectionState == ConnectionState.waiting
+                              ? const Center(child: CircularProgressIndicator())
+                              : PasswordList(password: passwordInfo))),
             ),
           ],
         ),

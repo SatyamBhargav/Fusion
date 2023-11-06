@@ -8,11 +8,12 @@ class PasswordCard {
     required this.userid,
     required this.length,
     required this.generatedpassword,
-  }) : id = uuid.v4();
+    String? id
+  }) : id = id ?? uuid.v4();
   String id;
   String platformname;
   String userid;
-  double length;
+  num length;
   // ignore: prefer_typing_uninitialized_variables
-  var generatedpassword;
+  String generatedpassword;
 }
