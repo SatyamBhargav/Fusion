@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:passgen/data/platformimage.dart';
 import 'package:passgen/model/passcard.dart';
 import 'package:passgen/provider/savepass_provider.dart';
 
@@ -14,8 +15,10 @@ class PassGenScreen extends ConsumerStatefulWidget {
 }
 
 class _PassGenState extends ConsumerState<PassGenScreen> {
+  final Map<String, String> platformImages = platformImage;
+
   double _currentSliderValue = 8;
-  String platformname = 'Facebook';
+  String platformname = 'Platform Name';
   String userId = 'user.example@gmail.com';
   TextEditingController? platformController;
   TextEditingController? userIdController;
@@ -60,13 +63,16 @@ class _PassGenState extends ConsumerState<PassGenScreen> {
         platformname: platformname,
         userid: userId,
         length: _currentSliderValue,
-        generatedpassword: generate));
+        generatedpassword: generate),);
 
     Navigator.of(context).pop();
   }
 
   @override
   Widget build(BuildContext context) {
+    String imageAsset =
+        platformImages[platformname.toLowerCase()] ?? 'unknown.png';
+
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -81,9 +87,9 @@ class _PassGenState extends ConsumerState<PassGenScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
               child: Card(
                 child: ListTile(
-                  leading: const Icon(
-                    Icons.snapchat,
-                    size: 45,
+                  leading: Image.asset(
+                    'assets/pImage/$imageAsset',
+                    height: 50,
                   ),
                   title: Text(platformname),
                   subtitle: Text(userId),
@@ -105,10 +111,11 @@ class _PassGenState extends ConsumerState<PassGenScreen> {
                   child: Padding(
                     padding: const EdgeInsets.only(left: 15, right: 70),
                     child: TextField(
+                      textCapitalization: TextCapitalization.words,
                       onChanged: (value) {
                         if (value == '') {
                           setState(() {
-                            platformname = 'Facebook';
+                            platformname = 'Platform Name';
                           });
                         } else {
                           setState(() {
@@ -118,7 +125,7 @@ class _PassGenState extends ConsumerState<PassGenScreen> {
                       },
                       controller: platformController,
                       decoration: const InputDecoration(
-                        hintText: 'Facebook',
+                        hintText: 'Platform Name',
                       ),
                     ),
                   ),

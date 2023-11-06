@@ -75,6 +75,20 @@ flutter:
     - assets/images/Img (5).png
     - assets/images/Img (6).png
     - assets/images/default.png
+    - assets/pImage/amazon.png
+    - assets/pImage/f.png
+    - assets/pImage/x.png
+    - assets/pImage/yt.png
+    - assets/pImage/in.png
+    - assets/pImage/flip.png
+    - assets/pImage/prime.png
+    - assets/pImage/pin.png
+    - assets/pImage/mail.png
+    - assets/pImage/netflix.png
+    - assets/pImage/google.png
+    - assets/pImage/gmail.png
+    - assets/pImage/inst.png
+    - assets/pImage/unknown.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -1,0 +1,16 @@
+final platformImage = {
+  'facebook': 'f.png',
+  'twitter': 'x.png',
+  'youtube': 'yt.png',
+  'instagram': 'inst.png',
+  'gmail': 'gmail.png',
+  'mail': 'mail.png',
+  'amazon': 'amazon.png',
+  'flipkart': 'flip.png',
+  'pinterest': 'pin.png',
+  'netflix': 'netflix.png',
+  'prime': 'prime.png',
+  'hotstar': 'hotstar.png',
+  'linkedin': 'in.png',
+  'google': 'google.png',
+};

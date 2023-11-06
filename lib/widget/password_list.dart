@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:passgen/data/platformimage.dart';
 import 'package:passgen/model/passcard.dart';
 
 class PasswordList extends StatelessWidget {
@@ -8,6 +9,7 @@ class PasswordList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Map<String, String> platformImages = platformImage;
     if (password.isEmpty) {
       return const Center(
           child: Text(
@@ -18,9 +20,9 @@ class PasswordList extends StatelessWidget {
       itemCount: password.length,
       itemBuilder: (context, index) => Card(
         child: ListTile(
-          leading: const Icon(
-            Icons.facebook,
-            size: 45,
+          leading: Image.asset(
+            'assets/pImage/${platformImages[password[index].platformname.toLowerCase()] ?? 'unknown.png'}',
+            height: 50,
           ),
           title: Text(password[index].platformname),
           subtitle: Text(password[index].userid),
