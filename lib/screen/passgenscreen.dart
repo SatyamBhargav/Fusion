@@ -59,11 +59,14 @@ class _PassGenState extends ConsumerState<PassGenScreen> {
   }
 
   void _savePassword() {
-    ref.read(passcardprovider.notifier).generatedPassword(PasswordCard(
-        platformname: platformname,
-        userid: userId,
-        length: _currentSliderValue,
-        generatedpassword: generate),);
+    ref.read(passcardprovider.notifier).generatedPassword(
+          PasswordCard(
+              addTime: DateTime.now(),
+              platformname: platformname,
+              userid: userId,
+              length: _currentSliderValue,
+              generatedpassword: generate),
+        );
 
     Navigator.of(context).pop();
   }
@@ -71,7 +74,7 @@ class _PassGenState extends ConsumerState<PassGenScreen> {
   @override
   Widget build(BuildContext context) {
     String imageAsset =
-        platformImages[platformname.toLowerCase()] ?? 'unknown.png';
+        platformImages[platformname.trim().toLowerCase()] ?? 'unknown.png';
 
     return SafeArea(
       child: Scaffold(

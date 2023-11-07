@@ -11,7 +11,7 @@ Future<Database> _openDatabase() async {
     path.join(dbPath, 'passGen.db'),
     onCreate: (db, version) {
       return db.execute(
-          'CREATE TABLE user_Detail(id TEXT PRIMARY KEY,platformName TEXT,userId TEXT,length REAL,genpassword TEXT)');
+          'CREATE TABLE user_Detail(id TEXT PRIMARY KEY,platformName TEXT,userId TEXT,length REAL,genpassword TEXT,addedTime INTEGER)');
     },
     version: 2,
   );
@@ -23,10 +23,12 @@ class SavePasswordNotifier extends StateNotifier<List<PasswordCard>> {
 
   Future<void> loaddetails() async {
     final db = await _openDatabase();
-    final data = await db.query('user_Detail');
+    final data = await db.query('user_Detail', orderBy: 'addedTime DESC');
     final details = data
         .map((row) => PasswordCard(
             id: row['id'] as String,
+            addTime:
+                DateTime.fromMillisecondsSinceEpoch(row['addedTime'] as int),
             platformname: row['platformName'] as String,
             userid: row['userId'] as String,
             length: row['length'] as num,
@@ -38,10 +40,12 @@ class SavePasswordNotifier extends StateNotifier<List<PasswordCard>> {
   void generatedPassword(PasswordCard passcard) async {
     // ignore: unused_local_variable
     final passIsAdded = state.contains(passcard);
+    final int timestamp = passcard.addTime.millisecondsSinceEpoch;
 
     final db = await _openDatabase();
     db.insert('user_Detail', {
       'id': passcard.id,
+      'addedTime': timestamp,
       'platformName': passcard.platformname,
       'userId': passcard.userid,
       'length': passcard.length,
@@ -56,7 +60,7 @@ class SavePasswordNotifier extends StateNotifier<List<PasswordCard>> {
     List<Map<String, dynamic>> data;
 
     if (pName.isEmpty) {
-      data = await db.query('user_Detail');
+      data = await db.query('user_Detail', orderBy: 'addedTime DESC');
     } else {
       data = await db.query('user_Detail',
           where: 'platformName LIKE ?', whereArgs: ['%$pName%']);
@@ -65,6 +69,8 @@ class SavePasswordNotifier extends StateNotifier<List<PasswordCard>> {
     final details = data
         .map((row) => PasswordCard(
             id: row['id'] as String,
+            addTime:
+                DateTime.fromMillisecondsSinceEpoch(row['addedTime'] as int),
             platformname: row['platformName'] as String,
             userid: row['userId'] as String,
             length: row['length'] as num,

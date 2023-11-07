@@ -21,7 +21,7 @@ class PasswordList extends StatelessWidget {
       itemBuilder: (context, index) => Card(
         child: ListTile(
           leading: Image.asset(
-            'assets/pImage/${platformImages[password[index].platformname.toLowerCase()] ?? 'unknown.png'}',
+            'assets/pImage/${platformImages[password[index].platformname.trim().toLowerCase()] ?? 'unknown.png'}',
             height: 50,
           ),
           title: Text(password[index].platformname),
