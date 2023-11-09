@@ -2,20 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:passgen/provider/savepass_provider.dart';
 import 'package:passgen/screen/passgenscreen.dart';
+import 'package:passgen/screen/profilescreen.dart';
 import 'package:passgen/screen/tabscreen.dart';
 import 'package:passgen/widget/addavatar.dart';
 import 'package:passgen/screen/homescreen.dart';
 import 'package:passgen/screen/welcomescreen.dart';
+import 'package:riverpod/riverpod.dart';
 
 // var kColorScheme =
 //     ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 96, 59, 181));
 
 var kDarkColorScheme = ColorScheme.fromSeed(
-  seedColor: const Color.fromARGB(255, 5, 99, 125),
+  seedColor: Colors.deepPurpleAccent,
   brightness: Brightness.dark,
 );
 
-void main() async {
+void main() {
   runApp(const ProviderScope(child: MyApp()));
   /** 
    // To check if table is created in database or not.
@@ -39,16 +41,19 @@ void main() async {
   */
 }
 
-class MyApp extends StatelessWidget {
+final themeModeProvider = StateProvider<ThemeMode>((ref) => ThemeMode.system);
+
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
-      // themeMode: ThemeMode.dark,
-      themeMode: ThemeMode.light,
+      themeMode: ref.watch(themeModeProvider),
       darkTheme: ThemeData.dark().copyWith(
+        textTheme: const TextTheme(
+            titleMedium: TextStyle(color: Colors.white, fontSize: 20)),
         listTileTheme: const ListTileThemeData(
             iconColor: Colors.white, textColor: Colors.black),
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
@@ -67,8 +72,9 @@ class MyApp extends StatelessWidget {
         ),
       ),
       theme: ThemeData().copyWith(
-          // listTileTheme: ListTileThemeData(iconColor: Colors.green),
           useMaterial3: true,
+          textTheme: const TextTheme(
+              titleMedium: TextStyle(color: Colors.black, fontSize: 20)),
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           bottomNavigationBarTheme: const BottomNavigationBarThemeData(
               selectedIconTheme: IconThemeData(color: Colors.deepPurple),
@@ -76,45 +82,20 @@ class MyApp extends StatelessWidget {
 
           // iconTheme: IconThemeData().copyWith(),
           ),
-      // theme: ThemeData().copyWith(
-      //   useMaterial3: true,
-      //   colorScheme: kColorScheme,
-      //   appBarTheme: const AppBarTheme().copyWith(
-      //     backgroundColor: kColorScheme.onPrimaryContainer,
-      //     foregroundColor: kColorScheme.primaryContainer,
-      //   ),
-      //   cardTheme: const CardTheme().copyWith(
-      //     color: kColorScheme.secondaryContainer,
-      //     margin: const EdgeInsets.symmetric(
-      //       horizontal: 16,
-      //       vertical: 8,
-      //     ),
-      //   ),
-      //   elevatedButtonTheme: ElevatedButtonThemeData(
-      //     style: ElevatedButton.styleFrom(
-      //         backgroundColor: kColorScheme.primaryContainer),
-      //   ),
-      //   textTheme: ThemeData().textTheme.copyWith(
-      //         titleLarge: TextStyle(
-      //           fontWeight: FontWeight.bold,
-      //           color: kColorScheme.onSecondaryContainer,
-      //           fontSize: 16,
-      //         ),
-      //       ),
-      // ),
-      // title: 'Password Generator',
 
       //default
       // theme: ThemeData(
       //   colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       //   useMaterial3: true,
       // ),
+      home: WelcomeScreen(),
       // home: const HomeScreen(),
-      home: TabScreen(),
+      // home: TabScreen(),
       // home: PassGenScreen(),
       // home: const WelcomeScreen(),
       // home: PassGen(),
       // home: AddAvatar(),
+      // home: ProfileScreen(),
     );
   }
 }

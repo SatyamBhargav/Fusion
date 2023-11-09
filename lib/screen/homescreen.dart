@@ -40,8 +40,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 children: [
                   Text(
                     'Hello, $userNameDetail',
-                    style: const TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.bold),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium
+                        ?.copyWith(fontWeight: FontWeight.bold),
                   ),
                   const Spacer(),
                   CircleAvatar(
@@ -58,6 +60,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 children: [
                   Expanded(
                     child: TextField(
+                      style: Theme.of(context).textTheme.titleMedium!,
                       onChanged: (value) =>
                           ref.read(passcardprovider.notifier).filtername(value),
                       decoration: const InputDecoration(
@@ -72,9 +75,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
             ),
             const SizedBox(height: 30),
-            const Text(
+            Text(
               'Saved Password',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: Theme.of(context)
+                  .textTheme
+                  .titleMedium
+                  ?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 30),
             Expanded(

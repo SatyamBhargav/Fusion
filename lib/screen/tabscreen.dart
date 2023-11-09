@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:passgen/main.dart';
 import 'package:passgen/screen/homescreen.dart';
 import 'package:passgen/screen/passgenscreen.dart';
 import 'package:passgen/screen/profilescreen.dart';

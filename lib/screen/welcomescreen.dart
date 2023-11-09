@@ -39,13 +39,16 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             GestureDetector(
-              onTap: () => showModalBottomSheet(
-                // shape: const RoundedRectangleBorder(
-                //     borderRadius:
-                //         BorderRadius.vertical(top: Radius.circular(30))),
-                context: context,
-                builder: (context) => const AddAvatar(),
-              ),
+              onTap: () {
+                FocusManager.instance.primaryFocus?.unfocus();
+                showModalBottomSheet(
+                  // shape: const RoundedRectangleBorder(
+                  //     borderRadius:
+                  //         BorderRadius.vertical(top: Radius.circular(30))),
+                  context: context,
+                  builder: (context) => const AddAvatar(),
+                );
+              },
               child: CircleAvatar(
                 radius: 50,
                 child: avatarInfo,
@@ -53,6 +56,7 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
             ),
             const SizedBox(height: 50),
             TextField(
+              style: Theme.of(context).textTheme.titleMedium,
               textCapitalization: TextCapitalization.words,
               controller: namecontroller,
               textAlign: TextAlign.center,

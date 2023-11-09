@@ -128,11 +128,14 @@ class _PassGenState extends ConsumerState<PassGenScreen> {
           const SizedBox(height: 20),
           Row(
             children: [
-              const Padding(
+              Padding(
                 padding: EdgeInsets.only(left: 40),
                 child: Text(
                   'Platform',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium
+                      ?.copyWith(fontWeight: FontWeight.bold),
                 ),
               ),
               const SizedBox(width: 10),
@@ -140,6 +143,10 @@ class _PassGenState extends ConsumerState<PassGenScreen> {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 15, right: 70),
                   child: TextField(
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium
+                        ?.copyWith(fontSize: 15),
                     textCapitalization: TextCapitalization.words,
                     onChanged: (value) {
                       if (value == '') {
@@ -164,11 +171,14 @@ class _PassGenState extends ConsumerState<PassGenScreen> {
           const SizedBox(height: 20),
           Row(
             children: [
-              const Padding(
+              Padding(
                 padding: EdgeInsets.only(left: 40),
                 child: Text(
                   'User id',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium
+                      ?.copyWith(fontWeight: FontWeight.bold),
                 ),
               ),
               const SizedBox(width: 10),
@@ -176,6 +186,10 @@ class _PassGenState extends ConsumerState<PassGenScreen> {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 30, right: 70),
                   child: TextField(
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium
+                        ?.copyWith(fontSize: 15),
                     keyboardType: TextInputType.emailAddress,
                     onChanged: (value) {
                       if (value == '') {
@@ -202,9 +216,12 @@ class _PassGenState extends ConsumerState<PassGenScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 40),
             child: Row(
               children: [
-                const Text(
+                Text(
                   'Length',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium
+                      ?.copyWith(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(width: 20),
                 SizedBox(
@@ -225,9 +242,12 @@ class _PassGenState extends ConsumerState<PassGenScreen> {
             ),
           ),
           const SizedBox(height: 20),
-          const Text(
+          Text(
             'Password',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            style: Theme.of(context)
+                .textTheme
+                .titleMedium
+                ?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 30),
           Container(
@@ -240,10 +260,10 @@ class _PassGenState extends ConsumerState<PassGenScreen> {
                 child: Text(
               generate,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(context)
+                  .textTheme
+                  .titleMedium
+                  ?.copyWith(fontWeight: FontWeight.bold),
             )),
           ),
           const SizedBox(height: 30),
