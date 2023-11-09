@@ -90,6 +90,9 @@ flutter:
     - assets/pImage/inst.png
     - assets/pImage/hotstar.png
     - assets/pImage/unknown.png
+    - assets/pImage/anime.png
+    - assets/pImage/spotify.png
+    - assets/pImage/outlook.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

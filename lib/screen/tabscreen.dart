@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:passgen/main.dart';
 import 'package:passgen/screen/homescreen.dart';
 import 'package:passgen/screen/passgenscreen.dart';
 import 'package:passgen/screen/profilescreen.dart';
@@ -48,7 +49,7 @@ class _TabScreenState extends State<TabScreen> {
         child: SizedBox(
           height: 80,
           child: BottomNavigationBar(
-            backgroundColor: Color.fromARGB(255, 229, 215, 255),
+            backgroundColor: const Color.fromARGB(255, 229, 215, 255),
             onTap: (value) {
               setState(() {
                 _selectedButton = value;
@@ -57,15 +58,21 @@ class _TabScreenState extends State<TabScreen> {
             currentIndex: _selectedButton,
             iconSize: 35,
             type: BottomNavigationBarType.fixed,
-            items: const [
+            items: const[
               BottomNavigationBarItem(
                 icon: Icon(
                   Icons.home_filled,
+                  // color: IconTheme.of(context).color,
                 ),
                 label: 'Home',
               ),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.person_rounded), label: 'Profile'),
+                icon: Icon(
+                  Icons.person_rounded,
+                  // color: IconTheme.of(context).color,
+                ),
+                label: 'Profile',
+              ),
             ],
           ),
         ),

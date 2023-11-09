@@ -11,7 +11,7 @@ Future<Database> _openDatabase() async {
     path.join(dbPath, 'passGen.db'),
     onCreate: (db, version) {
       return db.execute(
-          'CREATE TABLE user_Detail(id TEXT PRIMARY KEY,platformName TEXT,userId TEXT,length REAL,genpassword TEXT,addedTime INTEGER)');
+          'CREATE TABLE user_Detail(id TEXT ,platformName TEXT PRIMARY KEY,userId TEXT,length REAL,genpassword TEXT,addedTime INTEGER)');
     },
     version: 2,
   );

@@ -28,7 +28,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     return SafeArea(
       child: Scaffold(
-        backgroundColor: const Color.fromARGB(234, 255, 255, 255),
+        // backgroundColor: const Color.fromARGB(234, 255, 255, 255),
         body: Column(
           children: [
             const SizedBox(

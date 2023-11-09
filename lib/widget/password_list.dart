@@ -19,26 +19,38 @@ class PasswordList extends StatelessWidget {
     return ListView.builder(
       itemCount: password.length,
       itemBuilder: (context, index) => Card(
-        child: ListTile(
-          leading: Image.asset(
-            'assets/pImage/${platformImages[password[index].platformname.trim().toLowerCase()] ?? 'unknown.png'}',
-            height: 50,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            gradient: LinearGradient(
+                colors: platformColor[
+                        password[index].platformname.trim().toLowerCase()] ??
+                    const [Color.fromARGB(255, 255, 245, 159), Colors.red],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight),
           ),
-          title: Text(password[index].platformname),
-          subtitle: Text(password[index].userid),
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              IconButton(
+          child: ListTile(
+            leading: Image.asset(
+              'assets/pImage/${platformImages[password[index].platformname.trim().toLowerCase()] ?? 'unknown.png'}',
+              height: 50,
+            ),
+            title: Text(password[index].platformname),
+            subtitle: Text(password[index].userid),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
                   onPressed: () async {
                     await Clipboard.setData(
                         ClipboardData(text: password[index].generatedpassword));
                     // ignore: use_build_context_synchronously
                     ScaffoldMessenger.of(context).hideCurrentSnackBar();
                   },
-                  icon: const Icon(Icons.copy)),
-              // const SizedBox(width: 10),
-            ],
+                  icon: const Icon(Icons.copy),
+                ),
+                // const SizedBox(width: 10),
+              ],
+            ),
           ),
         ),
       ),

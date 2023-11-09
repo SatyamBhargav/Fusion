@@ -59,36 +59,61 @@ class _PassGenState extends ConsumerState<PassGenScreen> {
   }
 
   void _savePassword() {
-    ref.read(passcardprovider.notifier).generatedPassword(
-          PasswordCard(
-              addTime: DateTime.now(),
-              platformname: platformname,
-              userid: userId,
-              length: _currentSliderValue,
-              generatedpassword: generate),
-        );
+    if (platformname == 'Platform Name' ||
+        userId == 'user.example@gmail.com' ||
+        _currentSliderValue == 0 ||
+        generate == '') {
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
 
-    Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Please enter valid value before saving')));
+    } else {
+      ref.read(passcardprovider.notifier).generatedPassword(
+            PasswordCard(
+                addTime: DateTime.now(),
+                platformname: platformname,
+                userid: userId,
+                length: _currentSliderValue,
+                generatedpassword: generate),
+          );
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Password Saved.'),
+        behavior: SnackBarBehavior.floating,
+      ));
+      Navigator.of(context).pop();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     String imageAsset =
         platformImages[platformname.trim().toLowerCase()] ?? 'unknown.png';
+    List<Color> colorAsset = platformColor[platformname.trim().toLowerCase()] ??
+        const [
+          Color.fromARGB(255, 255, 239, 99),
+          Colors.red,
+        ];
 
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'Password Generator',
-            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-          ),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Password Generator',
+          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
         ),
-        body: SingleChildScrollView(
-          child: Column(children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-              child: Card(
+      ),
+      body: SingleChildScrollView(
+        child: Column(children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+            child: Card(
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  gradient: LinearGradient(
+                      colors: colorAsset,
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight),
+                ),
                 child: ListTile(
                   leading: Image.asset(
                     'assets/pImage/$imageAsset',
@@ -99,192 +124,193 @@ class _PassGenState extends ConsumerState<PassGenScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
-            Row(
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(left: 40),
-                  child: Text(
-                    'Platform',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
+          ),
+          const SizedBox(height: 20),
+          Row(
+            children: [
+              const Padding(
+                padding: EdgeInsets.only(left: 40),
+                child: Text(
+                  'Platform',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 15, right: 70),
-                    child: TextField(
-                      textCapitalization: TextCapitalization.words,
-                      onChanged: (value) {
-                        if (value == '') {
-                          setState(() {
-                            platformname = 'Platform Name';
-                          });
-                        } else {
-                          setState(() {
-                            platformname = value;
-                          });
-                        }
-                      },
-                      controller: platformController,
-                      decoration: const InputDecoration(
-                        hintText: 'Platform Name',
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            Row(
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(left: 40),
-                  child: Text(
-                    'User id',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 30, right: 70),
-                    child: TextField(
-                      onChanged: (value) {
-                        if (value == '') {
-                          setState(() {
-                            userId = 'user.example@gmail.com';
-                          });
-                        } else {
-                          setState(() {
-                            userId = value;
-                          });
-                        }
-                      },
-                      controller: userIdController,
-                      decoration: const InputDecoration(
-                        hintText: 'user.example@gmail.com',
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 40),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40),
-              child: Row(
-                children: [
-                  const Text(
-                    'Length',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(width: 20),
-                  SizedBox(
-                    width: 268,
-                    child: Slider(
-                      value: _currentSliderValue,
-                      max: 40,
-                      divisions: 5,
-                      label: _currentSliderValue.round().toString(),
-                      onChanged: (double value) {
-                        setState(() {
-                          _currentSliderValue = value;
-                        });
-                      },
-                    ),
-                  ),
-                ],
               ),
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              'Password',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 30),
-            Container(
-              height: 80,
-              width: 320,
-              decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary.withOpacity(.3),
-                  borderRadius: BorderRadius.circular(20)),
-              child: Center(
-                  child: Text(
-                generate,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+              const SizedBox(width: 10),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 15, right: 70),
+                  child: TextField(
+                    textCapitalization: TextCapitalization.words,
+                    onChanged: (value) {
+                      if (value == '') {
+                        setState(() {
+                          platformname = 'Platform Name';
+                        });
+                      } else {
+                        setState(() {
+                          platformname = value;
+                        });
+                      }
+                    },
+                    controller: platformController,
+                    decoration: const InputDecoration(
+                      hintText: 'Platform Name',
+                    ),
+                  ),
                 ),
-              )),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          Row(
+            children: [
+              const Padding(
+                padding: EdgeInsets.only(left: 40),
+                child: Text(
+                  'User id',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 30, right: 70),
+                  child: TextField(
+                    keyboardType: TextInputType.emailAddress,
+                    onChanged: (value) {
+                      if (value == '') {
+                        setState(() {
+                          userId = 'user.example@gmail.com';
+                        });
+                      } else {
+                        setState(() {
+                          userId = value;
+                        });
+                      }
+                    },
+                    controller: userIdController,
+                    decoration: const InputDecoration(
+                      hintText: 'user.example@gmail.com',
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 40),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 40),
+            child: Row(
+              children: [
+                const Text(
+                  'Length',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(width: 20),
+                SizedBox(
+                  width: 268,
+                  child: Slider(
+                    value: _currentSliderValue,
+                    max: 40,
+                    divisions: 5,
+                    label: _currentSliderValue.round().toString(),
+                    onChanged: (double value) {
+                      setState(() {
+                        _currentSliderValue = value;
+                      });
+                    },
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 30),
-            ElevatedButton(
-                style: ButtonStyle(
-                    backgroundColor: MaterialStatePropertyAll(
-                        Theme.of(context).colorScheme.primary),
-                    padding: const MaterialStatePropertyAll(EdgeInsets.only(
-                        top: 20, bottom: 20, right: 120, left: 120))),
-                onPressed: () {
-                  setState(() {
-                    generate = generatePassword(_currentSliderValue);
-                  });
-                },
-                child: const Text(
-                  'Generate',
-                  style: TextStyle(fontSize: 20, color: Colors.white),
-                )),
-            const SizedBox(height: 30),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40),
-              child: Row(
-                children: [
-                  const SizedBox(width: 30),
-                  ElevatedButton.icon(
-                      onPressed: () async {
+          ),
+          const SizedBox(height: 20),
+          const Text(
+            'Password',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 30),
+          Container(
+            height: 80,
+            width: 320,
+            decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primary.withOpacity(.3),
+                borderRadius: BorderRadius.circular(20)),
+            child: Center(
+                child: Text(
+              generate,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            )),
+          ),
+          const SizedBox(height: 30),
+          ElevatedButton(
+              style: ButtonStyle(
+                  backgroundColor: MaterialStatePropertyAll(
+                      Theme.of(context).colorScheme.primary),
+                  padding: const MaterialStatePropertyAll(EdgeInsets.only(
+                      top: 20, bottom: 20, right: 120, left: 120))),
+              onPressed: () {
+                setState(() {
+                  generate = generatePassword(_currentSliderValue);
+                });
+              },
+              child: const Text(
+                'Generate',
+                style: TextStyle(fontSize: 20, color: Colors.white),
+              )),
+          const SizedBox(height: 30),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 40),
+            child: Row(
+              children: [
+                const SizedBox(width: 30),
+                ElevatedButton.icon(
+                    onPressed: () async {
+                      if (generate == '') {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Nothing to copy')));
+                      } else {
                         await Clipboard.setData(ClipboardData(text: generate));
                         // ignore: use_build_context_synchronously
                         ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                      },
-                      style: const ButtonStyle(
-                          padding: MaterialStatePropertyAll(EdgeInsets.only(
-                              top: 20, bottom: 20, left: 30, right: 30))),
-                      icon: const Icon(Icons.copy_sharp),
-                      label: const Text(
-                        'Copy',
-                        style: TextStyle(
-                          fontSize: 15,
-                        ),
-                      )),
-                  const SizedBox(width: 30),
-                  ElevatedButton.icon(
-                      style: const ButtonStyle(
-                          padding: MaterialStatePropertyAll(EdgeInsets.only(
-                              top: 20, bottom: 20, left: 30, right: 30))),
-                      onPressed: () {
-                        _savePassword();
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          content: Text('Password Saved.'),
-                          behavior: SnackBarBehavior.floating,
-                        ));
-                      },
-                      icon: const Icon(
-                        Icons.save_outlined,
-                        size: 26,
+                      }
+                    },
+                    style: const ButtonStyle(
+                        padding: MaterialStatePropertyAll(EdgeInsets.only(
+                            top: 20, bottom: 20, left: 30, right: 30))),
+                    icon: const Icon(Icons.copy_sharp),
+                    label: const Text(
+                      'Copy',
+                      style: TextStyle(
+                        fontSize: 15,
                       ),
-                      label: const Text(
-                        'Save',
-                        style: TextStyle(
-                          fontSize: 15,
-                        ),
-                      )),
-                ],
-              ),
-            )
-          ]),
-        ),
+                    )),
+                const SizedBox(width: 30),
+                ElevatedButton.icon(
+                    style: const ButtonStyle(
+                        padding: MaterialStatePropertyAll(EdgeInsets.only(
+                            top: 20, bottom: 20, left: 30, right: 30))),
+                    onPressed: () {
+                      _savePassword();
+                    },
+                    icon: const Icon(
+                      Icons.save_outlined,
+                      size: 26,
+                    ),
+                    label: const Text(
+                      'Save',
+                      style: TextStyle(
+                        fontSize: 15,
+                      ),
+                    )),
+              ],
+            ),
+          )
+        ]),
       ),
     );
   }
