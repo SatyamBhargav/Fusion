@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:passgen/provider/savepass_provider.dart';
+import 'package:passgen/screen/manualgenscreen.dart';
+import 'package:passgen/screen/passeditscreen.dart';
 import 'package:passgen/screen/passgenscreen.dart';
 import 'package:passgen/screen/profilescreen.dart';
 import 'package:passgen/screen/tabscreen.dart';
@@ -91,6 +93,8 @@ class MyApp extends ConsumerWidget {
       // home: WelcomeScreen(),
       // home: const HomeScreen(),
       home: const TabScreen(),
+      // home: ManualGenScreen(),
+      // home: PassEditScreen(),
       // home: PassGenScreen(),
       // home: const WelcomeScreen(),
       // home: PassGen(),

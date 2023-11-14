@@ -7,15 +7,26 @@ import 'package:passgen/data/platformimage.dart';
 import 'package:passgen/model/passcard.dart';
 import 'package:passgen/provider/savepass_provider.dart';
 
-class PassGenScreen extends ConsumerStatefulWidget {
-  const PassGenScreen({super.key});
+class PassEditScreen extends ConsumerStatefulWidget {
+  const PassEditScreen({super.key, required this.passwordCard});
+  final PasswordCard passwordCard;
 
   @override
-  ConsumerState<PassGenScreen> createState() => _PassGenState();
+  ConsumerState<PassEditScreen> createState() => _PassEditState();
 }
 
-class _PassGenState extends ConsumerState<PassGenScreen> {
+class _PassEditState extends ConsumerState<PassEditScreen> {
   final Map<String, String> platformImages = platformImage;
+
+  @override
+  void initState() {
+    super.initState();
+    platformController =
+        TextEditingController(text: widget.passwordCard.platformname);
+    userIdController = TextEditingController(text: widget.passwordCard.userid);
+    _currentSliderValue = widget.passwordCard.length.toDouble();
+    generate = widget.passwordCard.generatedpassword;
+  }
 
   double _currentSliderValue = 8;
   String platformname = 'Platform Name';
@@ -23,20 +34,19 @@ class _PassGenState extends ConsumerState<PassGenScreen> {
   TextEditingController? platformController;
   TextEditingController? userIdController;
   String generate = '';
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   platformController = TextEditingController();
+  //   userIdController = TextEditingController();
+  // }
 
-  @override
-  void initState() {
-    super.initState();
-    platformController = TextEditingController();
-    userIdController = TextEditingController();
-  }
-
-  @override
-  void dispose() {
-    platformController!.dispose();
-    userIdController!.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   platformController!.dispose();
+  //   userIdController!.dispose();
+  //   super.dispose();
+  // }
 
   String generatePassword(double length) {
     const String uppercaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -58,37 +68,37 @@ class _PassGenState extends ConsumerState<PassGenScreen> {
     return password;
   }
 
-  void _savePassword() {
-    // if (platformname == 'Platform Name' ||
-    //     userId == 'user.example@gmail.com' ||
-    //     _currentSliderValue == 0 ||
-    //     generate == '') {
-    //   ScaffoldMessenger.of(context).hideCurrentSnackBar();
+  void _updateInfo() async {
+    final updatedPasswordCard = PasswordCard(
+      id: widget.passwordCard.id, // Preserve the original ID
+      addTime: DateTime.now(),
+      platformname: platformController!.text,
+      userid: userIdController!.text,
+      length: _currentSliderValue,
+      generatedpassword: generate,
+    );
 
-    //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-    //       content: Text('Please enter valid value before saving')));
-    // } else {
-    ref.read(passcardprovider.notifier).generatedPassword(
-          PasswordCard(
-              addTime: DateTime.now(),
-              platformname: platformname,
-              userid: userId,
-              length: _currentSliderValue,
-              generatedpassword: generate),
-        );
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      content: Text('Password Saved.'),
-      behavior: SnackBarBehavior.floating,
-    ));
-    Navigator.of(context).popAndPushNamed('HomeScreen');
-    // }
+    await ref
+        .read(passcardprovider.notifier)
+        .updatePassword(updatedPasswordCard);
+
+    // ignore: use_build_context_synchronously
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Information Updated.'),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+
+    // ignore: use_build_context_synchronously
+    Navigator.of(context).pop();
   }
 
   @override
   Widget build(BuildContext context) {
     String imageAsset =
-        platformImages[platformname.trim().toLowerCase()] ?? 'unknown.png';
-    List<Color> colorAsset = platformColor[platformname.trim().toLowerCase()] ??
+        platformImages[platformController!.text] ?? 'unknown.png';
+    List<Color> colorAsset = platformColor[platformController!.text] ??
         const [
           Color.fromARGB(255, 255, 239, 99),
           Colors.red,
@@ -97,7 +107,7 @@ class _PassGenState extends ConsumerState<PassGenScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Password Generator',
+          'Update Info',
           style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
         ),
       ),
@@ -119,8 +129,8 @@ class _PassGenState extends ConsumerState<PassGenScreen> {
                     'assets/pImage/$imageAsset',
                     height: 50,
                   ),
-                  title: Text(platformname),
-                  subtitle: Text(userId),
+                  title: Text(platformController!.text),
+                  subtitle: Text(userIdController!.text),
                 ),
               ),
             ),
@@ -129,7 +139,7 @@ class _PassGenState extends ConsumerState<PassGenScreen> {
           Row(
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 40),
+                padding: EdgeInsets.only(left: 40),
                 child: Text(
                   'Platform',
                   style: Theme.of(context)
@@ -172,7 +182,7 @@ class _PassGenState extends ConsumerState<PassGenScreen> {
           Row(
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 40),
+                padding: EdgeInsets.only(left: 40),
                 child: Text(
                   'User id',
                   style: Theme.of(context)
@@ -267,62 +277,42 @@ class _PassGenState extends ConsumerState<PassGenScreen> {
             )),
           ),
           const SizedBox(height: 30),
-          ElevatedButton(
-              style: ButtonStyle(
-                  backgroundColor: MaterialStatePropertyAll(
-                      Theme.of(context).colorScheme.primary),
-                  padding: const MaterialStatePropertyAll(EdgeInsets.only(
-                      top: 20, bottom: 20, right: 120, left: 120))),
-              onPressed: () {
-                setState(() {
-                  generate = generatePassword(_currentSliderValue);
-                });
-              },
-              child: const Text(
-                'Generate',
-                style: TextStyle(fontSize: 20, color: Colors.white),
-              )),
-          const SizedBox(height: 30),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 40),
             child: Row(
               children: [
                 const SizedBox(width: 30),
                 ElevatedButton.icon(
-                    onPressed: () async {
-                      if (generate == '') {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Nothing to copy')));
-                      } else {
-                        await Clipboard.setData(ClipboardData(text: generate));
-                        // ignore: use_build_context_synchronously
-                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                      }
-                    },
-                    style: const ButtonStyle(
-                        padding: MaterialStatePropertyAll(EdgeInsets.only(
-                            top: 20, bottom: 20, left: 30, right: 30))),
-                    icon: const Icon(Icons.copy_sharp),
-                    label: const Text(
-                      'Copy',
-                      style: TextStyle(
-                        fontSize: 15,
-                      ),
-                    )),
+                  style: const ButtonStyle(
+                    padding: MaterialStatePropertyAll(
+                      EdgeInsets.only(top: 20, bottom: 20, left: 30, right: 30),
+                    ),
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      generate = generatePassword(_currentSliderValue);
+                    });
+                  },
+                  icon: const Icon(Icons.new_label_outlined),
+                  label: const Text('New', style: TextStyle(fontSize: 15)),
+                ),
                 const SizedBox(width: 30),
                 ElevatedButton.icon(
                     style: const ButtonStyle(
-                        padding: MaterialStatePropertyAll(EdgeInsets.only(
-                            top: 20, bottom: 20, left: 30, right: 30))),
+                      padding: MaterialStatePropertyAll(
+                        EdgeInsets.only(
+                            top: 20, bottom: 20, left: 30, right: 30),
+                      ),
+                    ),
                     onPressed: () {
-                      _savePassword();
+                      _updateInfo();
                     },
                     icon: const Icon(
-                      Icons.save_outlined,
+                      Icons.update,
                       size: 26,
                     ),
                     label: const Text(
-                      'Save',
+                      'Update',
                       style: TextStyle(
                         fontSize: 15,
                       ),

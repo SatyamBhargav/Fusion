@@ -75,6 +75,21 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       )
                     ],
                   ),
+                ),
+                Text(
+                  'Version 1.0.0',
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium!
+                      .copyWith(fontSize: 15),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  'Designed by SB',
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium!
+                      .copyWith(fontSize: 15),
                 )
               ],
             ),

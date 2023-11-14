@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:passgen/screen/homescreen.dart';
-import 'package:passgen/screen/passgenscreen.dart';
+import 'package:passgen/screen/manualgenscreen.dart';
 import 'package:passgen/screen/profilescreen.dart';
 
 class TabScreen extends StatefulWidget {
@@ -27,8 +27,8 @@ class _TabScreenState extends State<TabScreen> {
         child: FloatingActionButton(
           onPressed: () {
             ScaffoldMessenger.of(context).clearSnackBars();
-            Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const PassGenScreen()));
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => const ManualGenScreen()));
           },
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
@@ -42,11 +42,11 @@ class _TabScreenState extends State<TabScreen> {
       ),
       bottomNavigationBar: ClipRRect(
         borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(50),
-          topRight: Radius.circular(50),
+          topLeft: Radius.circular(30),
+          topRight: Radius.circular(30),
         ),
         child: SizedBox(
-          height: 80,
+          height: 70,
           child: BottomNavigationBar(
             backgroundColor: const Color.fromARGB(255, 229, 215, 255),
             onTap: (value) {
@@ -57,7 +57,7 @@ class _TabScreenState extends State<TabScreen> {
             currentIndex: _selectedButton,
             iconSize: 35,
             type: BottomNavigationBarType.fixed,
-            items: const[
+            items: const [
               BottomNavigationBarItem(
                 icon: Icon(
                   Icons.home_filled,

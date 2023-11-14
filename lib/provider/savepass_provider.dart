@@ -55,14 +55,37 @@ class SavePasswordNotifier extends StateNotifier<List<PasswordCard>> {
     state = [passcard, ...state];
   }
 
-    Future<void> _deletePassword(String id) async {
+  Future<void> _deletePassword(String id) async {
     final db = await _openDatabase();
     await db.delete('user_Detail', where: 'id = ?', whereArgs: [id]);
   }
 
-    void deletePassword(String id) async {
+  void deletePassword(String id) async {
     await _deletePassword(id);
     state = state.where((password) => password.id != id).toList();
+  }
+
+  Future<void> updatePassword(PasswordCard updatedPasswordCard) async {
+    final db = await _openDatabase();
+
+    await db.update(
+      'user_Detail',
+      {
+        'addedTime': updatedPasswordCard.addTime.millisecondsSinceEpoch,
+        'platformName': updatedPasswordCard.platformname,
+        'userId': updatedPasswordCard.userid,
+        'length': updatedPasswordCard.length,
+        'genpassword': updatedPasswordCard.generatedpassword,
+      },
+      where: 'id = ?',
+      whereArgs: [updatedPasswordCard.id],
+    );
+
+    state = state.map((password) {
+      return password.id == updatedPasswordCard.id
+          ? updatedPasswordCard
+          : password;
+    }).toList();
   }
 
   void filtername(String pName) async {
