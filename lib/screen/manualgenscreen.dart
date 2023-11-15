@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:passgen/data/platformimage.dart';
 import 'package:passgen/model/passcard.dart';
 import 'package:passgen/provider/savepass_provider.dart';
-import 'package:passgen/screen/passgenscreen.dart';
 
 class ManualGenScreen extends ConsumerStatefulWidget {
   const ManualGenScreen({super.key});
@@ -125,7 +124,7 @@ class _ManualGenState extends ConsumerState<ManualGenScreen> {
           Row(
             children: [
               Padding(
-                padding: EdgeInsets.only(left: 40),
+                padding: const EdgeInsets.only(left: 40),
                 child: Text(
                   'Platform',
                   style: Theme.of(context)
@@ -168,7 +167,7 @@ class _ManualGenState extends ConsumerState<ManualGenScreen> {
           Row(
             children: [
               Padding(
-                padding: EdgeInsets.only(left: 40),
+                padding: const EdgeInsets.only(left: 40),
                 child: Text(
                   'User id',
                   style: Theme.of(context)
@@ -208,36 +207,6 @@ class _ManualGenState extends ConsumerState<ManualGenScreen> {
             ],
           ),
           const SizedBox(height: 40),
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(horizontal: 40),
-          //   child: Row(
-          //     children: [
-          //       Text(
-          //         'Length',
-          //         style: Theme.of(context)
-          //             .textTheme
-          //             .titleMedium
-          //             ?.copyWith(fontWeight: FontWeight.bold),
-          //       ),
-          //       const SizedBox(width: 20),
-          //       SizedBox(
-          //         width: 268,
-          //         child: Slider(
-          //           value: _currentSliderValue,
-          //           max: 40,
-          //           divisions: 5,
-          //           label: _currentSliderValue.round().toString(),
-          //           onChanged: (double value) {
-          //             setState(() {
-          //               _currentSliderValue = value;
-          //             });
-          //           },
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          // ),
-          // const SizedBox(height: 20),
           Text(
             'Password',
             style: Theme.of(context)
@@ -246,22 +215,6 @@ class _ManualGenState extends ConsumerState<ManualGenScreen> {
                 ?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 30),
-          // Container(
-          //   height: 80,
-          //   width: 320,
-          //   decoration: BoxDecoration(
-          //       color: Theme.of(context).colorScheme.primary.withOpacity(.3),
-          //       borderRadius: BorderRadius.circular(20)),
-          //   child: Center(
-          //       child: Text(
-          //     generate,
-          //     textAlign: TextAlign.center,
-          //     style: Theme.of(context)
-          //         .textTheme
-          //         .titleMedium
-          //         ?.copyWith(fontWeight: FontWeight.bold),
-          //   )),
-          // ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 50),
             child: TextField(
@@ -282,11 +235,6 @@ class _ManualGenState extends ConsumerState<ManualGenScreen> {
                   padding: const MaterialStatePropertyAll(EdgeInsets.only(
                       top: 20, bottom: 20, right: 120, left: 120))),
               onPressed: _savePassword,
-              // () {
-              //   setState(() {
-              //     generate = generatePassword(_currentSliderValue);
-              //   });
-              // },
               child: const Text(
                 'Save',
                 style: TextStyle(fontSize: 20, color: Colors.white),
@@ -314,63 +262,12 @@ class _ManualGenState extends ConsumerState<ManualGenScreen> {
                   fontSize: 15,
                 ),
               )),
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(horizontal: 40),
-          //   child: Row(
-          //     children: [
-          //       const SizedBox(width: 30),
-          //       ElevatedButton.icon(
-          //           onPressed: () async {
-          //             if (generate == '') {
-          //               ScaffoldMessenger.of(context).showSnackBar(
-          //                   const SnackBar(content: Text('Nothing to copy')));
-          //             } else {
-          //               await Clipboard.setData(ClipboardData(text: generate));
-          //               // ignore: use_build_context_synchronously
-          //               ScaffoldMessenger.of(context).hideCurrentSnackBar();
-          //             }
-          //           },
-          //           style: const ButtonStyle(
-          //               padding: MaterialStatePropertyAll(EdgeInsets.only(
-          //                   top: 20, bottom: 20, left: 30, right: 30))),
-          //           icon: const Icon(Icons.copy_sharp),
-          //           label: const Text(
-          //             'Copy',
-          //             style: TextStyle(
-          //               fontSize: 15,
-          //             ),
-          //           )),
-          //       const SizedBox(width: 30),
-          //       ElevatedButton.icon(
-          //           style: const ButtonStyle(
-          //               padding: MaterialStatePropertyAll(EdgeInsets.only(
-          //                   top: 20, bottom: 20, left: 30, right: 30))),
-          //           onPressed: () {
-          //             _savePassword();
-          //           },
-          //           icon: const Icon(
-          //             Icons.save_outlined,
-          //             size: 26,
-          //           ),
-          //           label: const Text(
-          //             'Save',
-          //             style: TextStyle(
-          //               fontSize: 15,
-          //             ),
-          //           )),
-          //     ],
-          //   ),
-          // ),
           const SizedBox(height: 30),
           TextButton(
               onPressed: () {
-                Navigator.of(context).pushAndRemoveUntil<void>(
-                    MaterialPageRoute(
-                      builder: (context) => const PassGenScreen(),
-                    ),
-                    ModalRoute.withName('/'));
+                Navigator.of(context).pushReplacementNamed('/passgenscreen');
               },
-              child: Text('Or generate a new one'))
+              child: const Text('Or generate a new one'))
         ]),
       ),
     );

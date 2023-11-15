@@ -4,10 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class UserAvatarNotifier extends StateNotifier<Image> {
   UserAvatarNotifier()
-      : super(Image.asset(
-          'assets/images/default.png',
-          height: 60,
-        ));
+      : super(Image.asset('assets/images/default.png', height: 60));
 
   void getUserAvatar(Image userAvatar) {
     state = userAvatar;

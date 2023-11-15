@@ -14,10 +14,12 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   late Future<void> _userFuture;
+  late Future<void> _userNameFuture;
   @override
   void initState() {
     super.initState();
     _userFuture = ref.read(passcardprovider.notifier).loaddetails();
+    _userNameFuture = ref.read(userDetailProvider.notifier).loaddetails();
   }
 
   @override
@@ -38,13 +40,28 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 30),
               child: Row(
                 children: [
-                  Text(
-                    'Hello, $userNameDetail',
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleMedium
-                        ?.copyWith(fontWeight: FontWeight.bold),
+                  Expanded(
+                    child: FutureBuilder(
+                      future: _userNameFuture,
+                      builder: (context, snapshot) =>
+                          snapshot.connectionState == ConnectionState.waiting
+                              ? const Center(child: LinearProgressIndicator())
+                              : Text(
+                                  'Hello, $userNameDetail',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleMedium!
+                                      .copyWith(fontWeight: FontWeight.bold),
+                                ),
+                    ),
                   ),
+                  // Text(
+                  //   'Hello, $userNameDetail',
+                  //   style: Theme.of(context)
+                  //       .textTheme
+                  //       .titleMedium
+                  //       ?.copyWith(fontWeight: FontWeight.bold),
+                  // ),
                   const Spacer(),
                   CircleAvatar(
                     radius: 35,

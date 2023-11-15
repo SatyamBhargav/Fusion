@@ -52,6 +52,7 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
+      routes: {'/passgenscreen': (context) => PassGenScreen()},
       themeMode: ref.watch(themeModeProvider),
       darkTheme: ThemeData.dark().copyWith(
         textTheme: const TextTheme(
@@ -90,9 +91,9 @@ class MyApp extends ConsumerWidget {
       //   colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       //   useMaterial3: true,
       // ),
-      // home: WelcomeScreen(),
+      home: WelcomeScreen(),
       // home: const HomeScreen(),
-      home: const TabScreen(),
+      // home: const TabScreen(),
       // home: ManualGenScreen(),
       // home: PassEditScreen(),
       // home: PassGenScreen(),

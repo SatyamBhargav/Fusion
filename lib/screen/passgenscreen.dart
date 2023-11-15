@@ -80,7 +80,7 @@ class _PassGenState extends ConsumerState<PassGenScreen> {
       content: Text('Password Saved.'),
       behavior: SnackBarBehavior.floating,
     ));
-    Navigator.of(context).popAndPushNamed('HomeScreen');
+    Navigator.of(context).pop();
     // }
   }
 
