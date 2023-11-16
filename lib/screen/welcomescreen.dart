@@ -89,7 +89,7 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
               },
               child: CircleAvatar(
                 radius: 50,
-                child: avatarInfo,
+                child: Image.asset(avatarInfo,height: 60,),
               ),
             ),
             const SizedBox(height: 50),

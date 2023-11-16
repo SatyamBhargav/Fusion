@@ -15,11 +15,13 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   late Future<void> _userFuture;
   late Future<void> _userNameFuture;
+  late Future<void> _userAvatarFuture;
   @override
   void initState() {
     super.initState();
     _userFuture = ref.read(passcardprovider.notifier).loaddetails();
     _userNameFuture = ref.read(userDetailProvider.notifier).loaddetails();
+    _userAvatarFuture = ref.read(userprofileprovider.notifier).loaddetails();
   }
 
   @override
@@ -65,7 +67,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   const Spacer(),
                   CircleAvatar(
                     radius: 35,
-                    child: userAvatarDetail,
+                    child: FutureBuilder(
+                      future: _userAvatarFuture,
+                      builder: (context, snapshot) =>
+                          snapshot.connectionState == ConnectionState.waiting
+                              ? const Center(child: LinearProgressIndicator())
+                              : Image.asset(
+                                  userAvatarDetail,
+                                  height: 60,
+                                ),
+                    ),
                   ),
                 ],
               ),

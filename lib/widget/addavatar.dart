@@ -3,7 +3,6 @@ import 'package:passgen/data/avatar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:passgen/provider/avatarselector_provider.dart';
 
-
 class AddAvatar extends ConsumerStatefulWidget {
   const AddAvatar({super.key});
 
@@ -24,6 +23,11 @@ class _AddAvatarState extends ConsumerState<AddAvatar> {
     });
   }
 
+  // void _saveAvatar() {
+  //   ref
+  //       .read(userprofileprovider.notifier)
+  //       .getUserAvatar(availableAvatar[Image.asset('assets/images/Img ($selectedAvatarIndex).png')]);
+  // }
   void _saveAvatar() {
     ref
         .read(userprofileprovider.notifier)
@@ -58,7 +62,10 @@ class _AddAvatarState extends ConsumerState<AddAvatar> {
                       child: CircleAvatar(
                         backgroundColor: Colors.blue[200],
                         radius: 35,
-                        child: availableAvatar[index],
+                        child: Image.asset(
+                          availableAvatar[index],
+                          height: 60,
+                        ),
                       ),
                     ),
                   ),

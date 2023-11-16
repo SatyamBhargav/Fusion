@@ -28,8 +28,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             child: Column(
               children: [
                 CircleAvatar(
-                  radius: 50,
-                  child: userAvatar,
+                  radius: 60,
+                  child: Image.asset(
+                    userAvatar,
+                    height: 80,
+                  ),
                 ),
                 const SizedBox(height: 20),
                 Text(
@@ -37,7 +40,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   style: Theme.of(context)
                       .textTheme
                       .titleMedium
-                      ?.copyWith(fontWeight: FontWeight.bold),
+                      ?.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
                 ),
                 const SizedBox(height: 50),
                 SizedBox(
