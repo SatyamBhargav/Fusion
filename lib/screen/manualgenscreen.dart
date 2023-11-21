@@ -229,11 +229,11 @@ class _ManualGenState extends ConsumerState<ManualGenScreen> {
           ),
           const SizedBox(height: 30),
           ElevatedButton(
-              style: ButtonStyle(
-                  backgroundColor: MaterialStatePropertyAll(
-                      Theme.of(context).colorScheme.primary),
-                  padding: const MaterialStatePropertyAll(EdgeInsets.only(
-                      top: 20, bottom: 20, right: 120, left: 120))),
+              style: const ButtonStyle(
+                  backgroundColor: MaterialStatePropertyAll(Colors.deepPurple),
+                  padding: MaterialStatePropertyAll(
+                    EdgeInsets.only(top: 20, bottom: 20, right: 120, left: 120),
+                  )),
               onPressed: _savePassword,
               child: const Text(
                 'Save',
@@ -252,9 +252,12 @@ class _ManualGenState extends ConsumerState<ManualGenScreen> {
                   ScaffoldMessenger.of(context).hideCurrentSnackBar();
                 }
               },
-              style: const ButtonStyle(
-                  padding: MaterialStatePropertyAll(EdgeInsets.only(
-                      top: 20, bottom: 20, left: 30, right: 30))),
+              style: ButtonStyle(
+                backgroundColor: MaterialStatePropertyAll(
+                    Theme.of(context).colorScheme.background),
+                padding: const MaterialStatePropertyAll(
+                    EdgeInsets.only(top: 20, bottom: 20, left: 30, right: 30)),
+              ),
               icon: const Icon(Icons.copy_sharp),
               label: const Text(
                 'Copy',

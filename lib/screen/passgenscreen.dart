@@ -59,29 +59,29 @@ class _PassGenState extends ConsumerState<PassGenScreen> {
   }
 
   void _savePassword() {
-    // if (platformname == 'Platform Name' ||
-    //     userId == 'user.example@gmail.com' ||
-    //     _currentSliderValue == 0 ||
-    //     generate == '') {
-    //   ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    if (platformname == 'Platform Name' ||
+        userId == 'user.example@gmail.com' ||
+        _currentSliderValue == 0 ||
+        generate == '') {
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
 
-    //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-    //       content: Text('Please enter valid value before saving')));
-    // } else {
-    ref.read(passcardprovider.notifier).generatedPassword(
-          PasswordCard(
-              addTime: DateTime.now(),
-              platformname: platformname,
-              userid: userId,
-              length: _currentSliderValue,
-              generatedpassword: generate),
-        );
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      content: Text('Password Saved.'),
-      behavior: SnackBarBehavior.floating,
-    ));
-    Navigator.of(context).pop();
-    // }
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Please enter valid value before saving')));
+    } else {
+      ref.read(passcardprovider.notifier).generatedPassword(
+            PasswordCard(
+                addTime: DateTime.now(),
+                platformname: platformname,
+                userid: userId,
+                length: _currentSliderValue,
+                generatedpassword: generate),
+          );
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Password Saved.'),
+        behavior: SnackBarBehavior.floating,
+      ));
+      Navigator.of(context).pop();
+    }
   }
 
   @override
@@ -96,6 +96,7 @@ class _PassGenState extends ConsumerState<PassGenScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: const Text(
           'Password Generator',
           style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
@@ -268,10 +269,9 @@ class _PassGenState extends ConsumerState<PassGenScreen> {
           ),
           const SizedBox(height: 30),
           ElevatedButton(
-              style: ButtonStyle(
-                  backgroundColor: MaterialStatePropertyAll(
-                      Theme.of(context).colorScheme.primary),
-                  padding: const MaterialStatePropertyAll(EdgeInsets.only(
+              style: const ButtonStyle(
+                  backgroundColor: MaterialStatePropertyAll(Colors.deepPurple),
+                  padding: MaterialStatePropertyAll(EdgeInsets.only(
                       top: 20, bottom: 20, right: 120, left: 120))),
               onPressed: () {
                 setState(() {
@@ -299,8 +299,10 @@ class _PassGenState extends ConsumerState<PassGenScreen> {
                         ScaffoldMessenger.of(context).hideCurrentSnackBar();
                       }
                     },
-                    style: const ButtonStyle(
-                        padding: MaterialStatePropertyAll(EdgeInsets.only(
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStatePropertyAll(
+                            Theme.of(context).colorScheme.background),
+                        padding: const MaterialStatePropertyAll(EdgeInsets.only(
                             top: 20, bottom: 20, left: 30, right: 30))),
                     icon: const Icon(Icons.copy_sharp),
                     label: const Text(
@@ -311,8 +313,10 @@ class _PassGenState extends ConsumerState<PassGenScreen> {
                     )),
                 const SizedBox(width: 30),
                 ElevatedButton.icon(
-                    style: const ButtonStyle(
-                        padding: MaterialStatePropertyAll(EdgeInsets.only(
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStatePropertyAll(
+                            Theme.of(context).colorScheme.background),
+                        padding: const MaterialStatePropertyAll(EdgeInsets.only(
                             top: 20, bottom: 20, left: 30, right: 30))),
                     onPressed: () {
                       _savePassword();

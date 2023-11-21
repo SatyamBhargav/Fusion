@@ -65,18 +65,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   //       ?.copyWith(fontWeight: FontWeight.bold),
                   // ),
                   const Spacer(),
-                  CircleAvatar(
-                    radius: 35,
-                    child: FutureBuilder(
-                      future: _userAvatarFuture,
-                      builder: (context, snapshot) =>
-                          snapshot.connectionState == ConnectionState.waiting
-                              ? const Center(child: LinearProgressIndicator())
-                              : Image.asset(
-                                  userAvatarDetail,
-                                  height: 60,
-                                ),
-                    ),
+                  FutureBuilder(
+                    future: _userAvatarFuture,
+                    builder: (context, snapshot) =>
+                        snapshot.connectionState == ConnectionState.waiting
+                            ? const Center(child: CircularProgressIndicator())
+                            : Image.asset(
+                                userAvatarDetail,
+                                height: 60,
+                              ),
                   ),
                 ],
               ),
@@ -96,7 +93,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           prefixIcon: Icon(Icons.search),
                           border: OutlineInputBorder(
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(15)))),
+                                  BorderRadius.all(Radius.circular(30)))),
                     ),
                   ),
                 ],

@@ -31,22 +31,12 @@ class _PassEditState extends ConsumerState<PassEditScreen> {
   double _currentSliderValue = 8;
   String platformname = 'Platform Name';
   String userId = 'user.example@gmail.com';
-  TextEditingController? platformController;
-  TextEditingController? userIdController;
+  String current = 'current password';
+  TextEditingController platformController = TextEditingController();
+  TextEditingController userIdController = TextEditingController();
+  TextEditingController currentController = TextEditingController();
   String generate = '';
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   platformController = TextEditingController();
-  //   userIdController = TextEditingController();
-  // }
-
-  // @override
-  // void dispose() {
-  //   platformController!.dispose();
-  //   userIdController!.dispose();
-  //   super.dispose();
-  // }
+  // String newpasswordcopy = generate;
 
   String generatePassword(double length) {
     const String uppercaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -69,13 +59,16 @@ class _PassEditState extends ConsumerState<PassEditScreen> {
   }
 
   void _updateInfo() async {
+    final newpassword =
+        currentController.text.isEmpty ? generate : currentController.text;
+
     final updatedPasswordCard = PasswordCard(
       id: widget.passwordCard.id, // Preserve the original ID
       addTime: DateTime.now(),
-      platformname: platformController!.text,
-      userid: userIdController!.text,
+      platformname: platformController.text,
+      userid: userIdController.text,
       length: _currentSliderValue,
-      generatedpassword: generate,
+      generatedpassword: newpassword,
     );
 
     await ref
@@ -89,16 +82,19 @@ class _PassEditState extends ConsumerState<PassEditScreen> {
         behavior: SnackBarBehavior.floating,
       ),
     );
-
+    setState(() {
+      generate = newpassword;
+      currentController.clear();
+    });
     // ignore: use_build_context_synchronously
-    Navigator.of(context).pop();
+    // Navigator.of(context).pop();
   }
 
   @override
   Widget build(BuildContext context) {
     String imageAsset =
-        platformImages[platformController!.text] ?? 'unknown.png';
-    List<Color> colorAsset = platformColor[platformController!.text] ??
+        platformImages[platformController.text] ?? 'unknown.png';
+    List<Color> colorAsset = platformColor[platformController.text] ??
         const [
           Color.fromARGB(255, 255, 239, 99),
           Colors.red,
@@ -106,6 +102,7 @@ class _PassEditState extends ConsumerState<PassEditScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: const Text(
           'Update Info',
           style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
@@ -129,8 +126,8 @@ class _PassEditState extends ConsumerState<PassEditScreen> {
                     'assets/pImage/$imageAsset',
                     height: 50,
                   ),
-                  title: Text(platformController!.text),
-                  subtitle: Text(userIdController!.text),
+                  title: Text(platformController.text),
+                  subtitle: Text(userIdController.text),
                 ),
               ),
             ),
@@ -139,7 +136,7 @@ class _PassEditState extends ConsumerState<PassEditScreen> {
           Row(
             children: [
               Padding(
-                padding: EdgeInsets.only(left: 40),
+                padding: const EdgeInsets.only(left: 40),
                 child: Text(
                   'Platform',
                   style: Theme.of(context)
@@ -276,6 +273,39 @@ class _PassEditState extends ConsumerState<PassEditScreen> {
                   ?.copyWith(fontWeight: FontWeight.bold),
             )),
           ),
+          const SizedBox(height: 20),
+          Row(
+            children: [
+              const SizedBox(width: 10),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 90),
+                  child: TextField(
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium
+                        ?.copyWith(fontSize: 15),
+                    onChanged: (value) {
+                      if (value == '') {
+                        setState(() {
+                          current = 'Manual Password';
+                        });
+                      } else {
+                        setState(() {
+                          current = value;
+                        });
+                      }
+                    },
+                    controller: currentController,
+                    decoration: const InputDecoration(
+                      hintText: 'Manual Password',
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
           const SizedBox(height: 30),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 40),
@@ -293,7 +323,10 @@ class _PassEditState extends ConsumerState<PassEditScreen> {
                       generate = generatePassword(_currentSliderValue);
                     });
                   },
-                  icon: const Icon(Icons.new_label_outlined),
+                  icon: const Icon(
+                    Icons.new_label_outlined,
+                    size: 26,
+                  ),
                   label: const Text('New', style: TextStyle(fontSize: 15)),
                 ),
                 const SizedBox(width: 30),
@@ -319,7 +352,14 @@ class _PassEditState extends ConsumerState<PassEditScreen> {
                     )),
               ],
             ),
-          )
+          ),
+          const SizedBox(height: 20),
+          TextButton.icon(
+              onPressed: () {
+                Clipboard.setData(ClipboardData(text: generate));
+              },
+              icon: const Icon(Icons.copy),
+              label: const Text('Copy Password'))
         ]),
       ),
     );

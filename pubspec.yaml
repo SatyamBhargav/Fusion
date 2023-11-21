@@ -37,10 +37,10 @@ dependencies:
   cupertino_icons: ^1.0.2
   uuid: ^4.1.0
   flutter_riverpod: ^2.4.5
-  path_provider: ^2.1.1
+
   path: ^1.8.3
   sqflite: ^2.3.0
-  flutter_slidable: ^3.0.1
+
 
 dev_dependencies:
   flutter_test:
@@ -66,9 +66,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/images/naruto.png
-    - assets/images/hinata.png
-    - assets/images/kakashi.png
+
     - assets/images/Img (1).png
     - assets/images/Img (2).png
     - assets/images/Img (3).png
@@ -94,6 +92,7 @@ flutter:
     - assets/pImage/anime.png
     - assets/pImage/spotify.png
     - assets/pImage/outlook.png
+    - assets/pImage/laptop.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

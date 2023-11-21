@@ -18,10 +18,13 @@ final platformImage = {
   'anime': 'anime.png',
   'outlook': 'outlook.png',
   'spotify': 'spotify.png',
+  'laptop': 'laptop.png',
+  'pc': 'laptop.png',
+  'computer': 'laptop.png',
 };
 
 final platformColor = {
-  'facebook': const[
+  'facebook': const [
     Color.fromARGB(104, 138, 177, 255),
     Color.fromARGB(48, 66, 103, 178)
   ],
@@ -79,5 +82,9 @@ final platformColor = {
   'outlook': const [
     Color.fromARGB(195, 84, 218, 255),
     Color.fromARGB(188, 0, 108, 180)
-  ]
+  ],
+  'laptop': const [
+    Color(0xff07c0e1),
+    Color.fromARGB(255, 71, 135, 255),
+  ],
 };

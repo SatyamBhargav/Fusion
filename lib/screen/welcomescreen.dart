@@ -18,7 +18,6 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
   @override
   void initState() {
     checkFirstTime();
-    // _userNameFuture = ref.read(userDetailProvider.notifier).openDatabase();
     super.initState();
   }
 
@@ -38,17 +37,19 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
     bool isFirstTime = result.isEmpty;
 
     if (isFirstTime) {
-      // Show your introductory screen here
-
       // Once the screen is shown, insert a record to indicate it's not the first time
       await database.rawInsert('INSERT INTO intro_screen(flag) VALUES(1)');
     } else {
       // Navigate to the main screen or home screen
-      Future.delayed(Duration(microseconds: 2000), () {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => TabScreen()),
-        );
-      });
+      // Future.delayed(Duration(microseconds: 2000), () {
+      //   Navigator.of(context).pushReplacement(
+      //     MaterialPageRoute(builder: (context) => TabScreen()),
+      //   );
+      // });
+      // ignore: use_build_context_synchronously
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const TabScreen()),
+      );
     }
   }
 
@@ -89,7 +90,10 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
               },
               child: CircleAvatar(
                 radius: 50,
-                child: Image.asset(avatarInfo,height: 60,),
+                child: Image.asset(
+                  avatarInfo,
+                  height: 60,
+                ),
               ),
             ),
             const SizedBox(height: 50),
@@ -99,7 +103,7 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
               controller: namecontroller,
               textAlign: TextAlign.center,
               decoration: const InputDecoration(
-                  hintText: 'User Name',
+                  hintText: 'What Should I Call You ?',
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10)))),
             ),
@@ -109,7 +113,15 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
                     backgroundColor: MaterialStatePropertyAll(
                         Theme.of(context).colorScheme.primary.withOpacity(.8))),
                 onPressed: () {
-                  _saveDetails();
+                  if (namecontroller.text.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text('What should I call you?')));
+                  } else if (avatarInfo == 'assets/images/default.png') {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text('Please select an avatar')));
+                  } else {
+                    _saveDetails();
+                  }
                 },
                 child: const Text(
                   'Welcome',

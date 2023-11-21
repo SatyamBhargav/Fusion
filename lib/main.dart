@@ -1,15 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:passgen/provider/savepass_provider.dart';
-import 'package:passgen/screen/manualgenscreen.dart';
-import 'package:passgen/screen/passeditscreen.dart';
 import 'package:passgen/screen/passgenscreen.dart';
-import 'package:passgen/screen/profilescreen.dart';
-import 'package:passgen/screen/tabscreen.dart';
-import 'package:passgen/widget/addavatar.dart';
-import 'package:passgen/screen/homescreen.dart';
 import 'package:passgen/screen/welcomescreen.dart';
-import 'package:riverpod/riverpod.dart';
 
 // var kColorScheme =
 //     ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 96, 59, 181));
@@ -52,9 +44,10 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
-      routes: {'/passgenscreen': (context) => PassGenScreen()},
+      routes: {'/passgenscreen': (context) => const PassGenScreen()},
       themeMode: ref.watch(themeModeProvider),
       darkTheme: ThemeData.dark().copyWith(
+        scaffoldBackgroundColor: Colors.black,
         textTheme: const TextTheme(
             titleMedium: TextStyle(color: Colors.white, fontSize: 20)),
         listTileTheme: const ListTileThemeData(
@@ -91,11 +84,11 @@ class MyApp extends ConsumerWidget {
       //   colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       //   useMaterial3: true,
       // ),
-      home: WelcomeScreen(),
+      home: const WelcomeScreen(),
       // home: const HomeScreen(),
       // home: const TabScreen(),
       // home: ManualGenScreen(),
-      // home: PassEditScreen(),
+      // home: PassEditScreen(passwordCard: ,),
       // home: PassGenScreen(),
       // home: const WelcomeScreen(),
       // home: PassGen(),

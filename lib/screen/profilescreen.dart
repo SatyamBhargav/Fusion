@@ -18,6 +18,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     final themeMode = ref.watch(themeModeProvider);
     final userName = ref.watch(userDetailProvider);
     final userAvatar = ref.watch(userprofileprovider);
+
     // ignore: unused_local_variable
     final userProfileImage = ref.watch(userprofileprovider);
     return SafeArea(
@@ -27,12 +28,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           child: Center(
             child: Column(
               children: [
-                CircleAvatar(
-                  radius: 60,
-                  child: Image.asset(
-                    userAvatar,
-                    height: 80,
-                  ),
+                Image.asset(
+                  userAvatar,
+                  height: 90,
                 ),
                 const SizedBox(height: 20),
                 Text(
@@ -86,7 +84,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       .titleMedium!
                       .copyWith(fontSize: 15),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Text(
                   'Designed by SB',
                   style: Theme.of(context)
