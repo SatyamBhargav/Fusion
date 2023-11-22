@@ -1,5 +1,3 @@
-import 'package:flutter/cupertino.dart';
-
 final availableAvatar = [
   // Image.asset('assets/images/naruto.png'),
   // Image.asset('assets/images/hinata.png'),

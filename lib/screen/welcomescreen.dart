@@ -104,14 +104,15 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
               textAlign: TextAlign.center,
               decoration: const InputDecoration(
                   hintText: 'What Should I Call You ?',
+                  hintStyle: TextStyle(fontSize: 15),
                   border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10)))),
+                      borderRadius: BorderRadius.all(Radius.circular(30)))),
             ),
             const SizedBox(height: 50),
             ElevatedButton(
-                style: ButtonStyle(
-                    backgroundColor: MaterialStatePropertyAll(
-                        Theme.of(context).colorScheme.primary.withOpacity(.8))),
+                style: const ButtonStyle(
+                    backgroundColor:
+                        MaterialStatePropertyAll(Colors.deepPurple)),
                 onPressed: () {
                   if (namecontroller.text.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -125,7 +126,6 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
                 },
                 child: const Text(
                   'Welcome',
-                  style: TextStyle(fontSize: 20, color: Colors.white),
                 ))
           ],
         ),

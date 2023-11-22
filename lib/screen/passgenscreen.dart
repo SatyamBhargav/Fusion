@@ -225,8 +225,7 @@ class _PassGenState extends ConsumerState<PassGenScreen> {
                       ?.copyWith(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(width: 20),
-                SizedBox(
-                  width: 268,
+                Expanded(
                   child: Slider(
                     value: _currentSliderValue,
                     max: 40,
@@ -283,56 +282,53 @@ class _PassGenState extends ConsumerState<PassGenScreen> {
                 style: TextStyle(fontSize: 20, color: Colors.white),
               )),
           const SizedBox(height: 30),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 40),
-            child: Row(
-              children: [
-                const SizedBox(width: 30),
-                ElevatedButton.icon(
-                    onPressed: () async {
-                      if (generate == '') {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Nothing to copy')));
-                      } else {
-                        await Clipboard.setData(ClipboardData(text: generate));
-                        // ignore: use_build_context_synchronously
-                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                      }
-                    },
-                    style: ButtonStyle(
-                        backgroundColor: MaterialStatePropertyAll(
-                            Theme.of(context).colorScheme.background),
-                        padding: const MaterialStatePropertyAll(EdgeInsets.only(
-                            top: 20, bottom: 20, left: 30, right: 30))),
-                    icon: const Icon(Icons.copy_sharp),
-                    label: const Text(
-                      'Copy',
-                      style: TextStyle(
-                        fontSize: 15,
-                      ),
-                    )),
-                const SizedBox(width: 30),
-                ElevatedButton.icon(
-                    style: ButtonStyle(
-                        backgroundColor: MaterialStatePropertyAll(
-                            Theme.of(context).colorScheme.background),
-                        padding: const MaterialStatePropertyAll(EdgeInsets.only(
-                            top: 20, bottom: 20, left: 30, right: 30))),
-                    onPressed: () {
-                      _savePassword();
-                    },
-                    icon: const Icon(
-                      Icons.save_outlined,
-                      size: 26,
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ElevatedButton.icon(
+                  onPressed: () async {
+                    if (generate == '') {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Nothing to copy')));
+                    } else {
+                      await Clipboard.setData(ClipboardData(text: generate));
+                      // ignore: use_build_context_synchronously
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                    }
+                  },
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStatePropertyAll(
+                          Theme.of(context).colorScheme.background),
+                      padding: const MaterialStatePropertyAll(EdgeInsets.only(
+                          top: 20, bottom: 20, left: 30, right: 30))),
+                  icon: const Icon(Icons.copy_sharp),
+                  label: const Text(
+                    'Copy',
+                    style: TextStyle(
+                      fontSize: 15,
                     ),
-                    label: const Text(
-                      'Save',
-                      style: TextStyle(
-                        fontSize: 15,
-                      ),
-                    )),
-              ],
-            ),
+                  )),
+              const SizedBox(width: 30),
+              ElevatedButton.icon(
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStatePropertyAll(
+                          Theme.of(context).colorScheme.background),
+                      padding: const MaterialStatePropertyAll(EdgeInsets.only(
+                          top: 20, bottom: 20, left: 30, right: 30))),
+                  onPressed: () {
+                    _savePassword();
+                  },
+                  icon: const Icon(
+                    Icons.save_outlined,
+                    size: 26,
+                  ),
+                  label: const Text(
+                    'Save',
+                    style: TextStyle(
+                      fontSize: 15,
+                    ),
+                  )),
+            ],
           )
         ]),
       ),

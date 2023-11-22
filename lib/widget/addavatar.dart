@@ -56,7 +56,7 @@ class _AddAvatarState extends ConsumerState<AddAvatar> {
                 return GestureDetector(
                   onTap: () => selectAvatar(index),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 30),
+                    padding: const EdgeInsets.symmetric(horizontal: 29),
                     child: CircleAvatar(
                       backgroundColor: avatarColors[index],
                       child: CircleAvatar(
@@ -78,14 +78,12 @@ class _AddAvatarState extends ConsumerState<AddAvatar> {
               _saveAvatar();
               Navigator.of(context).pop();
             },
-            style: ButtonStyle(
-                backgroundColor: MaterialStatePropertyAll(
-                    Theme.of(context).colorScheme.primary.withOpacity(.7)),
-                padding: const MaterialStatePropertyAll(
+            style: const ButtonStyle(
+                backgroundColor: MaterialStatePropertyAll(Colors.deepPurple),
+                padding: MaterialStatePropertyAll(
                     EdgeInsets.only(top: 20, bottom: 20, left: 80, right: 80))),
             child: const Text(
               'Select',
-              style: TextStyle(fontSize: 20, color: Colors.white),
             ),
           )
         ],

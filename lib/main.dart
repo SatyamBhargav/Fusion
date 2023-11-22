@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:passgen/screen/passgenscreen.dart';
+import 'package:passgen/screen/profilescreen.dart';
+import 'package:passgen/screen/tabscreen.dart';
 import 'package:passgen/screen/welcomescreen.dart';
 
 // var kColorScheme =
@@ -43,6 +46,7 @@ class MyApp extends ConsumerWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     return MaterialApp(
       routes: {'/passgenscreen': (context) => const PassGenScreen()},
       themeMode: ref.watch(themeModeProvider),
