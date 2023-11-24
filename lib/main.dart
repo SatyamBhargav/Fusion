@@ -6,6 +6,8 @@ import 'package:passgen/screen/passgenscreen.dart';
 import 'package:passgen/screen/profilescreen.dart';
 import 'package:passgen/screen/tabscreen.dart';
 import 'package:passgen/screen/welcomescreen.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart' as path;
 
 // var kColorScheme =
 //     ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 96, 59, 181));
@@ -17,26 +19,6 @@ var kDarkColorScheme = ColorScheme.fromSeed(
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
-  /** 
-   // To check if table is created in database or not.
-   
-  Initialize SavePasswordNotifier
-  final savePasswordNotifier = SavePasswordNotifier();
-
-  Call checkDatabase to verify the database and table
-  savePasswordNotifier.checkDatabase();
-
-  // To check wether data is being written into the table or not.
-
-  await savePasswordNotifier.loaddetails();
-  final dataWritten = await savePasswordNotifier.isDataWritten();
-
-  if (dataWritten) {
-    print("Data is written to the table.");
-  } else {
-    print("No data in the table.");
-  }
-  */
 }
 
 class MyApp extends ConsumerStatefulWidget {
@@ -51,7 +33,20 @@ class _MyAppState extends ConsumerState<MyApp> {
   @override
   void initState() {
     _values = ref.read(themeProvider.notifier).loaddetails();
+    checkFirstTime();
     super.initState();
+  }
+
+  Future<Widget> checkFirstTime() async {
+    String namedatabase = path.join(await getDatabasesPath(), 'userName.db');
+    bool exist = await databaseExists(namedatabase);
+
+    if (exist) {
+      // ignore: use_build_context_synchronously
+      return const TabScreen();
+    } else {
+      return const WelcomeScreen();
+    }
   }
 
   // This widget is the root of your application.
@@ -106,7 +101,7 @@ class _MyAppState extends ConsumerState<MyApp> {
                         ColorScheme.fromSeed(seedColor: Colors.deepPurple),
                     bottomNavigationBarTheme:
                         const BottomNavigationBarThemeData(
-                      backgroundColor: const Color.fromARGB(255, 229, 215, 255),
+                      backgroundColor: Color.fromARGB(255, 229, 215, 255),
                       selectedIconTheme:
                           IconThemeData(color: Colors.deepPurple),
                       unselectedIconTheme: IconThemeData(
@@ -122,7 +117,21 @@ class _MyAppState extends ConsumerState<MyApp> {
                 //   colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
                 //   useMaterial3: true,
                 // ),
-                home: const WelcomeScreen(),
+                // home: const WelcomeScreen(),
+                home: FutureBuilder(
+                  future: checkFirstTime(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Scaffold(
+                        body: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+                    } else {
+                      return snapshot.data!;
+                    }
+                  },
+                ),
                 // home: const HomeScreen(),
                 // home: const TabScreen(),
                 // home: ManualGenScreen(),
@@ -135,3 +144,28 @@ class _MyAppState extends ConsumerState<MyApp> {
               ));
   }
 }
+
+
+
+  /** 
+   * use the below code in main function
+   * 
+   // To check if table is created in database or not.
+   
+  Initialize SavePasswordNotifier
+  final savePasswordNotifier = SavePasswordNotifier();
+
+  Call checkDatabase to verify the database and table
+  savePasswordNotifier.checkDatabase();
+
+  // To check wether data is being written into the table or not.
+
+  await savePasswordNotifier.loaddetails();
+  final dataWritten = await savePasswordNotifier.isDataWritten();
+
+  if (dataWritten) {
+    print("Data is written to the table.");
+  } else {
+    print("No data in the table.");
+  }
+  */

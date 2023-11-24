@@ -15,25 +15,24 @@ class WelcomeScreen extends ConsumerStatefulWidget {
 }
 
 class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
-  @override
-  void initState() {
-    checkFirstTime();
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   checkFirstTime();
+  //   super.initState();
+  // }
 
-  Future<void> checkFirstTime() async {
-    String namedatabase = path.join(await getDatabasesPath(), 'userName.db');
-    bool exist = await databaseExists(namedatabase);
-    // debugPrint('nameDatabase value - $exist');
+  // Future<void> checkFirstTime() async {
+  //   String namedatabase = path.join(await getDatabasesPath(), 'userName.db');
+  //   bool exist = await databaseExists(namedatabase);
+  //   // debugPrint('nameDatabase value - $exist');
 
-    if (exist) {
-      // ignore: use_build_context_synchronously
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const TabScreen()),
-      );
-
-    }
-  }
+  //   if (exist) {
+  //     // ignore: use_build_context_synchronously
+  //     Navigator.of(context).pushReplacement(
+  //       MaterialPageRoute(builder: (context) => const TabScreen()),
+  //     );
+  //   }
+  // }
 
   final namecontroller = TextEditingController();
   @override
@@ -63,9 +62,16 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
               onTap: () {
                 FocusManager.instance.primaryFocus?.unfocus();
                 showModalBottomSheet(
-                  // shape: const RoundedRectangleBorder(
-                  //     borderRadius:
-                  //         BorderRadius.vertical(top: Radius.circular(30))),
+                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                  /**
+                    Clip.antiAliasWithSaveLayer makes it so that if the content of the modal sheet is scrollable, 
+                    the scrollable content will also be clipped to the modal's 
+                    border radius if anyone was wondering.
+              
+                   */
+                  shape: const RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.vertical(top: Radius.circular(30))),
                   context: context,
                   builder: (context) => const AddAvatar(),
                 );
