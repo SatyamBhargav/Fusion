@@ -48,7 +48,7 @@ class _TabScreenState extends State<TabScreen> {
         child: SizedBox(
           height: 70,
           child: BottomNavigationBar(
-            backgroundColor: const Color.fromARGB(255, 229, 215, 255),
+            // backgroundColor: const Color.fromARGB(255, 229, 215, 255),
             onTap: (value) {
               setState(() {
                 _selectedButton = value;

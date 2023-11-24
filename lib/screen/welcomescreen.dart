@@ -22,34 +22,16 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
   }
 
   Future<void> checkFirstTime() async {
-    final database = await openDatabase(
-      path.join(await getDatabasesPath(), 'intro_screen.db'),
-      onCreate: (db, version) {
-        return db.execute(
-          'CREATE TABLE intro_screen(flag INTEGER)',
-        );
-      },
-      version: 1,
-    );
+    String namedatabase = path.join(await getDatabasesPath(), 'userName.db');
+    bool exist = await databaseExists(namedatabase);
+    // debugPrint('nameDatabase value - $exist');
 
-    List<Map<String, dynamic>> result =
-        await database.rawQuery('SELECT * FROM intro_screen');
-    bool isFirstTime = result.isEmpty;
-
-    if (isFirstTime) {
-      // Once the screen is shown, insert a record to indicate it's not the first time
-      await database.rawInsert('INSERT INTO intro_screen(flag) VALUES(1)');
-    } else {
-      // Navigate to the main screen or home screen
-      // Future.delayed(Duration(microseconds: 2000), () {
-      //   Navigator.of(context).pushReplacement(
-      //     MaterialPageRoute(builder: (context) => TabScreen()),
-      //   );
-      // });
+    if (exist) {
       // ignore: use_build_context_synchronously
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const TabScreen()),
       );
+
     }
   }
 
@@ -124,8 +106,15 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
                     _saveDetails();
                   }
                 },
-                child: const Text(
-                  'Welcome',
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Text(
+                    'Welcome',
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium!
+                        .copyWith(color: Colors.white),
+                  ),
                 ))
           ],
         ),

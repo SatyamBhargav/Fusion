@@ -23,11 +23,6 @@ class _AddAvatarState extends ConsumerState<AddAvatar> {
     });
   }
 
-  // void _saveAvatar() {
-  //   ref
-  //       .read(userprofileprovider.notifier)
-  //       .getUserAvatar(availableAvatar[Image.asset('assets/images/Img ($selectedAvatarIndex).png')]);
-  // }
   void _saveAvatar() {
     ref
         .read(userprofileprovider.notifier)
@@ -41,20 +36,23 @@ class _AddAvatarState extends ConsumerState<AddAvatar> {
         // mainAxisSize: MainAxisSize.min,
         children: [
           const SizedBox(height: 30),
-          const Text(
+          Text(
             'Select Avatar',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            style: Theme.of(context).textTheme.titleMedium,
           ),
           const SizedBox(height: 30),
-          SizedBox(
-            height: 320,
+          Expanded(
             child: GridView.builder(
               itemCount: avatarColors.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3),
               itemBuilder: (context, index) {
                 return GestureDetector(
-                  onTap: () => selectAvatar(index),
+                  onTap: () {
+                    selectAvatar(index);
+                    _saveAvatar();
+                    Navigator.of(context).pop();
+                  },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 29),
                     child: CircleAvatar(
@@ -73,19 +71,6 @@ class _AddAvatarState extends ConsumerState<AddAvatar> {
               },
             ),
           ),
-          ElevatedButton(
-            onPressed: () {
-              _saveAvatar();
-              Navigator.of(context).pop();
-            },
-            style: const ButtonStyle(
-                backgroundColor: MaterialStatePropertyAll(Colors.deepPurple),
-                padding: MaterialStatePropertyAll(
-                    EdgeInsets.only(top: 20, bottom: 20, left: 80, right: 80))),
-            child: const Text(
-              'Select',
-            ),
-          )
         ],
       ),
     );

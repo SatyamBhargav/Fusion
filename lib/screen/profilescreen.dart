@@ -14,8 +14,8 @@ class ProfileScreen extends ConsumerStatefulWidget {
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
+    // final screenWidth = MediaQuery.of(context).size.width;
+    // final screenHeight = MediaQuery.of(context).size.height;
     final userName = ref.watch(userDetailProvider);
     final userAvatar = ref.watch(userprofileprovider);
     // bool _isTrue = ref.watch(themeProvider);
@@ -42,66 +42,54 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       ?.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
                 ),
                 const SizedBox(height: 50),
-                SizedBox(
-                  height: screenHeight < 900 ? 450 : 500,
-                  width: screenWidth < 450 ? 280 : 320,
-                  child: Column(
-                    children: [
-                      Consumer(
-                        builder: (context, ref, child) {
-                          final isTrue = ref.watch(themeProvider);
-                          return SwitchListTile(
-                            value: isTrue,
-                            onChanged: (value) {
-                              ref.read(themeProvider.notifier).setTheme(value);
-                            },
-                            title: Row(
-                              children: [
-                                isTrue
-                                    ? const Icon(
-                                        Icons.dark_mode,
-                                        size: 30,
-                                      )
-                                    : const Icon(
-                                        Icons.light_mode,
-                                        size: 30,
-                                      ),
-                                const SizedBox(width: 15),
-                                Text(
-                                  'Dark Mode',
-                                  style:
-                                      Theme.of(context).textTheme.titleMedium,
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                      const SizedBox(height: 20),
-                      Text(
-                          MediaQuery.of(context).size.height.toStringAsFixed(2),
-                          style: Theme.of(context).textTheme.titleMedium),
-                      const SizedBox(height: 20),
-                      Text(MediaQuery.of(context).size.width.toStringAsFixed(2),
-                          style: Theme.of(context).textTheme.titleMedium)
-                    ],
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 40),
+                    child: Column(
+                      children: [
+                        Consumer(
+                          builder: (context, ref, child) {
+                            final isTrue = ref.watch(themeProvider);
+                            return SwitchListTile(
+                              value: isTrue,
+                              onChanged: (value) {
+                                ref
+                                    .read(themeProvider.notifier)
+                                    .setTheme(value);
+                              },
+                              title: Row(
+                                children: [
+                                  isTrue
+                                      ? const Icon(
+                                          Icons.dark_mode,
+                                          size: 30,
+                                        )
+                                      : const Icon(
+                                          Icons.light_mode,
+                                          size: 30,
+                                        ),
+                                  const SizedBox(width: 15),
+                                  Text(
+                                    'Dark Mode',
+                                    style:
+                                        Theme.of(context).textTheme.titleMedium,
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                        // const SizedBox(height: 20),
+                        // Text(
+                        //     MediaQuery.of(context).size.height.toStringAsFixed(2),
+                        //     style: Theme.of(context).textTheme.titleMedium),
+                        // const SizedBox(height: 20),
+                        // Text(MediaQuery.of(context).size.width.toStringAsFixed(2),
+                        //     style: Theme.of(context).textTheme.titleMedium)
+                      ],
+                    ),
                   ),
                 ),
-                Text(
-                  'Version 1.0.0',
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium!
-                      .copyWith(fontSize: 15),
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  'Designed by SB',
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium!
-                      .copyWith(fontSize: 15),
-                )
               ],
             ),
           ),

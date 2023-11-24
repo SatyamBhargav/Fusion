@@ -74,17 +74,19 @@ class _MyAppState extends ConsumerState<MyApp> {
                 routes: {'/passgenscreen': (context) => const PassGenScreen()},
                 themeMode: datavalue ? ThemeMode.dark : ThemeMode.light,
                 darkTheme: ThemeData.dark().copyWith(
-                  scaffoldBackgroundColor: Colors.black,
+                  colorScheme: kDarkColorScheme,
+                  useMaterial3: true,
+                  scaffoldBackgroundColor: const Color(0xff121212),
                   textTheme: const TextTheme(
                       titleMedium:
                           TextStyle(color: Colors.white, fontSize: 20)),
                   listTileTheme: const ListTileThemeData(
                       iconColor: Colors.white, textColor: Colors.black),
                   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-                      unselectedItemColor: Color(0xff696375),
-                      selectedItemColor: Colors.deepPurple),
-                  colorScheme: kDarkColorScheme,
-                  useMaterial3: true,
+                    backgroundColor: Color(0xff1d1d1d),
+                    unselectedItemColor: Color(0xff696375),
+                    selectedItemColor: Colors.deepPurpleAccent,
+                  ),
                   cardTheme: const CardTheme().copyWith(
                     color: kDarkColorScheme.secondaryContainer,
                   ),
@@ -104,10 +106,13 @@ class _MyAppState extends ConsumerState<MyApp> {
                         ColorScheme.fromSeed(seedColor: Colors.deepPurple),
                     bottomNavigationBarTheme:
                         const BottomNavigationBarThemeData(
-                            selectedIconTheme:
-                                IconThemeData(color: Colors.deepPurple),
-                            unselectedIconTheme:
-                                IconThemeData(color: Color(0xff696375)))
+                      backgroundColor: const Color.fromARGB(255, 229, 215, 255),
+                      selectedIconTheme:
+                          IconThemeData(color: Colors.deepPurple),
+                      unselectedIconTheme: IconThemeData(
+                        color: Color(0xff696375),
+                      ),
+                    )
 
                     // iconTheme: IconThemeData().copyWith(),
                     ),
