@@ -1,4 +1,3 @@
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sqflite/sqflite.dart' as sql;
 import 'package:sqflite/sqlite_api.dart';
@@ -31,8 +30,12 @@ class UserAvatarNotifier extends StateNotifier<String> {
   void getUserAvatar(String imagePath) async {
     state = imagePath;
     final db = await _openDatabase();
-    db.insert('user_Profile', {'name': imagePath},
-        conflictAlgorithm: ConflictAlgorithm.replace);
+    final data = await db.query('user_Profile');
+    if (data.isEmpty) {
+      db.insert('user_Profile', {'name': imagePath});
+    } else {
+      db.update('user_Profile', {'name': imagePath});
+    }
   }
 }
 

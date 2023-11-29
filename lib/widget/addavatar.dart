@@ -33,6 +33,7 @@ class _AddAvatarState extends ConsumerState<AddAvatar> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         // mainAxisSize: MainAxisSize.min,
         children: [
           const SizedBox(height: 30),
@@ -40,29 +41,31 @@ class _AddAvatarState extends ConsumerState<AddAvatar> {
             'Select Avatar',
             style: Theme.of(context).textTheme.titleMedium,
           ),
-          const SizedBox(height: 30),
-          Expanded(
-            child: GridView.builder(
+          const SizedBox(height: 20),
+          SizedBox(
+            height: 100,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
               itemCount: avatarColors.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3),
+              // gridDelegate:
+              //     const SliverGridDelegateWithFixedCrossAxisCount(
+              //         crossAxisCount: 3),
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
                     selectAvatar(index);
-                    _saveAvatar();
-                    Navigator.of(context).pop();
                   },
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 29),
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: CircleAvatar(
                       backgroundColor: avatarColors[index],
+                      radius: 40,
                       child: CircleAvatar(
                         backgroundColor: Colors.blue[200],
                         radius: 35,
                         child: Image.asset(
                           availableAvatar[index],
-                          height: 60,
+                          height: 50,
                         ),
                       ),
                     ),
@@ -71,6 +74,20 @@ class _AddAvatarState extends ConsumerState<AddAvatar> {
               },
             ),
           ),
+          const SizedBox(height: 20),
+          ElevatedButton(
+              style: const ButtonStyle(
+                  backgroundColor: MaterialStatePropertyAll(Colors.deepPurple),
+                  padding: MaterialStatePropertyAll(EdgeInsets.only(
+                      top: 20, bottom: 20, left: 50, right: 50))),
+              onPressed: () {
+                _saveAvatar();
+                Navigator.of(context).pop();
+              },
+              child: const Text(
+                'Select',
+                style: TextStyle(color: Colors.white),
+              ))
         ],
       ),
     );
