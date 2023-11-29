@@ -21,9 +21,64 @@ final platformImage = {
   'laptop': 'laptop.png',
   'pc': 'laptop.png',
   'computer': 'laptop.png',
+  'git': 'git.png',
+  'github': 'git.png',
+  'bios': 'bios.png',
+  'discord': 'discord.png',
+  'epic game': 'epic-game.png',
+  'micro soft': 'msoffice.png',
+  'msoffice': 'msoffice.png',
+  'nvidia': 'nvidia.png',
+  'steam': 'steam.png',
+  'twitch': 'twitch.png',
+  'udemy': 'udemy.png'
 };
 
 final platformColor = {
+  'udemy': const [
+    Color.fromARGB(255, 253, 158, 158),
+    Colors.red,
+   ],
+  'twitch': const [
+    Color.fromARGB(255, 206, 160, 255),
+    Color(0xff8343c8),
+  ],
+  'steam': const [
+    Color.fromARGB(108, 3, 116, 202),
+    Color(0xff135996),
+  ],
+  'nvidia': [
+    Colors.greenAccent,
+    Colors.green,
+  ],
+  'micro soft': const [
+    Color.fromARGB(255, 255, 239, 99),
+    Color(0xffe65100),
+  ],
+  'msoffice': const [
+    Color.fromARGB(255, 255, 239, 99),
+    Color(0xffe65100),
+  ],
+  'epic game': [
+    Colors.grey,
+    Colors.black45,
+  ],
+  'discord': const [
+    Color.fromARGB(17, 95, 107, 173),
+    Color(0xff899bfa),
+  ],
+  'bios': [
+    Colors.yellowAccent,
+    Colors.greenAccent,
+  ],
+  'git': [
+    Colors.black26,
+    Colors.black54,
+  ],
+  'github': [
+    Colors.black26,
+    Colors.black54,
+  ],
   'facebook': const [
     Color.fromARGB(104, 138, 177, 255),
     Color.fromARGB(48, 66, 103, 178)
