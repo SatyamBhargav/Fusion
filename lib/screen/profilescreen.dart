@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:passgen/provider/avatarselector_provider.dart';
+import 'package:passgen/provider/savepass_provider.dart';
 import 'package:passgen/provider/theme_provider.dart';
 import 'package:passgen/provider/username_provider.dart';
 
@@ -47,6 +48,38 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 40),
                     child: Column(
                       children: [
+                        ListTile(
+                          leading: const Tooltip(
+                            message: 'Download Your Passwords',
+                            waitDuration: Duration(milliseconds: 0),
+                            child: Icon(
+                              Icons.info_rounded,
+                              size: 30,
+                            ),
+                          ),
+                          title: Text(
+                            'Download',
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                          trailing: IconButton(
+                              onPressed: () {
+                                ref.read(passcardprovider.notifier).printData();
+                                ScaffoldMessenger.of(context)
+                                    .hideCurrentSnackBar();
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        dismissDirection:
+                                            DismissDirection.horizontal,
+                                        behavior: SnackBarBehavior.floating,
+                                        content: Text(
+                                            'Password Saved to Download Folder')));
+                              },
+                              icon: const Icon(
+                                Icons.download,
+                                size: 30,
+                              )),
+                        ),
+                        const SizedBox(height: 20),
                         Consumer(
                           builder: (context, ref, child) {
                             final isTrue = ref.watch(themeProvider);

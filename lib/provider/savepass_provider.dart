@@ -1,8 +1,10 @@
+import 'dart:io';
 import 'package:passgen/model/passcard.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as path;
 import 'package:sqflite/sqflite.dart' as sql;
 import 'package:sqflite/sqlite_api.dart';
+import 'package:excel/excel.dart';
 // import 'package:path_provider/path_provider.dart' as syspath;
 
 Future<Database> _openDatabase() async {
@@ -35,6 +37,36 @@ class SavePasswordNotifier extends StateNotifier<List<PasswordCard>> {
             generatedpassword: row['genpassword'] as String))
         .toList();
     state = details;
+  }
+
+  Future<void> printData() async {
+    var excel = Excel.createExcel();
+    var sheet = excel['Sheet1'];
+    final db = await _openDatabase();
+    final data = await db.query('user_Detail');
+    sheet.appendRow([
+      const TextCellValue('Platform Name'),
+      const TextCellValue('Email'),
+      const TextCellValue('Password')
+    ]);
+    for (var row in data) {
+      sheet.appendRow([
+        TextCellValue(row['platformName'] as String),
+        TextCellValue(row['userId'] as String),
+        TextCellValue(row['genpassword'] as String)
+      ]);
+    }
+
+    String outputFile = "/storage/emulated/0/Download/Password.xlsx";
+
+    //stopwatch.reset();
+    List<int>? fileBytes = excel.save();
+    //print('saving executed in ${stopwatch.elapsed}');
+    if (fileBytes != null) {
+      File(path.join(outputFile))
+        ..createSync(recursive: true)
+        ..writeAsBytesSync(fileBytes);
+    }
   }
 
   void generatedPassword(PasswordCard passcard) async {
