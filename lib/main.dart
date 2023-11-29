@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:passgen/provider/theme_provider.dart';
 import 'package:passgen/screen/passgenscreen.dart';
-import 'package:passgen/screen/profilescreen.dart';
 import 'package:passgen/screen/tabscreen.dart';
 import 'package:passgen/screen/welcomescreen.dart';
 import 'package:sqflite/sqflite.dart';
@@ -70,7 +69,6 @@ class _MyAppState extends ConsumerState<MyApp> {
                 themeMode: datavalue ? ThemeMode.dark : ThemeMode.light,
                 darkTheme: ThemeData.dark().copyWith(
                   colorScheme: kDarkColorScheme,
-                  useMaterial3: true,
                   scaffoldBackgroundColor: const Color(0xff121212),
                   textTheme: const TextTheme(
                       titleMedium:
@@ -93,7 +91,6 @@ class _MyAppState extends ConsumerState<MyApp> {
                   ),
                 ),
                 theme: ThemeData().copyWith(
-                    useMaterial3: true,
                     textTheme: const TextTheme(
                         titleMedium:
                             TextStyle(color: Colors.black, fontSize: 20)),
@@ -107,17 +104,7 @@ class _MyAppState extends ConsumerState<MyApp> {
                       unselectedIconTheme: IconThemeData(
                         color: Color(0xff696375),
                       ),
-                    )
-
-                    // iconTheme: IconThemeData().copyWith(),
-                    ),
-
-                //default
-                // theme: ThemeData(
-                //   colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-                //   useMaterial3: true,
-                // ),
-                // home: const WelcomeScreen(),
+                    )),
                 home: FutureBuilder(
                   future: checkFirstTime(),
                   builder: (context, snapshot) {
@@ -132,15 +119,6 @@ class _MyAppState extends ConsumerState<MyApp> {
                     }
                   },
                 ),
-                // home: const HomeScreen(),
-                // home: const TabScreen(),
-                // home: ManualGenScreen(),
-                // home: PassEditScreen(passwordCard: ,),
-                // home: PassGenScreen(),
-                // home: const WelcomeScreen(),
-                // home: PassGen(),
-                // home: AddAvatar(),
-                // home: ProfileScreen(),
               ));
   }
 }

@@ -26,7 +26,7 @@ class _TabScreenState extends State<TabScreen> {
         visible: !showFAB,
         child: FloatingActionButton(
           onPressed: () {
-            ScaffoldMessenger.of(context).clearSnackBars();
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => const ManualGenScreen()));
           },

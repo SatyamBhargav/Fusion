@@ -4,8 +4,6 @@ import 'package:passgen/provider/username_provider.dart';
 import 'package:passgen/screen/tabscreen.dart';
 import 'package:passgen/widget/addavatar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:path/path.dart' as path;
-import 'package:sqflite/sqflite.dart';
 
 class WelcomeScreen extends ConsumerStatefulWidget {
   const WelcomeScreen({super.key});
@@ -73,7 +71,8 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
                       borderRadius:
                           BorderRadius.vertical(top: Radius.circular(30))),
                   context: context,
-                  builder: (context) => const AddAvatar(),
+                  builder: (context) =>
+                      const SizedBox(height: 300, child: AddAvatar()),
                 );
               },
               child: CircleAvatar(
@@ -103,11 +102,17 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
                         MaterialStatePropertyAll(Colors.deepPurple)),
                 onPressed: () {
                   if (namecontroller.text.isEmpty) {
+                    ScaffoldMessenger.of(context).clearSnackBars();
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text('What should I call you?')));
+                      content: Text('What should I call you?'),
+                      dismissDirection: DismissDirection.horizontal,
+                    ));
                   } else if (avatarInfo == 'assets/images/default.png') {
+                    ScaffoldMessenger.of(context).clearSnackBars();
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text('Please select an avatar')));
+                      content: Text('Please select an avatar'),
+                      dismissDirection: DismissDirection.horizontal,
+                    ));
                   } else {
                     _saveDetails();
                   }

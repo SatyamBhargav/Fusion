@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -66,7 +65,9 @@ class _PassGenState extends ConsumerState<PassGenScreen> {
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
 
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Please enter valid value before saving')));
+        content: Text('Please enter valid value before saving'),
+        dismissDirection: DismissDirection.horizontal,
+      ));
     } else {
       ref.read(passcardprovider.notifier).generatedPassword(
             PasswordCard(
@@ -76,9 +77,11 @@ class _PassGenState extends ConsumerState<PassGenScreen> {
                 length: _currentSliderValue,
                 generatedpassword: generate),
           );
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Password Saved.'),
         behavior: SnackBarBehavior.floating,
+        dismissDirection: DismissDirection.horizontal,
       ));
       Navigator.of(context).pop();
     }
@@ -288,8 +291,11 @@ class _PassGenState extends ConsumerState<PassGenScreen> {
               ElevatedButton.icon(
                   onPressed: () async {
                     if (generate == '') {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Nothing to copy')));
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text('Nothing to copy'),
+                        dismissDirection: DismissDirection.horizontal,
+                      ));
                     } else {
                       await Clipboard.setData(ClipboardData(text: generate));
                       // ignore: use_build_context_synchronously

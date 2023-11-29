@@ -63,6 +63,7 @@ class PasswordList extends ConsumerWidget {
                     ScaffoldMessenger.of(context).hideCurrentSnackBar();
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       behavior: SnackBarBehavior.floating,
+                      dismissDirection: DismissDirection.horizontal,
                       content: const Text('Password Deleted'),
                       action: SnackBarAction(
                         label: 'Undo',

@@ -40,6 +40,8 @@ dependencies:
 
   path: ^1.8.3
   sqflite: ^2.3.0
+  excel: ^4.0.0
+  
 
 
 dev_dependencies:
@@ -93,6 +95,15 @@ flutter:
     - assets/pImage/spotify.png
     - assets/pImage/outlook.png
     - assets/pImage/laptop.png
+    - assets/pImage/bios.png
+    - assets/pImage/discord.png
+    - assets/pImage/epic-game.png
+    - assets/pImage/git.png
+    - assets/pImage/msoffice.png
+    - assets/pImage/nvidia.png
+    - assets/pImage/steam.png
+    - assets/pImage/twitch.png
+    - assets/pImage/udemy.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

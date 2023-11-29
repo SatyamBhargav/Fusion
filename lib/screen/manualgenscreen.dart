@@ -60,7 +60,9 @@ class _ManualGenState extends ConsumerState<ManualGenScreen> {
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
 
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Please enter valid value before saving')));
+        content: Text('Please enter valid value before saving'),
+        dismissDirection: DismissDirection.horizontal,
+      ));
     } else {
       ref.read(passcardprovider.notifier).generatedPassword(
             PasswordCard(
@@ -70,9 +72,11 @@ class _ManualGenState extends ConsumerState<ManualGenScreen> {
                 length: _currentSliderValue,
                 generatedpassword: _newPassword.text),
           );
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Password Saved.'),
         behavior: SnackBarBehavior.floating,
+        dismissDirection: DismissDirection.horizontal,
       ));
       Navigator.of(context).pop();
     }
@@ -243,8 +247,10 @@ class _ManualGenState extends ConsumerState<ManualGenScreen> {
           ElevatedButton.icon(
               onPressed: () async {
                 if (_newPassword.text == '') {
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
                   ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Nothing to copy')));
+                      const SnackBar(content: Text('Nothing to copy'),                                        dismissDirection:
+                                            DismissDirection.horizontal,));
                 } else {
                   await Clipboard.setData(
                       ClipboardData(text: _newPassword.text));

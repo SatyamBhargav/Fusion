@@ -74,12 +74,14 @@ class _PassEditState extends ConsumerState<PassEditScreen> {
     await ref
         .read(passcardprovider.notifier)
         .updatePassword(updatedPasswordCard);
-
+// ignore: use_build_context_synchronously
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
     // ignore: use_build_context_synchronously
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('Information Updated.'),
         behavior: SnackBarBehavior.floating,
+        dismissDirection: DismissDirection.horizontal,
       ),
     );
     setState(() {
@@ -179,7 +181,7 @@ class _PassEditState extends ConsumerState<PassEditScreen> {
           Row(
             children: [
               Padding(
-                padding: EdgeInsets.only(left: 40),
+                padding: const EdgeInsets.only(left: 40),
                 child: Text(
                   'User id',
                   style: Theme.of(context)
