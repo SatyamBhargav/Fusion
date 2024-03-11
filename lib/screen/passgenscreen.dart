@@ -335,7 +335,13 @@ class _PassGenState extends ConsumerState<PassGenScreen> {
                     ),
                   )),
             ],
-          )
+          ),
+          const SizedBox(height: 30),
+          TextButton(
+              onPressed: () {
+                Navigator.of(context).pushReplacementNamed('/manualgenscreen');
+              },
+              child: const Text('Or add a new one'))
         ]),
       ),
     );

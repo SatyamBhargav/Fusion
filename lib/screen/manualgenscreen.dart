@@ -271,12 +271,7 @@ class _ManualGenState extends ConsumerState<ManualGenScreen> {
                   fontSize: 15,
                 ),
               )),
-          const SizedBox(height: 30),
-          TextButton(
-              onPressed: () {
-                Navigator.of(context).pushReplacementNamed('/passgenscreen');
-              },
-              child: const Text('Or generate a new one'))
+
         ]),
       ),
     );

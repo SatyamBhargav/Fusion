@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:passgen/screen/homescreen.dart';
 import 'package:passgen/screen/manualgenscreen.dart';
+import 'package:passgen/screen/passgenscreen.dart';
 import 'package:passgen/screen/profilescreen.dart';
 
 class TabScreen extends StatefulWidget {
@@ -28,7 +29,7 @@ class _TabScreenState extends State<TabScreen> {
           onPressed: () {
             ScaffoldMessenger.of(context).hideCurrentSnackBar();
             Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => const ManualGenScreen()));
+                builder: (context) => const PassGenScreen()));
           },
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
@@ -46,7 +47,7 @@ class _TabScreenState extends State<TabScreen> {
           topRight: Radius.circular(30),
         ),
         child: SizedBox(
-          height: 70,
+          // height: 70,
           child: BottomNavigationBar(
             // backgroundColor: const Color.fromARGB(255, 229, 215, 255),
             onTap: (value) {
