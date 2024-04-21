@@ -29,7 +29,7 @@ class _TabScreenState extends State<TabScreen> {
           onPressed: () {
             ScaffoldMessenger.of(context).hideCurrentSnackBar();
             Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => const PassGenScreen()));
+                builder: (context) => const ManualGenScreen()));
           },
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),

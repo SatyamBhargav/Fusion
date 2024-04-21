@@ -5,7 +5,7 @@ const uuid = Uuid();
 class PasswordCard {
   PasswordCard(
       {required this.addTime,
-        required this.platformname,
+      required this.platformname,
       required this.userid,
       required this.length,
       required this.generatedpassword,

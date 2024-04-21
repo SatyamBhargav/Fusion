@@ -1,4 +1,6 @@
+import 'dart:developer';
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:passgen/model/passcard.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as path;
@@ -143,6 +145,89 @@ class SavePasswordNotifier extends StateNotifier<List<PasswordCard>> {
         .toList();
 
     state = details;
+  }
+
+  void uploadData(String excelFilePath, context) async {
+    //********************************* Upload Excel Data **************************************/
+    var file = File(excelFilePath);
+    var bytes = await file.readAsBytes();
+    var excel = Excel.decodeBytes(bytes);
+
+    // Parse Excel data
+    var sheet = excel['Sheet1'];
+    List<List<dynamic>> excelData = [];
+
+    // Iterate over rows, starting from the second row (index 1)
+    for (var row in sheet.rows) {
+      // Extract only the necessary columns (Platform, Email, Password)
+      var rowData = [
+        row[0]?.value, // Platform
+        row[1]?.value, // Email
+        row[2]?.value, // Password
+      ];
+
+      // Add row data to excelData if it's not null or empty
+      if (rowData.every((cell) => cell != null && cell.toString().isNotEmpty)) {
+        excelData.add(rowData);
+      }
+    }
+    final db = await _openDatabase();
+    try {
+      for (var i = 1; i < excelData.length; i++) {
+        await db.insert('user_Detail', {
+          'id': uuid.v4(),
+          'addedTime': DateTime.now().microsecondsSinceEpoch,
+          'platformName': excelData[i][0].toString(),
+          'userId': excelData[i][1].toString(),
+          'length': '0',
+          'genpassword': excelData[i][2].toString(),
+        });
+      }
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Password Added Successfully'),
+          behavior: SnackBarBehavior.floating,
+          dismissDirection: DismissDirection.horizontal,
+        ),
+      );
+    } catch (e) {
+      if (e.toString().contains('UNIQUE constraint failed')) {
+        // Handle UNIQUE constraint violation error here
+        // log(e.toString());
+        ScaffoldMessenger.of(context).clearSnackBars();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Sheet contain duplicate platform name'),
+            behavior: SnackBarBehavior.floating,
+            dismissDirection: DismissDirection.horizontal,
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).clearSnackBars();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Error Occurred! Please try again'),
+            behavior: SnackBarBehavior.floating,
+            dismissDirection: DismissDirection.horizontal,
+          ),
+        );
+      }
+    }
+
+    // loaddetails();
+    //********************************* Value from the DB *****************************************/
+
+    //   // Query the database
+    //   List<Map<String, dynamic>> rows = await db.query('user_Detail');
+
+    //   // Print the data
+    //   for (Map<String, dynamic> row in rows) {
+    //     print(row);
+    //   }
+
+    //   // Close the database connection
+    //   await db.close();
   }
 }
 

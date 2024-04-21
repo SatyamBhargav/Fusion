@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:passgen/provider/avatarselector_provider.dart';
@@ -20,6 +23,17 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     final userName = ref.watch(userDetailProvider);
     final userAvatar = ref.watch(userprofileprovider);
     // bool _isTrue = ref.watch(themeProvider);
+    String? filePath;
+    Future<void> pickFile(context) async {
+      FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+      if (result != null) {
+        setState(() {
+          filePath = result.files.single.path!;
+        });
+      }
+      ref.read(passcardprovider.notifier).uploadData(filePath!, context);
+    }
 
     // ignore: unused_local_variable
     final userProfileImage = ref.watch(userprofileprovider);
@@ -76,6 +90,28 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                               },
                               icon: const Icon(
                                 Icons.download,
+                                size: 30,
+                              )),
+                        ),
+                        ListTile(
+                          leading: const Tooltip(
+                            message: 'Download Your Passwords',
+                            waitDuration: Duration(milliseconds: 0),
+                            child: Icon(
+                              Icons.info_rounded,
+                              size: 30,
+                            ),
+                          ),
+                          title: Text(
+                            'Upload',
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                          trailing: IconButton(
+                              onPressed: () {
+                                pickFile(context);
+                              },
+                              icon: const Icon(
+                                Icons.file_upload_outlined,
                                 size: 30,
                               )),
                         ),
