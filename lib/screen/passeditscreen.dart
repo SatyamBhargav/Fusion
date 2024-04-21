@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:passgen/data/platformimage.dart';
 import 'package:passgen/model/passcard.dart';
@@ -134,7 +135,7 @@ class _PassEditState extends ConsumerState<PassEditScreen> {
               ),
             ),
           ),
-          const SizedBox(height: 20),
+          // const SizedBox(height: 10),
           Row(
             children: [
               Padding(
@@ -233,8 +234,7 @@ class _PassEditState extends ConsumerState<PassEditScreen> {
                       ?.copyWith(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(width: 20),
-                SizedBox(
-                  width: 268,
+                Expanded(
                   child: Slider(
                     value: _currentSliderValue,
                     max: 40,
@@ -309,51 +309,48 @@ class _PassEditState extends ConsumerState<PassEditScreen> {
             ],
           ),
           const SizedBox(height: 30),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 40),
-            child: Row(
-              children: [
-                const SizedBox(width: 30),
-                ElevatedButton.icon(
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(width: 30),
+              ElevatedButton.icon(
+                style: const ButtonStyle(
+                  padding: MaterialStatePropertyAll(
+                    EdgeInsets.only(top: 20, bottom: 20, left: 30, right: 30),
+                  ),
+                ),
+                onPressed: () {
+                  setState(() {
+                    generate = generatePassword(_currentSliderValue);
+                  });
+                },
+                icon: const Icon(
+                  Icons.new_label_outlined,
+                  size: 26,
+                ),
+                label: const Text('New', style: TextStyle(fontSize: 15)),
+              ),
+              const SizedBox(width: 30),
+              ElevatedButton.icon(
                   style: const ButtonStyle(
                     padding: MaterialStatePropertyAll(
                       EdgeInsets.only(top: 20, bottom: 20, left: 30, right: 30),
                     ),
                   ),
                   onPressed: () {
-                    setState(() {
-                      generate = generatePassword(_currentSliderValue);
-                    });
+                    _updateInfo();
                   },
                   icon: const Icon(
-                    Icons.new_label_outlined,
+                    Icons.update,
                     size: 26,
                   ),
-                  label: const Text('New', style: TextStyle(fontSize: 15)),
-                ),
-                const SizedBox(width: 30),
-                ElevatedButton.icon(
-                    style: const ButtonStyle(
-                      padding: MaterialStatePropertyAll(
-                        EdgeInsets.only(
-                            top: 20, bottom: 20, left: 30, right: 30),
-                      ),
+                  label: const Text(
+                    'Update',
+                    style: TextStyle(
+                      fontSize: 15,
                     ),
-                    onPressed: () {
-                      _updateInfo();
-                    },
-                    icon: const Icon(
-                      Icons.update,
-                      size: 26,
-                    ),
-                    label: const Text(
-                      'Update',
-                      style: TextStyle(
-                        fontSize: 15,
-                      ),
-                    )),
-              ],
-            ),
+                  )),
+            ],
           ),
           const SizedBox(height: 20),
           TextButton.icon(

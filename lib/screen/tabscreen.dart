@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:passgen/screen/homescreen.dart';
 import 'package:passgen/screen/manualgenscreen.dart';
-import 'package:passgen/screen/passgenscreen.dart';
 import 'package:passgen/screen/profilescreen.dart';
 
 class TabScreen extends StatefulWidget {

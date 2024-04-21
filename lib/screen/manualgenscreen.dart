@@ -248,9 +248,10 @@ class _ManualGenState extends ConsumerState<ManualGenScreen> {
               onPressed: () async {
                 if (_newPassword.text == '') {
                   ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Nothing to copy'),                                        dismissDirection:
-                                            DismissDirection.horizontal,));
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text('Nothing to copy'),
+                    dismissDirection: DismissDirection.horizontal,
+                  ));
                 } else {
                   await Clipboard.setData(
                       ClipboardData(text: _newPassword.text));
@@ -271,7 +272,12 @@ class _ManualGenState extends ConsumerState<ManualGenScreen> {
                   fontSize: 15,
                 ),
               )),
-
+          const SizedBox(height: 30),
+          TextButton(
+              onPressed: () {
+                Navigator.of(context).pushReplacementNamed('/passgenscreen');
+              },
+              child: const Text('Or generate a new one'))
         ]),
       ),
     );

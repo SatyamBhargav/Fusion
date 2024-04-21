@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:passgen/provider/theme_provider.dart';
-import 'package:passgen/screen/manualgenscreen.dart';
+import 'package:passgen/screen/passgenscreen.dart';
 import 'package:passgen/screen/tabscreen.dart';
 import 'package:passgen/screen/welcomescreen.dart';
 import 'package:sqflite/sqflite.dart';
@@ -65,9 +65,7 @@ class _MyAppState extends ConsumerState<MyApp> {
                 )),
               )
             : MaterialApp(
-                routes: {
-                  '/manualgenscreen': (context) => const ManualGenScreen()
-                },
+                routes: {'/passgenscreen': (context) => const PassGenScreen()},
                 themeMode: datavalue ? ThemeMode.dark : ThemeMode.light,
                 darkTheme: ThemeData.dark().copyWith(
                   colorScheme: kDarkColorScheme,
