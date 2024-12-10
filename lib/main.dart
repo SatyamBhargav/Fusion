@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:passgen/provider/theme_provider.dart';
+import 'package:passgen/screen/auth.dart';
 import 'package:passgen/screen/passgenscreen.dart';
-import 'package:passgen/screen/tabscreen.dart';
 import 'package:passgen/screen/welcomescreen.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart' as path;
@@ -42,7 +42,7 @@ class _MyAppState extends ConsumerState<MyApp> {
 
     if (exist) {
       // ignore: use_build_context_synchronously
-      return const TabScreen();
+      return const Auth();
     } else {
       return const WelcomeScreen();
     }

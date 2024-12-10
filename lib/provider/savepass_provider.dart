@@ -46,9 +46,9 @@ class SavePasswordNotifier extends StateNotifier<List<PasswordCard>> {
     final db = await _openDatabase();
     final data = await db.query('user_Detail');
     sheet.appendRow([
-      const TextCellValue('Platform Name'),
-      const TextCellValue('Email'),
-      const TextCellValue('Password')
+      TextCellValue('Platform Name'),
+      TextCellValue('Email'),
+      TextCellValue('Password')
     ]);
     for (var row in data) {
       sheet.appendRow([
