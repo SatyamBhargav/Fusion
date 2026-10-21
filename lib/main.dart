@@ -6,19 +6,24 @@ import 'screens/home_shell.dart';
 import 'screens/login_screen.dart';
 import 'screens/welcome_screen.dart';
 import 'services/auth_service.dart';
+import 'services/theme_controller.dart';
 import 'services/vault_store.dart';
 import 'theme.dart';
 import 'widgets/components.dart';
 import 'widgets/motion.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setSystemUIOverlayStyle(darkStatusBar);
   final auth = AuthService()..init();
+  // Read the theme before the first frame so there's no flash of the wrong one.
+  final theme = ThemeController();
+  await theme.init();
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider<AuthService>.value(value: auth),
+        ChangeNotifierProvider<ThemeController>.value(value: theme),
         ChangeNotifierProvider<VaultStore>(create: (_) => VaultStore()),
       ],
       child: const FusionApp(),
@@ -34,7 +39,11 @@ class FusionApp extends StatelessWidget {
     return MaterialApp(
       title: 'Fusion',
       debugShowCheckedModeBanner: false,
-      theme: buildFusionTheme(),
+      theme: buildFusionTheme(FC.light, Brightness.light),
+      darkTheme: buildFusionTheme(FC.dark, Brightness.dark),
+      themeMode: context.watch<ThemeController>().mode,
+      themeAnimationDuration: const Duration(milliseconds: 300),
+      themeAnimationCurve: Curves.easeOutCubic,
       home: const AuthGate(),
     );
   }
@@ -78,11 +87,11 @@ class _Splash extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const AnnotatedRegion<SystemUiOverlayStyle>(
+    return AnnotatedRegion<SystemUiOverlayStyle>(
       value: lightStatusBar,
       child: Scaffold(
-        backgroundColor: FC.violet,
-        body: Center(
+        backgroundColor: context.fc.violet,
+        body: const Center(
           child: PopIn(child: FusionLogo(size: 80, left: Colors.white)),
         ),
       ),

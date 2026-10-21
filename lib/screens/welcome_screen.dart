@@ -34,10 +34,11 @@ class _WelcomeScreenState extends State<WelcomeScreen>
 
   @override
   Widget build(BuildContext context) {
+    final fc = context.fc;
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: lightStatusBar,
       child: Scaffold(
-        backgroundColor: FC.violet,
+        backgroundColor: fc.violet,
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(24, 12, 24, 20),
@@ -65,7 +66,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                   delay: const Duration(milliseconds: 330),
                   child: Text(
                     'Generate, save and sign in with ease — Fusion keeps every login safe and a tap away.',
-                    style: FT.body(16, color: FC.onViolet, height: 1.5),
+                    style: FT.body(16, color: fc.onViolet, height: 1.5),
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -75,8 +76,8 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                     children: [
                       PrimaryButton(
                         label: 'Create account',
-                        color: FC.lime,
-                        foreground: FC.ink,
+                        color: fc.lime,
+                        foreground: fc.onLime,
                         glow: false,
                         trailingIcon: FIcons.arrowRight,
                         onTap: () => Navigator.of(
@@ -113,6 +114,7 @@ class _Illustration extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fc = context.fc;
     return ExcludeSemantics(
       child: LayoutBuilder(
         builder: (context, c) {
@@ -132,7 +134,7 @@ class _Illustration extends StatelessWidget {
                       scale: 1 + 0.035 * math.sin(float.value * 2 * math.pi),
                       child: child,
                     ),
-                    child: const Blob(size: 300, color: FC.lime),
+                    child: Blob(size: 300, color: fc.lime),
                   ),
                 ),
               ),
@@ -214,11 +216,12 @@ class _VaultCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fc = context.fc;
     return Container(
       width: 232,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: fc.surface,
         borderRadius: BorderRadius.circular(24),
         boxShadow: const [
           BoxShadow(
@@ -234,12 +237,12 @@ class _VaultCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              const MonogramTile(
+              MonogramTile(
                 text: 'Spotify',
                 size: 40,
                 radius: 13,
-                bg: FC.lavender,
-                fg: FC.violetDeep,
+                bg: fc.lavender,
+                fg: fc.violetDeep,
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -254,12 +257,12 @@ class _VaultCard extends StatelessWidget {
                     Text(
                       'aanya@example.com',
                       overflow: TextOverflow.ellipsis,
-                      style: FT.body(12, color: FC.muted),
+                      style: FT.body(12, color: fc.muted),
                     ),
                   ],
                 ),
               ),
-              const FIcon(FIcons.star, filled: true, color: FC.violet),
+              FIcon(FIcons.star, filled: true, color: fc.violet),
             ],
           ),
           const SizedBox(height: 12),
@@ -299,11 +302,12 @@ class _GeneratedCardState extends State<_GeneratedCard> {
 
   @override
   Widget build(BuildContext context) {
+    final fc = context.fc;
     return Container(
       width: 214,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: FC.ink,
+        color: fc.panel,
         borderRadius: BorderRadius.circular(24),
         boxShadow: const [
           BoxShadow(
@@ -322,7 +326,7 @@ class _GeneratedCardState extends State<_GeneratedCard> {
             style: FT.body(
               11,
               weight: FontWeight.w700,
-              color: FC.lime,
+              color: fc.lime,
               spacing: 1.2,
             ),
           ),
@@ -341,7 +345,7 @@ class _GeneratedCardState extends State<_GeneratedCard> {
                   height: 5,
                   margin: EdgeInsets.only(right: i < 3 ? 4 : 0),
                   decoration: BoxDecoration(
-                    color: FC.lime,
+                    color: fc.lime,
                     borderRadius: BorderRadius.circular(3),
                   ),
                 ),

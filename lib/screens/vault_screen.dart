@@ -48,6 +48,7 @@ class _VaultScreenState extends State<VaultScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final fc = context.fc;
     final store = context.watch<VaultStore>();
     final auth = context.watch<AuthService>();
     final filter = widget.favouritesOnly ? VaultFilter.favourites : _filter;
@@ -106,7 +107,7 @@ class _VaultScreenState extends State<VaultScreen> {
                     children: [
                       Text(
                         first.isEmpty ? 'Hi there' : 'Hi, $first',
-                        style: FT.body(14, color: FC.muted),
+                        style: FT.body(14, color: fc.muted),
                       ),
                       const SizedBox(height: 2),
                       Text(
@@ -122,13 +123,18 @@ class _VaultScreenState extends State<VaultScreen> {
                     width: 48,
                     height: 48,
                     alignment: Alignment.center,
-                    decoration: const BoxDecoration(
-                      color: FC.lime,
+                    decoration: BoxDecoration(
+                      color: fc.lime,
                       shape: BoxShape.circle,
                     ),
                     child: Text(
                       first.isEmpty ? 'F' : first.substring(0, 1).toUpperCase(),
-                      style: FT.display(20, spacing: 0, height: 1),
+                      style: FT.display(
+                        20,
+                        color: fc.onLime,
+                        spacing: 0,
+                        height: 1,
+                      ),
                     ),
                   ),
                 ),
@@ -156,7 +162,7 @@ class _VaultScreenState extends State<VaultScreen> {
                     label: 'Clear search',
                     bg: Colors.transparent,
                     bordered: false,
-                    fg: FC.muted,
+                    fg: fc.muted,
                     iconSize: 16,
                     onTap: () {
                       _search.clear();
@@ -355,6 +361,7 @@ class _FilterChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fc = context.fc;
     return Pressable(
       onTap: onTap,
       semanticLabel: label,
@@ -365,9 +372,9 @@ class _FilterChip extends StatelessWidget {
         height: 44,
         padding: EdgeInsets.symmetric(horizontal: star ? 14 : 18),
         decoration: BoxDecoration(
-          color: selected ? FC.ink : Colors.white,
+          color: selected ? fc.panel : fc.surface,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: selected ? FC.ink : FC.line, width: 1.5),
+          border: Border.all(color: selected ? fc.panel : fc.line, width: 1.5),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -377,7 +384,7 @@ class _FilterChip extends StatelessWidget {
                 FIcons.star,
                 size: 16,
                 filled: true,
-                color: selected ? FC.lime : FC.violet,
+                color: selected ? fc.lime : fc.violet,
               ),
               const SizedBox(width: 6),
             ],
@@ -386,7 +393,7 @@ class _FilterChip extends StatelessWidget {
               style: FT.body(
                 14,
                 weight: FontWeight.w700,
-                color: selected ? Colors.white : FC.ink,
+                color: selected ? Colors.white : fc.ink,
               ),
               child: Text(label),
             ),
@@ -410,6 +417,7 @@ class _FavCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fc = context.fc;
     final Color bg;
     final Color fg;
     final Color sub;
@@ -418,27 +426,28 @@ class _FavCard extends StatelessWidget {
     final Color star;
     switch (variant) {
       case 0:
-        bg = FC.violet;
+        bg = fc.violet;
         fg = Colors.white;
-        sub = FC.onViolet;
-        tileBg = FC.onVioletGlass;
+        sub = fc.onViolet;
+        tileBg = fc.onVioletGlass;
         tileFg = Colors.white;
-        star = FC.lime;
+        star = fc.lime;
       case 1:
-        bg = FC.lime;
-        fg = FC.ink;
-        sub = FC.ink2;
-        tileBg = FC.ink;
-        tileFg = FC.lime;
-        star = FC.ink;
+        bg = fc.lime;
+        fg = fc.onLime;
+        // Lime is the same in both themes, so its content stays fixed too.
+        sub = FC.light.ink2;
+        tileBg = fc.onLime;
+        tileFg = fc.lime;
+        star = fc.onLime;
       default:
         final p = paletteFor(item.name);
-        bg = Colors.white;
-        fg = FC.ink;
-        sub = FC.muted;
+        bg = fc.surface;
+        fg = fc.ink;
+        sub = fc.muted;
         tileBg = p.$1;
         tileFg = p.$2;
-        star = FC.violet;
+        star = fc.violet;
     }
     return Pressable(
       onTap: onTap,
@@ -450,7 +459,7 @@ class _FavCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: bg,
           borderRadius: BorderRadius.circular(22),
-          border: variant == 2 ? Border.all(color: FC.line, width: 1.5) : null,
+          border: variant == 2 ? Border.all(color: fc.line, width: 1.5) : null,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -509,6 +518,7 @@ class _ListCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fc = context.fc;
     return AnimatedSize(
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeOutCubic,
@@ -516,9 +526,9 @@ class _ListCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.fromLTRB(14, 4, 4, 4),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: fc.surface,
           borderRadius: BorderRadius.circular(22),
-          border: Border.all(color: FC.line, width: 1.5),
+          border: Border.all(color: fc.line, width: 1.5),
         ),
         child: Column(
           children: [
@@ -556,12 +566,11 @@ class _Row extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fc = context.fc;
     return Container(
       height: 68,
       decoration: BoxDecoration(
-        border: divider
-            ? const Border(bottom: BorderSide(color: FC.divider))
-            : null,
+        border: divider ? Border(bottom: BorderSide(color: fc.divider)) : null,
       ),
       child: Row(
         children: [
@@ -593,7 +602,7 @@ class _Row extends StatelessWidget {
                               vertical: 2,
                             ),
                             decoration: BoxDecoration(
-                              color: FC.violetTint,
+                              color: fc.violetTint,
                               borderRadius: BorderRadius.circular(7),
                             ),
                             child: Text(
@@ -601,7 +610,7 @@ class _Row extends StatelessWidget {
                               style: FT.body(
                                 12,
                                 weight: FontWeight.w700,
-                                color: FC.violetDeep,
+                                color: fc.violetDeep,
                               ),
                             ),
                           )
@@ -610,7 +619,7 @@ class _Row extends StatelessWidget {
                             item.username.isEmpty ? item.host : item.username,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: FT.body(13, color: FC.muted),
+                            style: FT.body(13, color: fc.muted),
                           ),
                       ],
                     ),

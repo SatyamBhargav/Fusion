@@ -69,10 +69,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
 
   @override
   Widget build(BuildContext context) {
+    final fc = context.fc;
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: darkStatusBar,
+      value: statusBarFor(context),
       child: Scaffold(
-        backgroundColor: FC.bg,
+        backgroundColor: fc.bg,
         body: SafeArea(
           child: SingleChildScrollView(
             padding: const EdgeInsets.fromLTRB(24, 12, 24, 28),
@@ -99,16 +100,16 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
                                   width: 120,
                                   height: 120,
                                   decoration: BoxDecoration(
-                                    color: FC.lime,
+                                    color: fc.lime,
                                     borderRadius: BorderRadius.circular(36),
                                   ),
                                 ),
                               ),
                             ),
-                            const Positioned(
+                            Positioned(
                               right: 0,
                               top: 0,
-                              child: Blob(size: 56, color: FC.violet),
+                              child: Blob(size: 56, color: fc.violet),
                             ),
                             Positioned(
                               left: 30,
@@ -128,7 +129,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
                                     child: child,
                                   );
                                 },
-                                child: const FIcon(FIcons.key, size: 60),
+                                child: FIcon(
+                                  FIcons.key,
+                                  size: 60,
+                                  color: fc.onLime,
+                                ),
                               ),
                             ),
                           ],
@@ -149,7 +154,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
                     delay: const Duration(milliseconds: 140),
                     child: Text(
                       'No worries. Enter the email linked to your vault and we’ll send you a 6-digit reset code.',
-                      style: FT.body(16, color: FC.muted, height: 1.5),
+                      style: FT.body(16, color: fc.muted, height: 1.5),
                     ),
                   ),
                   const SizedBox(height: 28),

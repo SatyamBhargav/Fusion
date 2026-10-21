@@ -13,21 +13,26 @@ class FusionLogo extends StatelessWidget {
   const FusionLogo({
     super.key,
     this.size = 34,
-    this.left = FC.violet,
-    this.right = FC.lime,
-    this.lens = FC.ink,
+    this.left,
+    this.right,
+    this.lens,
   });
 
   final double size;
-  final Color left;
-  final Color right;
-  final Color lens;
+  final Color? left;
+  final Color? right;
+  final Color? lens;
 
   @override
   Widget build(BuildContext context) {
+    final fc = context.fc;
     return CustomPaint(
       size: Size.square(size),
-      painter: _LogoPainter(left, right, lens),
+      painter: _LogoPainter(
+        left ?? fc.violet,
+        right ?? fc.lime,
+        lens ?? fc.onLime,
+      ),
     );
   }
 }
@@ -70,19 +75,20 @@ class FusionWordmark extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fc = context.fc;
     return Semantics(
       label: 'Fusion',
       child: ExcludeSemantics(
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            FusionLogo(size: 34, left: onDark ? Colors.white : FC.violet),
+            FusionLogo(size: 34, left: onDark ? Colors.white : fc.violet),
             const SizedBox(width: 10),
             Text(
               'fusion',
               style: FT.display(
                 23,
-                color: onDark ? Colors.white : FC.ink,
+                color: onDark ? Colors.white : fc.ink,
                 spacing: -0.5,
               ),
             ),
@@ -126,7 +132,7 @@ class PrimaryButton extends StatelessWidget {
     super.key,
     required this.label,
     this.onTap,
-    this.color = FC.violet,
+    this.color,
     this.foreground = Colors.white,
     this.trailingIcon,
     this.leadingIcon,
@@ -137,7 +143,7 @@ class PrimaryButton extends StatelessWidget {
 
   final String label;
   final VoidCallback? onTap;
-  final Color color;
+  final Color? color;
   final Color foreground;
   final String? trailingIcon;
   final String? leadingIcon;
@@ -147,6 +153,7 @@ class PrimaryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fc = context.fc;
     final enabled = onTap != null && !loading;
     return AnimatedOpacity(
       opacity: onTap == null ? 0.45 : 1,
@@ -159,7 +166,7 @@ class PrimaryButton extends StatelessWidget {
           height: 56,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: color,
+            color: color ?? fc.violet,
             borderRadius: BorderRadius.circular(18),
             border: borderColor != null
                 ? Border.all(color: borderColor!, width: 1.5)
@@ -232,8 +239,8 @@ class SquareIconButton extends StatelessWidget {
     required this.icon,
     required this.label,
     this.onTap,
-    this.bg = Colors.white,
-    this.fg = FC.ink,
+    this.bg,
+    this.fg,
     this.bordered = true,
     this.size = 44,
     this.radius = 14,
@@ -244,8 +251,8 @@ class SquareIconButton extends StatelessWidget {
   final String icon;
   final String label;
   final VoidCallback? onTap;
-  final Color bg;
-  final Color fg;
+  final Color? bg;
+  final Color? fg;
   final bool bordered;
   final double size;
   final double radius;
@@ -254,6 +261,7 @@ class SquareIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fc = context.fc;
     return Pressable(
       onTap: onTap,
       semanticLabel: label,
@@ -264,9 +272,9 @@ class SquareIconButton extends StatelessWidget {
         height: size,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: bg,
+          color: bg ?? fc.surface,
           borderRadius: BorderRadius.circular(radius),
-          border: bordered ? Border.all(color: FC.line, width: 1.5) : null,
+          border: bordered ? Border.all(color: fc.line, width: 1.5) : null,
         ),
         child: AnimatedSwitcher(
           duration: const Duration(milliseconds: 180),
@@ -275,7 +283,7 @@ class SquareIconButton extends StatelessWidget {
             icon,
             key: ValueKey(icon),
             size: iconSize,
-            color: fg,
+            color: fg ?? fc.ink,
             stroke: stroke,
           ),
         ),
@@ -314,12 +322,13 @@ class EyeButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fc = context.fc;
     return SquareIconButton(
       icon: obscured ? FIcons.eye : FIcons.eyeOff,
       label: obscured ? 'Show password' : 'Hide password',
       onTap: onTap,
       bg: Colors.transparent,
-      fg: FC.muted,
+      fg: fc.muted,
       bordered: false,
       radius: 12,
       stroke: 2,
@@ -336,6 +345,7 @@ class TextLink extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fc = context.fc;
     return Pressable(
       onTap: onTap,
       semanticLabel: text,
@@ -343,7 +353,7 @@ class TextLink extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 12),
         child: Text(
           text,
-          style: FT.body(size, weight: FontWeight.w700, color: FC.violet),
+          style: FT.body(size, weight: FontWeight.w700, color: fc.violet),
         ),
       ),
     );
@@ -364,11 +374,12 @@ class InlineLink extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fc = context.fc;
     return Wrap(
       alignment: WrapAlignment.center,
       crossAxisAlignment: WrapCrossAlignment.center,
       children: [
-        Text(prefix, style: FT.body(15, color: FC.muted)),
+        Text(prefix, style: FT.body(15, color: fc.muted)),
         TextLink(link, onTap: onTap, size: 15),
       ],
     );
@@ -382,6 +393,7 @@ class GenerateChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fc = context.fc;
     return Pressable(
       onTap: onTap,
       semanticLabel: 'Generate a password',
@@ -389,15 +401,18 @@ class GenerateChip extends StatelessWidget {
         height: 44,
         padding: const EdgeInsets.symmetric(horizontal: 12),
         decoration: BoxDecoration(
-          color: FC.lime,
+          color: fc.lime,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const FIcon(FIcons.sparkle, size: 16, stroke: 2.2),
+            FIcon(FIcons.sparkle, size: 16, stroke: 2.2, color: fc.onLime),
             const SizedBox(width: 6),
-            Text('Generate', style: FT.body(14, weight: FontWeight.w700)),
+            Text(
+              'Generate',
+              style: FT.body(14, weight: FontWeight.w700, color: fc.onLime),
+            ),
           ],
         ),
       ),
@@ -474,10 +489,11 @@ class _FusionFieldState extends State<FusionField> {
 
   @override
   Widget build(BuildContext context) {
+    final fc = context.fc;
     final hasError = widget.error != null;
     final multiline = widget.maxLines > 1 && !widget.obscure;
-    final ring = hasError ? FC.danger : (_focused ? FC.violet : FC.line);
-    final glow = hasError ? FC.dangerTint : FC.violetTint;
+    final ring = hasError ? fc.danger : (_focused ? fc.violet : fc.line);
+    final glow = hasError ? fc.dangerTint : fc.violetTint;
 
     final field = Semantics(
       label: widget.label,
@@ -496,7 +512,7 @@ class _FusionFieldState extends State<FusionField> {
         textCapitalization: widget.capitalization,
         autocorrect: !widget.obscure && !widget.mono,
         enableSuggestions: !widget.obscure && !widget.mono,
-        cursorColor: FC.violet,
+        cursorColor: fc.violet,
         style: widget.mono
             ? FT.mono(16, weight: FontWeight.w500)
             : FT.body(
@@ -508,7 +524,7 @@ class _FusionFieldState extends State<FusionField> {
           isCollapsed: true,
           border: InputBorder.none,
           hintText: widget.hint,
-          hintStyle: FT.body(16, color: FC.muted),
+          hintStyle: FT.body(16, color: fc.muted),
         ),
       ),
     );
@@ -526,7 +542,7 @@ class _FusionFieldState extends State<FusionField> {
           multiline ? 12 : 0,
         ),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: fc.surface,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: ring, width: 1.5),
           boxShadow: [
@@ -544,7 +560,7 @@ class _FusionFieldState extends State<FusionField> {
             if (widget.icon != null) ...[
               FIcon(
                 widget.icon!,
-                color: hasError ? FC.danger : (_focused ? FC.violet : FC.icon),
+                color: hasError ? fc.danger : (_focused ? fc.violet : fc.icon),
               ),
               const SizedBox(width: 12),
             ],
@@ -560,7 +576,7 @@ class _FusionFieldState extends State<FusionField> {
       mainAxisSize: MainAxisSize.min,
       children: [
         if (widget.showLabel) ...[
-          Text(widget.label, style: FT.label()),
+          Text(widget.label, style: FT.label(color: fc.ink2)),
           const SizedBox(height: 7),
         ],
         box,
@@ -574,9 +590,9 @@ class _FusionFieldState extends State<FusionField> {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.only(top: 1),
-                        child: FIcon(FIcons.info, size: 15, color: FC.danger),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 1),
+                        child: FIcon(FIcons.info, size: 15, color: fc.danger),
                       ),
                       const SizedBox(width: 6),
                       Expanded(
@@ -585,7 +601,7 @@ class _FusionFieldState extends State<FusionField> {
                           style: FT.body(
                             13,
                             weight: FontWeight.w600,
-                            color: FC.danger,
+                            color: fc.danger,
                           ),
                         ),
                       ),
@@ -649,6 +665,7 @@ class _OtpInputState extends State<OtpInput> {
 
   @override
   Widget build(BuildContext context) {
+    final fc = context.fc;
     final text = widget.controller.text;
     final focused = _focus.hasFocus;
     final boxes = <Widget>[];
@@ -659,12 +676,12 @@ class _OtpInputState extends State<OtpInput> {
           (i == text.length ||
               (text.length == widget.length && i == widget.length - 1));
       final border = widget.error
-          ? FC.danger
+          ? fc.danger
           : active
-          ? FC.violet
+          ? fc.violet
           : filled
-          ? const Color(0xFFCFC9F7)
-          : FC.line;
+          ? fc.violet.withAlpha(77)
+          : fc.line;
       if (i > 0) boxes.add(const SizedBox(width: 8));
       boxes.add(
         Expanded(
@@ -673,12 +690,12 @@ class _OtpInputState extends State<OtpInput> {
             height: 58,
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: fc.surface,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(color: border, width: 1.5),
               boxShadow: [
                 BoxShadow(
-                  color: active ? FC.violetTint : FC.violetTint.withAlpha(0),
+                  color: active ? fc.violetTint : fc.violetTint.withAlpha(0),
                   spreadRadius: 4,
                 ),
               ],
@@ -744,23 +761,24 @@ class StrengthMeter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fc = context.fc;
     final s = strengthOf(password);
 
     Color seg(int i) {
-      if (i >= s.score) return onDark ? const Color(0x38FFFFFF) : FC.line;
-      if (onDark) return FC.lime;
-      if (s.score == 1) return FC.danger;
-      if (s.score == 2) return FC.fair;
-      return FC.violet;
+      if (i >= s.score) return onDark ? const Color(0x38FFFFFF) : fc.line;
+      if (onDark) return fc.lime;
+      if (s.score == 1) return fc.danger;
+      if (s.score == 2) return fc.fair;
+      return fc.violet;
     }
 
     final labelColor = onDark
         ? Colors.white
         : s.score == 1
-        ? FC.danger
+        ? fc.danger
         : s.score == 2
-        ? FC.fairText
-        : FC.violetText;
+        ? fc.fairText
+        : fc.violetText;
 
     return Semantics(
       label: s.label.isEmpty ? null : 'Password strength: ${s.label}',
@@ -829,6 +847,7 @@ class FusionSwitch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fc = context.fc;
     return Semantics(
       toggled: value,
       label: label,
@@ -849,7 +868,7 @@ class FusionSwitch extends StatelessWidget {
               height: 32,
               padding: const EdgeInsets.all(3),
               decoration: BoxDecoration(
-                color: value ? FC.violet : FC.switchOff,
+                color: value ? fc.violet : fc.switchOff,
                 borderRadius: BorderRadius.circular(16),
               ),
               child: AnimatedAlign(
@@ -894,6 +913,7 @@ class FavouriteToggleRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fc = context.fc;
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () => onChanged(!value),
@@ -901,9 +921,9 @@ class FavouriteToggleRow extends StatelessWidget {
         constraints: const BoxConstraints(minHeight: 60),
         padding: const EdgeInsets.fromLTRB(16, 0, 8, 0),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: fc.surface,
           borderRadius: BorderRadius.circular(18),
-          border: Border.all(color: FC.line, width: 1.5),
+          border: Border.all(color: fc.line, width: 1.5),
         ),
         child: Row(
           children: [
@@ -913,7 +933,7 @@ class FavouriteToggleRow extends StatelessWidget {
               child: FIcon(
                 FIcons.star,
                 key: ValueKey(value),
-                color: FC.violet,
+                color: fc.violet,
                 filled: value,
               ),
             ),
@@ -945,11 +965,12 @@ class SegmentedToggle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fc = context.fc;
     return Container(
       height: 54,
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: FC.segBg,
+        color: fc.segBg,
         borderRadius: BorderRadius.circular(18),
       ),
       child: Stack(
@@ -964,7 +985,7 @@ class SegmentedToggle extends StatelessWidget {
               heightFactor: 1,
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: fc.raised,
                   borderRadius: BorderRadius.circular(14),
                   boxShadow: const [
                     BoxShadow(
@@ -1002,17 +1023,23 @@ class SegmentedToggle extends StatelessWidget {
                             icons[i],
                             size: 18,
                             stroke: 2.2,
-                            color: selected ? FC.violet : FC.ink2,
+                            color: selected ? fc.violet : fc.ink2,
                           ),
                           const SizedBox(width: 8),
-                          AnimatedDefaultTextStyle(
-                            duration: const Duration(milliseconds: 200),
-                            style: FT.body(
-                              15,
-                              weight: FontWeight.w700,
-                              color: selected ? FC.ink : FC.ink2,
+                          Flexible(
+                            child: AnimatedDefaultTextStyle(
+                              duration: const Duration(milliseconds: 200),
+                              style: FT.body(
+                                15,
+                                weight: FontWeight.w700,
+                                color: selected ? fc.ink : fc.ink2,
+                              ),
+                              child: Text(
+                                labels[i],
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
-                            child: Text(labels[i]),
                           ),
                         ],
                       ),
@@ -1082,8 +1109,8 @@ class StarButton extends StatefulWidget {
     required this.active,
     required this.onTap,
     required this.label,
-    this.activeColor = FC.violet,
-    this.inactiveColor = FC.icon,
+    this.activeColor,
+    this.inactiveColor,
     this.bg = Colors.transparent,
     this.activeBg,
     this.size = 20,
@@ -1094,8 +1121,8 @@ class StarButton extends StatefulWidget {
   final bool active;
   final VoidCallback onTap;
   final String label;
-  final Color activeColor;
-  final Color inactiveColor;
+  final Color? activeColor;
+  final Color? inactiveColor;
   final Color bg;
   final Color? activeBg;
   final double size;
@@ -1144,6 +1171,7 @@ class _StarButtonState extends State<StarButton>
 
   @override
   Widget build(BuildContext context) {
+    final fc = context.fc;
     return Semantics(
       button: true,
       toggled: widget.active,
@@ -1171,7 +1199,9 @@ class _StarButtonState extends State<StarButton>
               FIcons.star,
               size: widget.size,
               filled: widget.active,
-              color: widget.active ? widget.activeColor : widget.inactiveColor,
+              color: widget.active
+                  ? (widget.activeColor ?? fc.violet)
+                  : (widget.inactiveColor ?? fc.icon),
             ),
           ),
         ),
@@ -1187,6 +1217,7 @@ class CountPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fc = context.fc;
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 220),
       transitionBuilder: (c, a) => ScaleTransition(scale: a, child: c),
@@ -1194,12 +1225,12 @@ class CountPill extends StatelessWidget {
         key: ValueKey(count),
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
         decoration: BoxDecoration(
-          color: FC.violetTint,
+          color: fc.violetTint,
           borderRadius: BorderRadius.circular(8),
         ),
         child: Text(
           '$count',
-          style: FT.body(12, weight: FontWeight.w700, color: FC.violetDeep),
+          style: FT.body(12, weight: FontWeight.w700, color: fc.violetDeep),
         ),
       ),
     );
@@ -1220,6 +1251,7 @@ class EmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fc = context.fc;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 28, horizontal: 12),
       child: Column(
@@ -1239,23 +1271,23 @@ class EmptyState extends StatelessWidget {
                         width: 92,
                         height: 92,
                         decoration: BoxDecoration(
-                          color: FC.lime,
+                          color: fc.lime,
                           borderRadius: BorderRadius.circular(28),
                         ),
                       ),
                     ),
                   ),
-                  const Positioned(
+                  Positioned(
                     right: 0,
                     top: 0,
-                    child: Blob(size: 40, color: FC.violet),
+                    child: Blob(size: 40, color: fc.violet),
                   ),
                   Positioned(
                     left: 30,
                     top: 30,
                     child: Transform.rotate(
                       angle: -0.14,
-                      child: FIcon(icon, size: 48, color: FC.ink),
+                      child: FIcon(icon, size: 48, color: fc.onLime),
                     ),
                   ),
                 ],
@@ -1272,7 +1304,7 @@ class EmptyState extends StatelessWidget {
           Text(
             message,
             textAlign: TextAlign.center,
-            style: FT.body(15, color: FC.muted, height: 1.5),
+            style: FT.body(15, color: fc.muted, height: 1.5),
           ),
         ],
       ),

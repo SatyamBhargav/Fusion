@@ -78,10 +78,11 @@ class _PasswordDetailScreenState extends State<PasswordDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final fc = context.fc;
     final store = context.watch<VaultStore>();
     // Keep showing the last known item while the page animates away after a delete.
     final item = store.byId(widget.itemId) ?? _last;
-    if (item == null) return const Scaffold(backgroundColor: FC.bg);
+    if (item == null) return Scaffold(backgroundColor: fc.bg);
     _last = item;
 
     final provider = providerById(item.provider);
@@ -90,7 +91,7 @@ class _PasswordDetailScreenState extends State<PasswordDetailScreen> {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: lightStatusBar,
       child: Scaffold(
-        backgroundColor: FC.bg,
+        backgroundColor: fc.bg,
         body: Column(
           children: [
             Expanded(
@@ -144,8 +145,8 @@ class _PasswordDetailScreenState extends State<PasswordDetailScreen> {
                       SquareIconButton(
                         icon: FIcons.trash,
                         label: 'Delete login',
-                        bg: FC.dangerTint,
-                        fg: FC.danger,
+                        bg: fc.dangerTint,
+                        fg: fc.danger,
                         bordered: false,
                         size: 56,
                         radius: 18,
@@ -157,7 +158,7 @@ class _PasswordDetailScreenState extends State<PasswordDetailScreen> {
                       Expanded(
                         child: PrimaryButton(
                           label: 'Edit login',
-                          color: FC.ink,
+                          color: fc.panel,
                           glow: false,
                           leadingIcon: FIcons.pencil,
                           onTap: () => Navigator.of(
@@ -177,6 +178,7 @@ class _PasswordDetailScreenState extends State<PasswordDetailScreen> {
   }
 
   Widget _infoCard(VaultItem item, SocialProvider provider) {
+    final fc = context.fc;
     final rows = <Widget>[
       _InfoRow(
         label: item.isSocial ? 'ACCOUNT' : 'USERNAME',
@@ -287,7 +289,7 @@ class _PasswordDetailScreenState extends State<PasswordDetailScreen> {
     return Container(
       padding: const EdgeInsets.fromLTRB(18, 6, 8, 6),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: fc.surface,
         borderRadius: BorderRadius.circular(24),
         boxShadow: const [
           BoxShadow(
@@ -303,7 +305,7 @@ class _PasswordDetailScreenState extends State<PasswordDetailScreen> {
             DecoratedBox(
               decoration: BoxDecoration(
                 border: i < rows.length - 1
-                    ? const Border(bottom: BorderSide(color: FC.divider))
+                    ? Border(bottom: BorderSide(color: fc.divider))
                     : null,
               ),
               child: rows[i],
@@ -314,6 +316,7 @@ class _PasswordDetailScreenState extends State<PasswordDetailScreen> {
   }
 
   Widget _statsRow(VaultItem item, SocialProvider provider) {
+    final fc = context.fc;
     final s = strengthOf(item.password);
     final left = item.isSocial
         ? _StatCard(
@@ -342,8 +345,8 @@ class _PasswordDetailScreenState extends State<PasswordDetailScreen> {
                           margin: EdgeInsets.only(right: i < 3 ? 4 : 0),
                           decoration: BoxDecoration(
                             color: Color.lerp(
-                              const Color(0x333D4A0B),
-                              FC.limeInk,
+                              fc.limeInk.withAlpha(0x33),
+                              fc.limeInk,
                               v,
                             ),
                             borderRadius: BorderRadius.circular(3),
@@ -395,21 +398,22 @@ class _Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fc = context.fc;
     final sub = item.host.isNotEmpty
         ? item.host
         : (item.isSocial ? item.subtitle : 'Saved login');
     return ClipRRect(
       borderRadius: const BorderRadius.vertical(bottom: Radius.circular(36)),
       child: Container(
-        color: FC.violet,
+        color: fc.violet,
         child: Stack(
           children: [
-            const Positioned(
+            Positioned(
               right: -70,
               bottom: -110,
               child: PopIn(
-                delay: Duration(milliseconds: 120),
-                child: Blob(size: 200, color: FC.lime),
+                delay: const Duration(milliseconds: 120),
+                child: Blob(size: 200, color: fc.lime),
               ),
             ),
             Padding(
@@ -423,7 +427,7 @@ class _Header extends StatelessWidget {
                       SquareIconButton(
                         icon: FIcons.back,
                         label: 'Back to vault',
-                        bg: FC.onVioletGlass,
+                        bg: fc.onVioletGlass,
                         fg: Colors.white,
                         bordered: false,
                         onTap: () => Navigator.of(context).maybePop(),
@@ -434,9 +438,9 @@ class _Header extends StatelessWidget {
                         label: item.favourite
                             ? 'Remove from favourites'
                             : 'Add to favourites',
-                        bg: FC.onVioletGlass,
-                        activeBg: FC.lime,
-                        activeColor: FC.ink,
+                        bg: fc.onVioletGlass,
+                        activeBg: fc.lime,
+                        activeColor: fc.onLime,
                         inactiveColor: Colors.white,
                         radius: 14,
                       ),
@@ -450,8 +454,9 @@ class _Header extends StatelessWidget {
                         size: 68,
                         radius: 22,
                         fontSize: 30,
+                        // Sits on the violet header, which doesn't change.
                         bg: Colors.white,
-                        fg: FC.violetDeep,
+                        fg: FC.light.violetDeep,
                         heroTag: 'tile-${item.id}',
                       ),
                       const SizedBox(width: 16),
@@ -477,7 +482,7 @@ class _Header extends StatelessWidget {
                                 sub,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                                style: FT.body(14, color: FC.onViolet),
+                                style: FT.body(14, color: fc.onViolet),
                               ),
                             ],
                           ),
@@ -508,6 +513,7 @@ class _InfoRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fc = context.fc;
     return ConstrainedBox(
       constraints: const BoxConstraints(minHeight: 72),
       child: Row(
@@ -519,7 +525,7 @@ class _InfoRow extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(label, style: FT.eyebrow()),
+                  Text(label, style: FT.eyebrow(color: fc.muted)),
                   const SizedBox(height: 4),
                   value,
                 ],
@@ -551,12 +557,13 @@ class _RoundAction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fc = context.fc;
     return SquareIconButton(
       icon: icon,
       label: label,
       onTap: onTap,
-      bg: primary ? FC.violet : FC.bg,
-      fg: primary ? Colors.white : FC.ink,
+      bg: primary ? fc.violet : fc.bg,
+      fg: primary ? Colors.white : fc.ink,
       bordered: false,
       iconSize: 18,
       stroke: 2,
@@ -577,18 +584,19 @@ class _StatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fc = context.fc;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       decoration: BoxDecoration(
-        color: tinted ? FC.limeTint : Colors.white,
+        color: tinted ? fc.limeTint : fc.surface,
         borderRadius: BorderRadius.circular(20),
-        border: tinted ? null : Border.all(color: FC.line, width: 1.5),
+        border: tinted ? null : Border.all(color: fc.line, width: 1.5),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: FT.eyebrow(color: tinted ? FC.limeInk : FC.muted)),
+          Text(label, style: FT.eyebrow(color: tinted ? fc.limeInk : fc.muted)),
           const SizedBox(height: 8),
           child,
         ],
@@ -604,22 +612,23 @@ class _NoteCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fc = context.fc;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: fc.surface,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: FC.line, width: 1.5),
+        border: Border.all(color: fc.line, width: 1.5),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('NOTE', style: FT.eyebrow()),
+          Text('NOTE', style: FT.eyebrow(color: fc.muted)),
           const SizedBox(height: 6),
           SelectableText(
             note,
-            style: FT.body(15, color: FC.ink2, height: 1.45),
+            style: FT.body(15, color: fc.ink2, height: 1.45),
           ),
         ],
       ),

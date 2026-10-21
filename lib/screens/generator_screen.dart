@@ -95,6 +95,7 @@ class _GeneratorScreenState extends State<GeneratorScreen>
 
   @override
   Widget build(BuildContext context) {
+    final fc = context.fc;
     final content = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -113,7 +114,7 @@ class _GeneratorScreenState extends State<GeneratorScreen>
               children: [
                 Text(
                   'Make it unguessable',
-                  style: FT.body(14, color: FC.muted),
+                  style: FT.body(14, color: fc.muted),
                 ),
                 const SizedBox(height: 2),
                 Text('Generator', style: FT.display(32, spacing: -1)),
@@ -139,7 +140,7 @@ class _GeneratorScreenState extends State<GeneratorScreen>
             delay: const Duration(milliseconds: 240),
             child: PrimaryButton(
               label: 'Save this password',
-              color: FC.ink,
+              color: fc.panel,
               glow: false,
               trailingIcon: FIcons.arrowRight,
               onTap: () => Navigator.of(
@@ -153,9 +154,9 @@ class _GeneratorScreenState extends State<GeneratorScreen>
 
     if (widget.pickMode) {
       return AnnotatedRegion<SystemUiOverlayStyle>(
-        value: darkStatusBar,
+        value: statusBarFor(context),
         child: Scaffold(
-          backgroundColor: FC.bg,
+          backgroundColor: fc.bg,
           body: SafeArea(
             child: Column(
               children: [
@@ -190,10 +191,11 @@ class _GeneratorScreenState extends State<GeneratorScreen>
   }
 
   Widget _card() {
+    final fc = context.fc;
     return ClipRRect(
       borderRadius: BorderRadius.circular(28),
       child: Container(
-        color: FC.violet,
+        color: fc.violet,
         child: Stack(
           children: [
             const Positioned(
@@ -211,7 +213,7 @@ class _GeneratorScreenState extends State<GeneratorScreen>
                     style: FT.body(
                       12,
                       weight: FontWeight.w700,
-                      color: FC.lime,
+                      color: fc.lime,
                       spacing: 1.2,
                     ),
                   ),
@@ -238,7 +240,7 @@ class _GeneratorScreenState extends State<GeneratorScreen>
                     children: [
                       Expanded(
                         child: _CardButton(
-                          bg: FC.onVioletGlass,
+                          bg: fc.onVioletGlass,
                           semanticLabel: 'Regenerate password',
                           onTap: _onRegenerate,
                           icon: RotationTransition(
@@ -263,7 +265,7 @@ class _GeneratorScreenState extends State<GeneratorScreen>
                       const SizedBox(width: 10),
                       Expanded(
                         child: _CardButton(
-                          bg: FC.lime,
+                          bg: fc.lime,
                           semanticLabel: _copied ? 'Copied' : 'Copy password',
                           onTap: _copy,
                           icon: AnimatedSwitcher(
@@ -274,6 +276,7 @@ class _GeneratorScreenState extends State<GeneratorScreen>
                               _copied ? FIcons.check : FIcons.copy,
                               key: ValueKey(_copied),
                               size: 18,
+                              color: fc.onLime,
                               stroke: 2.2,
                             ),
                           ),
@@ -284,7 +287,11 @@ class _GeneratorScreenState extends State<GeneratorScreen>
                             child: Text(
                               _copied ? 'Copied' : 'Copy',
                               key: ValueKey(_copied),
-                              style: FT.body(15, weight: FontWeight.w700),
+                              style: FT.body(
+                                15,
+                                weight: FontWeight.w700,
+                                color: fc.onLime,
+                              ),
                             ),
                           ),
                         ),
@@ -301,6 +308,7 @@ class _GeneratorScreenState extends State<GeneratorScreen>
   }
 
   Widget _length() {
+    final fc = context.fc;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -322,7 +330,7 @@ class _GeneratorScreenState extends State<GeneratorScreen>
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: FC.ink,
+                  color: fc.panel,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
@@ -337,10 +345,10 @@ class _GeneratorScreenState extends State<GeneratorScreen>
         SliderTheme(
           data: SliderTheme.of(context).copyWith(
             trackHeight: 6,
-            activeTrackColor: FC.violet,
-            inactiveTrackColor: FC.line,
-            thumbColor: FC.violet,
-            overlayColor: const Color(0x295B47F5),
+            activeTrackColor: fc.violet,
+            inactiveTrackColor: fc.line,
+            thumbColor: fc.violet,
+            overlayColor: fc.violet.withAlpha(0x29),
             thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 11),
             overlayShape: const RoundSliderOverlayShape(overlayRadius: 22),
             trackShape: const RoundedRectSliderTrackShape(),
@@ -471,6 +479,7 @@ class _OptionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fc = context.fc;
     return Pressable(
       onTap: onTap,
       semanticLabel: '$label, ${on ? 'on' : 'off'}',
@@ -481,9 +490,9 @@ class _OptionTile extends StatelessWidget {
         height: 64,
         padding: const EdgeInsets.symmetric(horizontal: 14),
         decoration: BoxDecoration(
-          color: on ? FC.violetTint : Colors.white,
+          color: on ? fc.violetTint : fc.surface,
           borderRadius: BorderRadius.circular(18),
-          border: Border.all(color: on ? FC.violet : FC.line, width: 1.5),
+          border: Border.all(color: on ? fc.violet : fc.line, width: 1.5),
         ),
         child: Row(
           children: [
@@ -493,10 +502,10 @@ class _OptionTile extends StatelessWidget {
               height: 24,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: on ? FC.violet : Colors.white,
+                color: on ? fc.violet : fc.surface,
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(
-                  color: on ? FC.violet : FC.checkOff,
+                  color: on ? fc.violet : fc.checkOff,
                   width: 1.5,
                 ),
               ),
@@ -520,7 +529,7 @@ class _OptionTile extends StatelessWidget {
                 children: [
                   Text(label, style: FT.body(14, weight: FontWeight.w700)),
                   const SizedBox(height: 1),
-                  Text(sample, style: FT.mono(12, color: FC.muted)),
+                  Text(sample, style: FT.mono(12, color: fc.muted)),
                 ],
               ),
             ),

@@ -54,11 +54,12 @@ class _HomeShellState extends State<HomeShell> {
 
   @override
   Widget build(BuildContext context) {
+    final fc = context.fc;
     final bottom = MediaQuery.paddingOf(context).bottom;
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: darkStatusBar,
+      value: statusBarFor(context),
       child: Scaffold(
-        backgroundColor: FC.bg,
+        backgroundColor: fc.bg,
         resizeToAvoidBottomInset: false,
         body: Stack(
           children: [
@@ -129,11 +130,12 @@ class _NavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fc = context.fc;
     return Container(
       height: 72,
       padding: const EdgeInsets.symmetric(horizontal: 8),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: fc.raised,
         borderRadius: BorderRadius.circular(26),
         boxShadow: const [
           BoxShadow(
@@ -167,7 +169,7 @@ class _NavBar extends StatelessWidget {
               height: 56,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: FC.violet,
+                color: fc.violet,
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: const [
                   BoxShadow(
@@ -218,6 +220,7 @@ class _NavItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fc = context.fc;
     return Pressable(
       onTap: onTap,
       semanticLabel: label,
@@ -229,7 +232,7 @@ class _NavItem extends StatelessWidget {
         height: 48,
         padding: EdgeInsets.symmetric(horizontal: active ? 14 : 11),
         decoration: BoxDecoration(
-          color: active ? FC.lime : Colors.transparent,
+          color: active ? fc.lime : Colors.transparent,
           borderRadius: BorderRadius.circular(16),
         ),
         child: Row(
@@ -238,7 +241,7 @@ class _NavItem extends StatelessWidget {
             FIcon(
               icon,
               size: active ? 20 : 22,
-              color: active ? FC.ink : FC.muted,
+              color: active ? fc.onLime : fc.muted,
               filled: false,
             ),
             AnimatedSize(
@@ -250,7 +253,11 @@ class _NavItem extends StatelessWidget {
                       child: Text(
                         label,
                         maxLines: 1,
-                        style: FT.body(14, weight: FontWeight.w700),
+                        style: FT.body(
+                          14,
+                          weight: FontWeight.w700,
+                          color: fc.onLime,
+                        ),
                       ),
                     )
                   : const SizedBox.shrink(),

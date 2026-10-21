@@ -116,13 +116,14 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final fc = context.fc;
     final m = (_seconds ~/ 60).toString();
     final s = (_seconds % 60).toString().padLeft(2, '0');
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: darkStatusBar,
+      value: statusBarFor(context),
       child: Scaffold(
-        backgroundColor: FC.bg,
+        backgroundColor: fc.bg,
         body: SafeArea(
           child: Column(
             children: [
@@ -147,7 +148,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                           delay: const Duration(milliseconds: 60),
                           child: Text.rich(
                             TextSpan(
-                              style: FT.body(16, color: FC.muted, height: 1.5),
+                              style: FT.body(16, color: fc.muted, height: 1.5),
                               children: [
                                 const TextSpan(
                                   text: 'We sent a 6-digit code for ',
@@ -157,7 +158,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                                   style: FT.body(
                                     16,
                                     weight: FontWeight.w700,
-                                    color: FC.ink,
+                                    color: fc.ink,
                                     height: 1.5,
                                   ),
                                 ),
@@ -175,7 +176,10 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Reset code', style: FT.label()),
+                              Text(
+                                'Reset code',
+                                style: FT.label(color: fc.ink2),
+                              ),
                               const SizedBox(height: 10),
                               OtpInput(
                                 controller: _code,
@@ -198,7 +202,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                                           style: FT.body(
                                             13,
                                             weight: FontWeight.w600,
-                                            color: FC.danger,
+                                            color: fc.danger,
                                           ),
                                         ),
                                       ),
@@ -209,7 +213,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                                 children: [
                                   Text(
                                     'Didn’t get it?',
-                                    style: FT.body(14, color: FC.muted),
+                                    style: FT.body(14, color: fc.muted),
                                   ),
                                   AnimatedSwitcher(
                                     duration: const Duration(milliseconds: 250),
@@ -225,7 +229,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                                               TextSpan(
                                                 style: FT.body(
                                                   14,
-                                                  color: FC.muted,
+                                                  color: fc.muted,
                                                 ),
                                                 children: [
                                                   const TextSpan(
@@ -236,6 +240,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                                                     style: FT.mono(
                                                       14,
                                                       weight: FontWeight.w500,
+                                                      color: fc.ink,
                                                     ),
                                                   ),
                                                 ],

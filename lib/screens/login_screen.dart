@@ -87,27 +87,28 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final fc = context.fc;
     final auth = context.watch<AuthService>();
     final canPop = Navigator.of(context).canPop();
     final first = auth.firstName;
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: darkStatusBar,
+      value: statusBarFor(context),
       child: Scaffold(
-        backgroundColor: FC.bg,
+        backgroundColor: fc.bg,
         body: Stack(
           children: [
-            const Positioned(
+            Positioned(
               right: -90,
               top: -80,
-              child: PopIn(child: Blob(size: 220, color: FC.lime)),
+              child: PopIn(child: Blob(size: 220, color: fc.lime)),
             ),
-            const Positioned(
+            Positioned(
               right: 40,
               top: 70,
               child: PopIn(
-                delay: Duration(milliseconds: 140),
-                child: Blob(size: 120, color: Color(0xE65B47F5)),
+                delay: const Duration(milliseconds: 140),
+                child: Blob(size: 120, color: fc.violet.withAlpha(0xE6)),
               ),
             ),
             SafeArea(
@@ -142,7 +143,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             first.isEmpty
                                 ? 'Unlock your vault to continue.'
                                 : 'Unlock your vault to continue, $first.',
-                            style: FT.body(16, color: FC.muted),
+                            style: FT.body(16, color: fc.muted),
                           ),
                         ),
                         const SizedBox(height: 28),

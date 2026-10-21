@@ -236,14 +236,16 @@ class ScrambleText extends StatefulWidget {
     super.key,
     required this.style,
     this.letterColor = Colors.white,
-    this.otherColor = FC.lime,
+    this.otherColor,
     this.duration = const Duration(milliseconds: 650),
   });
 
   final String text;
   final TextStyle style;
   final Color letterColor;
-  final Color otherColor;
+
+  /// Defaults to the theme's lime.
+  final Color? otherColor;
   final Duration duration;
 
   @override
@@ -276,6 +278,7 @@ class _ScrambleTextState extends State<ScrambleText>
 
   @override
   Widget build(BuildContext context) {
+    final otherColor = widget.otherColor ?? context.fc.lime;
     return Semantics(
       label: widget.text,
       liveRegion: true,
@@ -294,7 +297,7 @@ class _ScrambleTextState extends State<ScrambleText>
                   ? widget.text[i]
                   : _glyphs[_rng.nextInt(_glyphs.length)];
               final isLetter = _letter.hasMatch(ch);
-              final base = isLetter ? widget.letterColor : widget.otherColor;
+              final base = isLetter ? widget.letterColor : otherColor;
               spans.add(
                 TextSpan(
                   text: ch,

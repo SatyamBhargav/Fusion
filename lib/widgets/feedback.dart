@@ -9,6 +9,8 @@ import 'components.dart';
 import 'icons.dart';
 
 /// Ink "pill" toast with a lime check — used for copy / save / delete.
+/// Its background comes from the theme's `snackBarTheme` (the panel colour):
+/// the messenger sits above the app theme, so colours resolve inside the bar.
 void showFusionToastOn(
   ScaffoldMessengerState messenger,
   String message, {
@@ -20,36 +22,42 @@ void showFusionToastOn(
     ..showSnackBar(
       SnackBar(
         behavior: SnackBarBehavior.floating,
-        backgroundColor: FC.ink,
         elevation: 0,
         margin: EdgeInsets.fromLTRB(20, 0, 20, bottom),
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
         duration: const Duration(milliseconds: 2200),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        content: Row(
-          children: [
-            Container(
-              width: 28,
-              height: 28,
-              alignment: Alignment.center,
-              decoration: const BoxDecoration(
-                color: FC.lime,
-                shape: BoxShape.circle,
-              ),
-              child: FIcon(icon, size: 15, stroke: 2.6),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Text(
-                message,
-                style: FT.body(
-                  14,
-                  weight: FontWeight.w600,
-                  color: Colors.white,
+        content: Builder(
+          builder: (context) => Row(
+            children: [
+              Container(
+                width: 28,
+                height: 28,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: context.fc.lime,
+                  shape: BoxShape.circle,
+                ),
+                child: FIcon(
+                  icon,
+                  size: 15,
+                  stroke: 2.6,
+                  color: context.fc.onLime,
                 ),
               ),
-            ),
-          ],
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  message,
+                  style: FT.body(
+                    14,
+                    weight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -154,6 +162,7 @@ class _CodeBannerState extends State<_CodeBanner>
 
   @override
   Widget build(BuildContext context) {
+    final fc = context.fc;
     final curved = CurvedAnimation(
       parent: _c,
       curve: Curves.easeOutBack,
@@ -182,7 +191,7 @@ class _CodeBannerState extends State<_CodeBanner>
                 child: Container(
                   padding: const EdgeInsets.all(14),
                   decoration: BoxDecoration(
-                    color: FC.ink,
+                    color: fc.panel,
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: const [
                       BoxShadow(
@@ -199,10 +208,10 @@ class _CodeBannerState extends State<_CodeBanner>
                         height: 42,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                          color: FC.lime,
+                          color: fc.lime,
                           borderRadius: BorderRadius.circular(13),
                         ),
-                        child: const FIcon(FIcons.mail, size: 20),
+                        child: FIcon(FIcons.mail, size: 20, color: fc.onLime),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
@@ -212,7 +221,7 @@ class _CodeBannerState extends State<_CodeBanner>
                           children: [
                             Text(
                               'FUSION · RESET CODE',
-                              style: FT.eyebrow(color: FC.lime),
+                              style: FT.eyebrow(color: fc.lime),
                             ),
                             const SizedBox(height: 4),
                             Text(
@@ -255,7 +264,7 @@ Future<bool> showConfirmSheet(
   final result = await showModalBottomSheet<bool>(
     context: context,
     backgroundColor: Colors.transparent,
-    barrierColor: FC.scrim,
+    barrierColor: context.fc.scrim,
     isScrollControlled: true,
     builder: (ctx) => _ConfirmSheet(
       title: title,
@@ -285,6 +294,7 @@ class _ConfirmSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fc = context.fc;
     return Container(
       padding: EdgeInsets.fromLTRB(
         24,
@@ -292,9 +302,9 @@ class _ConfirmSheet extends StatelessWidget {
         24,
         24 + MediaQuery.paddingOf(context).bottom,
       ),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+      decoration: BoxDecoration(
+        color: fc.raised,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -303,7 +313,7 @@ class _ConfirmSheet extends StatelessWidget {
             width: 40,
             height: 5,
             decoration: BoxDecoration(
-              color: FC.line,
+              color: fc.line,
               borderRadius: BorderRadius.circular(3),
             ),
           ),
@@ -321,10 +331,10 @@ class _ConfirmSheet extends StatelessWidget {
               height: 72,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: FC.dangerTint,
+                color: fc.dangerTint,
                 borderRadius: BorderRadius.circular(24),
               ),
-              child: FIcon(icon, size: 32, color: FC.danger),
+              child: FIcon(icon, size: 32, color: fc.danger),
             ),
           ),
           const SizedBox(height: 18),
@@ -337,20 +347,20 @@ class _ConfirmSheet extends StatelessWidget {
           Text(
             message,
             textAlign: TextAlign.center,
-            style: FT.body(15, color: FC.muted, height: 1.5),
+            style: FT.body(15, color: fc.muted, height: 1.5),
           ),
           const SizedBox(height: 24),
           PrimaryButton(
             label: confirmLabel,
-            color: FC.danger,
+            color: fc.danger,
             glow: false,
             onTap: () => Navigator.of(context).pop(true),
           ),
           const SizedBox(height: 10),
           PrimaryButton(
             label: cancelLabel,
-            color: FC.bg,
-            foreground: FC.ink,
+            color: fc.bg,
+            foreground: fc.ink,
             glow: false,
             onTap: () => Navigator.of(context).pop(false),
           ),

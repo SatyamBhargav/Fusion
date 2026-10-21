@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
 import '../services/auth_service.dart';
+import '../services/theme_controller.dart';
 import '../services/vault_store.dart';
 import '../theme.dart';
 import '../widgets/components.dart';
@@ -10,13 +12,18 @@ import '../widgets/icons.dart';
 import '../widgets/motion.dart';
 import 'home_shell.dart';
 
+/// Order of the appearance toggle's segments.
+const _themeModes = [ThemeMode.light, ThemeMode.dark, ThemeMode.system];
+
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final fc = context.fc;
     final auth = context.watch<AuthService>();
     final store = context.watch<VaultStore>();
+    final theme = context.watch<ThemeController>();
     final name = (auth.name ?? '').trim();
     final initial = name.isEmpty ? 'F' : name.substring(0, 1).toUpperCase();
     final count = store.items.length;
@@ -30,7 +37,7 @@ class SettingsScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Your account', style: FT.body(14, color: FC.muted)),
+                Text('Your account', style: FT.body(14, color: fc.muted)),
                 const SizedBox(height: 2),
                 Text('Settings', style: FT.display(32, spacing: -1)),
               ],
@@ -43,15 +50,15 @@ class SettingsScreen extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(24),
               child: Container(
-                color: FC.violet,
+                color: fc.violet,
                 child: Stack(
                   children: [
-                    const Positioned(
+                    Positioned(
                       right: -40,
                       bottom: -60,
                       child: PopIn(
-                        delay: Duration(milliseconds: 200),
-                        child: Blob(size: 130, color: FC.lime),
+                        delay: const Duration(milliseconds: 200),
+                        child: Blob(size: 130, color: fc.lime),
                       ),
                     ),
                     Padding(
@@ -62,13 +69,18 @@ class SettingsScreen extends StatelessWidget {
                             width: 56,
                             height: 56,
                             alignment: Alignment.center,
-                            decoration: const BoxDecoration(
-                              color: FC.lime,
+                            decoration: BoxDecoration(
+                              color: fc.lime,
                               shape: BoxShape.circle,
                             ),
                             child: Text(
                               initial,
-                              style: FT.display(24, spacing: 0, height: 1),
+                              style: FT.display(
+                                24,
+                                color: fc.onLime,
+                                spacing: 0,
+                                height: 1,
+                              ),
                             ),
                           ),
                           const SizedBox(width: 14),
@@ -91,7 +103,7 @@ class SettingsScreen extends StatelessWidget {
                                   auth.email ?? '',
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
-                                  style: FT.body(14, color: FC.onViolet),
+                                  style: FT.body(14, color: fc.onViolet),
                                 ),
                               ],
                             ),
@@ -102,7 +114,7 @@ class SettingsScreen extends StatelessWidget {
                               vertical: 6,
                             ),
                             decoration: BoxDecoration(
-                              color: FC.ink,
+                              color: fc.panel,
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Text(
@@ -128,13 +140,13 @@ class SettingsScreen extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: FC.limeTint,
+                color: fc.limeTint,
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const FIcon(FIcons.shieldCheck, color: FC.limeInk),
+                  FIcon(FIcons.shieldCheck, color: fc.limeInk),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Column(
@@ -145,13 +157,13 @@ class SettingsScreen extends StatelessWidget {
                           style: FT.body(
                             15,
                             weight: FontWeight.w700,
-                            color: FC.limeText,
+                            color: fc.limeText,
                           ),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           'Your vault lives in your phone’s secure storage. Nothing is uploaded anywhere.',
-                          style: FT.body(14, color: FC.limeText, height: 1.45),
+                          style: FT.body(14, color: fc.limeText, height: 1.45),
                         ),
                       ],
                     ),
@@ -164,11 +176,71 @@ class SettingsScreen extends StatelessWidget {
           FadeSlideIn(
             delay: const Duration(milliseconds: 180),
             child: Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: fc.surface,
+                borderRadius: BorderRadius.circular(22),
+                border: Border.all(color: fc.line, width: 1.5),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        width: 40,
+                        height: 40,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: fc.violetTint,
+                          borderRadius: BorderRadius.circular(13),
+                        ),
+                        child: FIcon(
+                          FIcons.contrast,
+                          size: 19,
+                          color: fc.violet,
+                        ),
+                      ),
+                      const SizedBox(width: 14),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Appearance',
+                              style: FT.body(15, weight: FontWeight.w700),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              'Match your device or pick a look',
+                              style: FT.body(13, color: fc.muted),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 14),
+                  SegmentedToggle(
+                    index: _themeModes.indexOf(theme.mode),
+                    labels: const ['Light', 'Dark', 'System'],
+                    icons: const [FIcons.sun, FIcons.moon, FIcons.contrast],
+                    onChanged: (i) =>
+                        context.read<ThemeController>().setMode(_themeModes[i]),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          FadeSlideIn(
+            delay: const Duration(milliseconds: 240),
+            child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: fc.surface,
                 borderRadius: BorderRadius.circular(22),
-                border: Border.all(color: FC.line, width: 1.5),
+                border: Border.all(color: fc.line, width: 1.5),
               ),
               child: Column(
                 children: [
@@ -181,7 +253,7 @@ class SettingsScreen extends StatelessWidget {
                       context.read<AuthService>().logout();
                     },
                   ),
-                  const Divider(height: 1, color: FC.divider),
+                  Divider(height: 1, color: fc.divider),
                   _SettingsRow(
                     icon: FIcons.trash,
                     title: 'Erase this vault',
@@ -207,8 +279,48 @@ class SettingsScreen extends StatelessWidget {
               ),
             ),
           ),
+          const SizedBox(height: 28),
+          const FadeSlideIn(
+            delay: Duration(milliseconds: 300),
+            child: _VersionLabel(),
+          ),
         ],
       ),
+    );
+  }
+}
+
+/// "Fusion v1.0.0 (1)", read from the platform build at runtime.
+class _VersionLabel extends StatefulWidget {
+  const _VersionLabel();
+
+  @override
+  State<_VersionLabel> createState() => _VersionLabelState();
+}
+
+class _VersionLabelState extends State<_VersionLabel> {
+  late final Future<PackageInfo> _info = PackageInfo.fromPlatform();
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<PackageInfo>(
+      future: _info,
+      builder: (context, snap) {
+        final info = snap.data;
+        if (info == null) return const SizedBox(height: 18);
+        final build = info.buildNumber.isEmpty ? '' : ' (${info.buildNumber})';
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const FusionLogo(size: 18),
+            const SizedBox(width: 8),
+            Text(
+              'Fusion v${info.version}$build',
+              style: FT.body(13, color: context.fc.muted),
+            ),
+          ],
+        );
+      },
     );
   }
 }
@@ -230,6 +342,7 @@ class _SettingsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fc = context.fc;
     return Pressable(
       onTap: onTap,
       scale: 0.98,
@@ -243,13 +356,13 @@ class _SettingsRow extends StatelessWidget {
               height: 40,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: danger ? FC.dangerTint : FC.violetTint,
+                color: danger ? fc.dangerTint : fc.violetTint,
                 borderRadius: BorderRadius.circular(13),
               ),
               child: FIcon(
                 icon,
                 size: 19,
-                color: danger ? FC.danger : FC.violet,
+                color: danger ? fc.danger : fc.violet,
               ),
             ),
             const SizedBox(width: 14),
@@ -262,15 +375,15 @@ class _SettingsRow extends StatelessWidget {
                     style: FT.body(
                       15,
                       weight: FontWeight.w700,
-                      color: danger ? FC.danger : FC.ink,
+                      color: danger ? fc.danger : fc.ink,
                     ),
                   ),
                   const SizedBox(height: 2),
-                  Text(subtitle, style: FT.body(13, color: FC.muted)),
+                  Text(subtitle, style: FT.body(13, color: fc.muted)),
                 ],
               ),
             ),
-            const FIcon(FIcons.chevronRight, size: 18, color: FC.muted),
+            FIcon(FIcons.chevronRight, size: 18, color: fc.muted),
           ],
         ),
       ),

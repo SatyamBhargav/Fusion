@@ -96,16 +96,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final fc = context.fc;
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: darkStatusBar,
+      value: statusBarFor(context),
       child: Scaffold(
-        backgroundColor: FC.bg,
+        backgroundColor: fc.bg,
         body: Stack(
           children: [
-            const Positioned(
+            Positioned(
               right: -60,
               top: -50,
-              child: PopIn(child: Blob(size: 160, color: FC.lime)),
+              child: PopIn(child: Blob(size: 160, color: fc.lime)),
             ),
             SafeArea(
               child: SingleChildScrollView(
@@ -129,7 +130,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           delay: const Duration(milliseconds: 60),
                           child: Text(
                             'One master password guards everything else.',
-                            style: FT.body(15, color: FC.muted),
+                            style: FT.body(15, color: fc.muted),
                           ),
                         ),
                         const SizedBox(height: 22),
@@ -209,11 +210,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 scale: _matches ? 1 : 0,
                                 duration: const Duration(milliseconds: 280),
                                 curve: Curves.easeOutBack,
-                                child: const Padding(
-                                  padding: EdgeInsets.only(right: 10),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(right: 10),
                                   child: FIcon(
                                     FIcons.check,
-                                    color: FC.success,
+                                    color: fc.success,
                                     stroke: 2.4,
                                   ),
                                 ),
@@ -266,6 +267,7 @@ class _AgreeRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fc = context.fc;
     return Semantics(
       checked: value,
       label: 'I agree to the Terms and Privacy Policy',
@@ -286,10 +288,10 @@ class _AgreeRow extends StatelessWidget {
                 height: 22,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: value ? FC.violet : Colors.white,
+                  color: value ? fc.violet : fc.surface,
                   borderRadius: BorderRadius.circular(7),
                   border: Border.all(
-                    color: value ? FC.violet : FC.checkOff,
+                    color: value ? fc.violet : fc.checkOff,
                     width: 1.5,
                   ),
                 ),
@@ -309,7 +311,7 @@ class _AgreeRow extends StatelessWidget {
               Expanded(
                 child: Text.rich(
                   TextSpan(
-                    style: FT.body(14, color: FC.ink2),
+                    style: FT.body(14, color: fc.ink2),
                     children: [
                       const TextSpan(text: 'I agree to the '),
                       TextSpan(
@@ -317,7 +319,7 @@ class _AgreeRow extends StatelessWidget {
                         style: FT.body(
                           14,
                           weight: FontWeight.w700,
-                          color: FC.violet,
+                          color: fc.violet,
                         ),
                       ),
                       const TextSpan(text: ' and '),
@@ -326,7 +328,7 @@ class _AgreeRow extends StatelessWidget {
                         style: FT.body(
                           14,
                           weight: FontWeight.w700,
-                          color: FC.violet,
+                          color: fc.violet,
                         ),
                       ),
                     ],

@@ -145,13 +145,14 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final fc = context.fc;
     final provider = providerById(_provider);
     final isPassword = _kind == LoginKind.password;
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: darkStatusBar,
+      value: statusBarFor(context),
       child: Scaffold(
-        backgroundColor: FC.bg,
+        backgroundColor: fc.bg,
         body: SafeArea(
           child: Column(
             children: [
@@ -367,6 +368,7 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
   }
 
   Widget _socialSection(SocialProvider provider) {
+    final fc = context.fc;
     Widget tile(SocialProvider p) => Expanded(
       child: _ProviderTile(
         provider: p,
@@ -382,7 +384,7 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
       key: const ValueKey('social'),
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('I sign in with', style: FT.label()),
+        Text('I sign in with', style: FT.label(color: fc.ink2)),
         const SizedBox(height: 10),
         Row(
           children: [
@@ -415,21 +417,21 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           decoration: BoxDecoration(
-            color: FC.limeTint,
+            color: fc.limeTint,
             borderRadius: BorderRadius.circular(18),
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Padding(
-                padding: EdgeInsets.only(top: 1),
-                child: FIcon(FIcons.shieldCheck, color: FC.limeInk),
+              Padding(
+                padding: const EdgeInsets.only(top: 1),
+                child: FIcon(FIcons.shieldCheck, color: fc.limeInk),
               ),
               const SizedBox(width: 12),
               Expanded(
                 child: Text(
                   'No password to remember. Fusion keeps note of which account you use, so you always tap the right button.',
-                  style: FT.body(14, color: FC.limeText, height: 1.45),
+                  style: FT.body(14, color: fc.limeText, height: 1.45),
                 ),
               ),
             ],
@@ -453,6 +455,7 @@ class _ProviderTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fc = context.fc;
     return Pressable(
       onTap: onTap,
       semanticLabel: provider.name,
@@ -462,9 +465,9 @@ class _ProviderTile extends StatelessWidget {
         curve: Curves.easeOutCubic,
         height: 84,
         decoration: BoxDecoration(
-          color: selected ? FC.violetTint : Colors.white,
+          color: selected ? fc.violetTint : fc.surface,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: selected ? FC.violet : FC.line, width: 2),
+          border: Border.all(color: selected ? fc.violet : fc.line, width: 2),
         ),
         child: Stack(
           children: [
@@ -505,8 +508,8 @@ class _ProviderTile extends StatelessWidget {
                   width: 20,
                   height: 20,
                   alignment: Alignment.center,
-                  decoration: const BoxDecoration(
-                    color: FC.violet,
+                  decoration: BoxDecoration(
+                    color: fc.violet,
                     shape: BoxShape.circle,
                   ),
                   child: const FIcon(
