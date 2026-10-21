@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
+  <!-- Fusion mark on its own (for light backgrounds). On violet, make the left circle #FFFFFF. -->
+  <circle cx="15" cy="20" r="12" fill="#5B47F5"/>
+  <circle cx="25" cy="20" r="12" fill="#D7F75B"/>
+  <path d="M20 9.0913 A12 12 0 0 1 20 30.9087 A12 12 0 0 1 20 9.0913 Z" fill="#16142B"/>
+</svg>
