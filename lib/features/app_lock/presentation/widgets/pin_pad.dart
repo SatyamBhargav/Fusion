@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../../../services/app_lock_controller.dart';
 import '../../../../core/theme/theme.dart';
 import '../../../../core/widgets/icons.dart';
 import '../../../../core/widgets/motion.dart';
+import '../../domain/entities/app_lock_status.dart';
 
 /// The row of dots above the keypad showing how many digits are in.
 class PinDots extends StatelessWidget {
   const PinDots({
     super.key,
     required this.filled,
-    this.length = AppLockController.pinLength,
+    this.length = AppLockStatus.pinLength,
     this.onDark = false,
     this.error = false,
   });

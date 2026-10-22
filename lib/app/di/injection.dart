@@ -1,5 +1,6 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../core/network/dio_client.dart';
 import '../../core/router/draft_password.dart';
@@ -69,6 +70,8 @@ import '../../features/vault/presentation/bloc/vault_bloc.dart';
 import '../../features/vault/presentation/cubits/login_form_cubit.dart';
 import '../../features/vault/presentation/cubits/password_detail_cubit.dart';
 import '../../features/vault/presentation/cubits/vault_filter_cubit.dart';
+import '../router/app_router.dart';
+import '../router/route_guard.dart';
 
 /// The app's service locator.
 final sl = GetIt.instance;
@@ -159,6 +162,7 @@ void configureDependencies({
   sl
     ..registerLazySingleton(
       () => AuthBloc(getSession: sl(), watchSession: sl()),
+      dispose: (b) => b.close(),
     )
     ..registerLazySingleton(
       () => AppLockBloc(
@@ -167,6 +171,7 @@ void configureDependencies({
         watchSession: sl(),
         shouldLockOnHide: sl(),
       ),
+      dispose: (b) => b.close(),
     )
     ..registerLazySingleton(
       () => VaultBloc(
@@ -175,9 +180,27 @@ void configureDependencies({
         loadVault: sl(),
         toggleFavourite: sl(),
       ),
+      dispose: (b) => b.close(),
     )
     ..registerLazySingleton(
       () => ThemeCubit(loadThemeMode: sl(), setThemeMode: sl()),
+      dispose: (b) => b.close(),
+    );
+
+  // ── Navigation ──
+  sl
+    ..registerLazySingleton(
+      () => RouteGuard(
+        getSession: sl(),
+        getLockStatus: sl(),
+        watchSession: sl(),
+        watchLockStatus: sl(),
+      ),
+      dispose: (g) => g.dispose(),
+    )
+    ..registerLazySingleton<GoRouter>(
+      () => buildRouter(sl()),
+      dispose: (r) => r.dispose(),
     );
 
   // ── Presentation: per screen ──

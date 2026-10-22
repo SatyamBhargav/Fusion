@@ -1,0 +1,549 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../../app/di/injection.dart';
+import '../../../../app/router/routes.dart';
+import '../../../../core/bloc/effects.dart';
+import '../../../../core/router/draft_password.dart';
+import '../../../../core/theme/theme.dart';
+import '../../../../core/widgets/components.dart';
+import '../../../../core/widgets/feedback.dart';
+import '../../../../core/widgets/icons.dart';
+import '../../../../core/widgets/motion.dart';
+import '../../../../core/widgets/nav_clearance.dart';
+import '../../domain/entities/gen_options.dart';
+import '../cubit/generator_cubit.dart';
+
+/// Password generator. As a tab it saves into a new login; in [pickMode]
+/// (opened from a form) it pops with the chosen password.
+class GeneratorPage extends StatelessWidget {
+  const GeneratorPage({super.key, this.pickMode = false});
+
+  final bool pickMode;
+
+  @override
+  Widget build(BuildContext context) => BlocProvider(
+    create: (_) => sl<GeneratorCubit>(),
+    child: _GeneratorView(pickMode: pickMode),
+  );
+}
+
+class _GeneratorView extends StatefulWidget {
+  const _GeneratorView({required this.pickMode});
+
+  final bool pickMode;
+
+  @override
+  State<_GeneratorView> createState() => _GeneratorViewState();
+}
+
+class _GeneratorViewState extends State<_GeneratorView>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _spin = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 650),
+  );
+  late final CurvedAnimation _spinCurve = CurvedAnimation(
+    parent: _spin,
+    curve: Curves.easeOutBack,
+  );
+
+  GeneratorCubit get _cubit => context.read<GeneratorCubit>();
+
+  // For use while building only.
+  GeneratorState get _state => context.watch<GeneratorCubit>().state;
+  GenOptions get _o => _state.options;
+  String get _pw => _state.password;
+  bool get _copied => _state.copied;
+
+  @override
+  void dispose() {
+    _spinCurve.dispose();
+    _spin.dispose();
+    super.dispose();
+  }
+
+  void _onRegenerate() {
+    HapticFeedback.selectionClick();
+    _spin.forward(from: 0);
+    _cubit.regenerate();
+  }
+
+  Future<void> _copy() async {
+    await Clipboard.setData(ClipboardData(text: _cubit.state.password));
+    HapticFeedback.lightImpact();
+    if (!mounted) return;
+    _cubit.copied();
+  }
+
+  void _toggle(CharacterSet set) {
+    if (_cubit.toggle(set)) HapticFeedback.selectionClick();
+  }
+
+  void _onEffect(BuildContext context, GeneratorEffect effect) {
+    HapticFeedback.heavyImpact();
+    showFusionToast(
+      context,
+      'Keep at least one character type',
+      icon: FIcons.info,
+      bottom: widget.pickMode ? 96 : 108,
+    );
+  }
+
+  void _saveAsLogin() {
+    sl<DraftPassword>().set(_cubit.state.password);
+    context.push(Routes.newItem);
+  }
+
+  @override
+  Widget build(BuildContext context) =>
+      EffectListener<GeneratorCubit, GeneratorEffect>(
+        listener: _onEffect,
+        child: _build(),
+      );
+
+  Widget _build() {
+    final fc = context.fc;
+    final content = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (widget.pickMode)
+          Row(
+            children: [
+              const BackButtonF(),
+              const SizedBox(width: 14),
+              Text('Generate', style: FT.display(26, spacing: -0.8)),
+            ],
+          )
+        else
+          FadeSlideIn(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Make it unguessable',
+                  style: FT.body(14, color: fc.muted),
+                ),
+                const SizedBox(height: 2),
+                Text('Generator', style: FT.display(32, spacing: -1)),
+              ],
+            ),
+          ),
+        const SizedBox(height: 20),
+        FadeSlideIn(
+          delay: const Duration(milliseconds: 60),
+          offset: 24,
+          child: _card(),
+        ),
+        const SizedBox(height: 22),
+        FadeSlideIn(delay: const Duration(milliseconds: 120), child: _length()),
+        const SizedBox(height: 18),
+        FadeSlideIn(
+          delay: const Duration(milliseconds: 180),
+          child: _include(),
+        ),
+        if (!widget.pickMode) ...[
+          const SizedBox(height: 22),
+          FadeSlideIn(
+            delay: const Duration(milliseconds: 240),
+            child: PrimaryButton(
+              label: 'Save this password',
+              color: fc.panel,
+              glow: false,
+              trailingIcon: FIcons.arrowRight,
+              onTap: _saveAsLogin,
+            ),
+          ),
+        ],
+      ],
+    );
+
+    if (widget.pickMode) {
+      return AnnotatedRegion<SystemUiOverlayStyle>(
+        value: statusBarFor(context),
+        child: Scaffold(
+          backgroundColor: fc.bg,
+          body: SafeArea(
+            child: Column(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
+                    child: content,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
+                  child: PrimaryButton(
+                    label: 'Use this password',
+                    trailingIcon: FIcons.check,
+                    onTap: () => context.pop(_cubit.state.password),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+    return SafeArea(
+      bottom: false,
+      child: SingleChildScrollView(
+        padding: EdgeInsets.fromLTRB(20, 12, 20, navClearance(context)),
+        child: content,
+      ),
+    );
+  }
+
+  Widget _card() {
+    final fc = context.fc;
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(28),
+      child: Container(
+        color: fc.violet,
+        child: Stack(
+          children: [
+            const Positioned(
+              right: -50,
+              top: -60,
+              child: Blob(size: 150, color: Color(0x2EFFFFFF), ring: true),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'YOUR NEW PASSWORD',
+                    style: FT.body(
+                      12,
+                      weight: FontWeight.w700,
+                      color: fc.lime,
+                      spacing: 1.2,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(minHeight: 68),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: ScrambleText(
+                        _pw,
+                        style: FT.mono(
+                          26,
+                          weight: FontWeight.w500,
+                          height: 1.3,
+                          spacing: 0.5,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  StrengthMeter(password: _pw, onDark: true),
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _CardButton(
+                          bg: fc.onVioletGlass,
+                          semanticLabel: 'Regenerate password',
+                          onTap: _onRegenerate,
+                          icon: RotationTransition(
+                            turns: _spinCurve,
+                            child: const FIcon(
+                              FIcons.refresh,
+                              size: 18,
+                              color: Colors.white,
+                              stroke: 2.2,
+                            ),
+                          ),
+                          label: Text(
+                            'Regenerate',
+                            style: FT.body(
+                              15,
+                              weight: FontWeight.w700,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: _CardButton(
+                          bg: fc.lime,
+                          semanticLabel: _copied ? 'Copied' : 'Copy password',
+                          onTap: _copy,
+                          icon: AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 220),
+                            transitionBuilder: (c, a) =>
+                                ScaleTransition(scale: a, child: c),
+                            child: FIcon(
+                              _copied ? FIcons.check : FIcons.copy,
+                              key: ValueKey(_copied),
+                              size: 18,
+                              color: fc.onLime,
+                              stroke: 2.2,
+                            ),
+                          ),
+                          label: AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 220),
+                            transitionBuilder: (c, a) =>
+                                FadeTransition(opacity: a, child: c),
+                            child: Text(
+                              _copied ? 'Copied' : 'Copy',
+                              key: ValueKey(_copied),
+                              style: FT.body(
+                                15,
+                                weight: FontWeight.w700,
+                                color: fc.onLime,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _length() {
+    final fc = context.fc;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                'Length',
+                style: FT.body(15, weight: FontWeight.w700),
+              ),
+            ),
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 180),
+              transitionBuilder: (c, a) => ScaleTransition(scale: a, child: c),
+              child: Container(
+                key: ValueKey(_o.length),
+                constraints: const BoxConstraints(minWidth: 44),
+                height: 30,
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: fc.panel,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  '${_o.length}',
+                  style: FT.mono(15, color: Colors.white),
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 4),
+        SliderTheme(
+          data: SliderTheme.of(context).copyWith(
+            trackHeight: 6,
+            activeTrackColor: fc.violet,
+            inactiveTrackColor: fc.line,
+            thumbColor: fc.violet,
+            overlayColor: fc.violet.withAlpha(0x29),
+            thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 11),
+            overlayShape: const RoundSliderOverlayShape(overlayRadius: 22),
+            trackShape: const RoundedRectSliderTrackShape(),
+            showValueIndicator: ShowValueIndicator.never,
+            activeTickMarkColor: Colors.transparent,
+            inactiveTickMarkColor: Colors.transparent,
+          ),
+          child: Slider(
+            value: _o.length.toDouble(),
+            min: 8,
+            max: 40,
+            divisions: 32,
+            semanticFormatterCallback: (v) => '${v.round()} characters',
+            onChanged: (v) {
+              final n = v.round();
+              if (n != _cubit.state.options.length) {
+                HapticFeedback.selectionClick();
+                _cubit.setLength(n);
+              }
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _include() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Include', style: FT.body(15, weight: FontWeight.w700)),
+        const SizedBox(height: 10),
+        Row(
+          children: [
+            Expanded(
+              child: _OptionTile(
+                label: 'Uppercase',
+                sample: 'ABC',
+                on: _o.upper,
+                onTap: () => _toggle(CharacterSet.upper),
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: _OptionTile(
+                label: 'Lowercase',
+                sample: 'abc',
+                on: _o.lower,
+                onTap: () => _toggle(CharacterSet.lower),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 10),
+        Row(
+          children: [
+            Expanded(
+              child: _OptionTile(
+                label: 'Numbers',
+                sample: '123',
+                on: _o.numbers,
+                onTap: () => _toggle(CharacterSet.numbers),
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: _OptionTile(
+                label: 'Symbols',
+                sample: r'#$&',
+                on: _o.symbols,
+                onTap: () => _toggle(CharacterSet.symbols),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _CardButton extends StatelessWidget {
+  const _CardButton({
+    required this.bg,
+    required this.icon,
+    required this.label,
+    required this.onTap,
+    required this.semanticLabel,
+  });
+
+  final Color bg;
+  final Widget icon;
+  final Widget label;
+  final VoidCallback onTap;
+  final String semanticLabel;
+
+  @override
+  Widget build(BuildContext context) {
+    return Pressable(
+      onTap: onTap,
+      semanticLabel: semanticLabel,
+      child: Container(
+        height: 48,
+        decoration: BoxDecoration(
+          color: bg,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [icon, const SizedBox(width: 8), label],
+        ),
+      ),
+    );
+  }
+}
+
+class _OptionTile extends StatelessWidget {
+  const _OptionTile({
+    required this.label,
+    required this.sample,
+    required this.on,
+    required this.onTap,
+  });
+
+  final String label;
+  final String sample;
+  final bool on;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final fc = context.fc;
+    return Pressable(
+      onTap: onTap,
+      semanticLabel: '$label, ${on ? 'on' : 'off'}',
+      selected: on,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 240),
+        curve: Curves.easeOutCubic,
+        height: 64,
+        padding: const EdgeInsets.symmetric(horizontal: 14),
+        decoration: BoxDecoration(
+          color: on ? fc.violetTint : fc.surface,
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: on ? fc.violet : fc.line, width: 1.5),
+        ),
+        child: Row(
+          children: [
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              width: 24,
+              height: 24,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: on ? fc.violet : fc.surface,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                  color: on ? fc.violet : fc.checkOff,
+                  width: 1.5,
+                ),
+              ),
+              child: AnimatedScale(
+                scale: on ? 1 : 0,
+                duration: const Duration(milliseconds: 260),
+                curve: Curves.easeOutBack,
+                child: const FIcon(
+                  FIcons.check,
+                  size: 14,
+                  color: Colors.white,
+                  stroke: 3,
+                ),
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(label, style: FT.body(14, weight: FontWeight.w700)),
+                  const SizedBox(height: 1),
+                  Text(sample, style: FT.mono(12, color: fc.muted)),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

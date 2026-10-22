@@ -1,18 +1,19 @@
-import 'dart:convert';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:fusion/main.dart';
-import 'package:fusion/services/app_lock_controller.dart';
-import 'package:fusion/services/auth_service.dart';
-import 'package:fusion/services/biometric_auth.dart';
-import 'package:fusion/services/theme_controller.dart';
-import 'package:fusion/services/vault_store.dart';
+import 'package:fusion/app/app.dart';
+import 'package:fusion/app/di/injection.dart';
+import 'package:fusion/core/security/hashing.dart';
+import 'package:fusion/features/app_lock/domain/entities/biometric_kind.dart';
+import 'package:fusion/features/app_lock/domain/repositories/app_lock_repository.dart';
+import 'package:fusion/features/settings/domain/entities/app_theme_mode.dart';
+import 'package:fusion/features/settings/presentation/cubit/theme_cubit.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import '../fakes.dart';
+import 'di.dart';
 
 export 'seeds.dart' show vaultItemJson;
 
@@ -24,57 +25,53 @@ class FusionHarness {
 }
 
 /// Pumps the whole app with seeded storage. The account is Ada Lovelace
-/// (ada@x.io) and the PIN is 123456.
+/// (ada@x.io, master password `pw`) and the PIN is 123456.
 Future<FusionHarness> pumpFusion(
   WidgetTester tester, {
   bool account = true,
   bool pin = true,
   bool loggedIn = false,
   bool biometric = false,
+  bool bioResult = true,
+  int failed = 0,
+  bool masterPasswordRequested = false,
   BiometricKind kind = BiometricKind.face,
+  AppThemeMode theme = AppThemeMode.system,
   List<Map<String, Object?>> items = const [],
   Size size = const Size(600, 1000),
+  PasswordHasher hasher = fastHash,
+
+  /// Runs after the services are set up, before the app is pumped.
+  FutureOr<void> Function()? before,
 }) async {
   GoogleFonts.config.allowRuntimeFetching = false;
+  PackageInfo.setMockInitialValues(
+    appName: 'Fusion',
+    packageName: 'app.fusion',
+    version: '1.0.0',
+    buildNumber: '1',
+    buildSignature: '',
+  );
   tester.view.physicalSize = size;
   tester.view.devicePixelRatio = 1;
   addTearDown(tester.view.reset);
-  FlutterSecureStorage.setMockInitialValues({
-    if (account)
-      'fusion.account.v1': jsonEncode({
-        'name': 'Ada Lovelace',
-        'email': 'ada@x.io',
-        'salt': 's',
-        'hash': 'h',
-      }),
-    if (pin)
-      'fusion.applock.v1': jsonEncode({
-        'salt': 's',
-        'hash': 's|123456',
-        'biometric': biometric,
-        'failed': 0,
-      }),
-    if (items.isNotEmpty) 'fusion.vault.v1': jsonEncode(items),
-  });
-  final bio = FakeBiometricAuth(kind: kind);
-  final auth = AuthService();
-  await auth.init();
-  if (loggedIn) auth.unlockWithAppLock();
-  final lock = AppLockController(auth: auth, biometrics: bio, hasher: fastHash);
-  await lock.init();
-  final theme = ThemeController();
-  await theme.init();
-  await tester.pumpWidget(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider<AuthService>.value(value: auth),
-        ChangeNotifierProvider<AppLockController>.value(value: lock),
-        ChangeNotifierProvider<ThemeController>.value(value: theme),
-        ChangeNotifierProvider<VaultStore>(create: (_) => VaultStore()),
-      ],
-      child: const FusionApp(),
-    ),
+  final bio = await setUpDi(
+    account: account,
+    pin: pin,
+    loggedIn: loggedIn,
+    biometric: biometric,
+    failed: failed,
+    items: items,
+    bio: FakeBiometricAuth(kind: kind, result: bioResult),
+    hasher: hasher,
   );
+  if (masterPasswordRequested) {
+    sl<AppLockRepository>().requestMasterPassword();
+  }
+  await before?.call();
+  await sl<ThemeCubit>().load();
+  await sl<ThemeCubit>().select(theme);
+  await tester.pumpWidget(const FusionApp());
   // Some screens loop an animation, so pump a fixed time instead of settling.
   await pumpFor(tester);
   return FusionHarness(bio);

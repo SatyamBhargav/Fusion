@@ -323,39 +323,3 @@ SystemUiOverlayStyle statusBarFor(BuildContext context) =>
     Theme.of(context).brightness == Brightness.dark
     ? lightStatusBar
     : darkStatusBar;
-
-/// Closes [route] even if something (like the app lock) was pushed over it
-/// while it was busy: pops when on top, otherwise removes just that route.
-void closeRoute<T>(NavigatorState nav, Route<T> route, [T? result]) {
-  if (route.isCurrent) {
-    nav.pop(result);
-  } else if (route.isActive) {
-    nav.removeRoute(route, result);
-  }
-}
-
-/// The house page transition: a short slide + fade.
-Route<T> fusionRoute<T>(Widget page) {
-  return PageRouteBuilder<T>(
-    transitionDuration: const Duration(milliseconds: 420),
-    reverseTransitionDuration: const Duration(milliseconds: 320),
-    pageBuilder: (_, __, ___) => page,
-    transitionsBuilder: (_, animation, __, child) {
-      final curved = CurvedAnimation(
-        parent: animation,
-        curve: Curves.easeOutCubic,
-        reverseCurve: Curves.easeInCubic,
-      );
-      return FadeTransition(
-        opacity: curved,
-        child: SlideTransition(
-          position: Tween<Offset>(
-            begin: const Offset(0.08, 0),
-            end: Offset.zero,
-          ).animate(curved),
-          child: child,
-        ),
-      );
-    },
-  );
-}
