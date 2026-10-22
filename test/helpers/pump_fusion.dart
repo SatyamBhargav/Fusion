@@ -14,32 +14,14 @@ import 'package:provider/provider.dart';
 
 import '../fakes.dart';
 
+export 'seeds.dart' show vaultItemJson;
+
 /// What a black-box test can still reach once the real app is running.
 class FusionHarness {
   FusionHarness(this.bio);
 
   final FakeBiometricAuth bio;
 }
-
-Map<String, Object?> vaultItemJson({
-  required String id,
-  required String name,
-  String website = '',
-  String username = '',
-  String password = 'pw-123456',
-  bool favourite = false,
-}) => {
-  'id': id,
-  'name': name,
-  'website': website,
-  'username': username,
-  'password': password,
-  'note': '',
-  'favourite': favourite,
-  'kind': 'password',
-  'provider': 'google',
-  'updatedAt': '2026-01-01T00:00:00.000',
-};
 
 /// Pumps the whole app with seeded storage. The account is Ada Lovelace
 /// (ada@x.io) and the PIN is 123456.
