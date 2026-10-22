@@ -36,12 +36,8 @@ android {
     ndkVersion flutter.ndkVersion
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-
-    kotlinOptions {
-        jvmTarget = '1.8'
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     sourceSets {
@@ -50,7 +46,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.satyambhargav.fusion"
+        applicationId "com.bhargav.fusion"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdkVersion flutter.minSdkVersion
@@ -69,13 +65,17 @@ android {
        }
         buildTypes {
            release {
-              // TODO: Add your own signing config for the release build.
-              // Signing with the debug keys for now,
-              // so `flutter run --release` works.
-// -                signingConfig signingConfigs.debug
-               signingConfig signingConfigs.release
+              // Falls back to debug keys until android/key.properties exists,
+              // so `flutter build apk --release` works without the upload keystore.
+               signingConfig keystorePropertiesFile.exists() ? signingConfigs.release : signingConfigs.debug
            }
         }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
+    }
 }
 
 flutter {
