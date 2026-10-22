@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:fusion/theme.dart';
+import 'package:fusion/core/theme/theme.dart';
 
 void main() {
   testWidgets('closeRoute removes only its own route when it is covered', (

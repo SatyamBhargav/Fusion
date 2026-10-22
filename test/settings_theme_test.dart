@@ -6,7 +6,7 @@ import 'package:fusion/services/app_lock_controller.dart';
 import 'package:fusion/services/auth_service.dart';
 import 'package:fusion/services/theme_controller.dart';
 import 'package:fusion/services/vault_store.dart';
-import 'package:fusion/theme.dart';
+import 'package:fusion/core/theme/theme.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';

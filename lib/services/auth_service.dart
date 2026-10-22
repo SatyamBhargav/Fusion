@@ -4,8 +4,8 @@ import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import 'hashing.dart';
-import 'storage.dart';
+import '../core/security/hashing.dart';
+import '../core/storage/secure_storage.dart';
 
 typedef AuthError = ({String field, String message});
 typedef ResetRequest = ({String? code, String? error});

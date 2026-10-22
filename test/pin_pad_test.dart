@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:fusion/theme.dart';
-import 'package:fusion/widgets/pin_pad.dart';
+import 'package:fusion/core/theme/theme.dart';
+import 'package:fusion/features/app_lock/presentation/widgets/pin_pad.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 Widget _host(Widget child) => MaterialApp(

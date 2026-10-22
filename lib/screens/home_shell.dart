@@ -3,9 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../services/vault_store.dart';
-import '../theme.dart';
-import '../widgets/icons.dart';
-import '../widgets/motion.dart';
+import '../core/theme/theme.dart';
+import '../core/widgets/icons.dart';
+import '../core/widgets/motion.dart';
 import 'generator_screen.dart';
 import 'login_form_screen.dart';
 import 'settings_screen.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import 'storage.dart';
+import '../core/storage/secure_storage.dart';
 
 /// The user's appearance choice: light, dark, or follow the device.
 /// Persisted alongside the rest of Fusion's data in secure storage.

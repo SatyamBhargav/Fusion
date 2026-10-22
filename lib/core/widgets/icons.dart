@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../theme.dart';
+import '../theme/theme.dart';
 
 /// The exact stroke icons from the design (24×24 viewBox).
 class FIcons {

@@ -6,7 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:fusion/screens/login_screen.dart';
 import 'package:fusion/services/app_lock_controller.dart';
 import 'package:fusion/services/auth_service.dart';
-import 'package:fusion/theme.dart';
+import 'package:fusion/core/theme/theme.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 

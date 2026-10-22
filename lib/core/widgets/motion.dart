@@ -3,7 +3,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-import '../theme.dart';
+import '../theme/theme.dart';
 
 /// Fades + rises a child into place, optionally after a delay (staggering).
 class FadeSlideIn extends StatefulWidget {

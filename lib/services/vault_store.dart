@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import 'storage.dart';
+import '../core/storage/secure_storage.dart';
 import 'vault_item.dart';
 
 class VaultStore extends ChangeNotifier {

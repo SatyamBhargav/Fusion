@@ -6,10 +6,10 @@ import 'package:provider/provider.dart';
 import '../services/auth_service.dart';
 import '../services/vault_item.dart';
 import '../services/vault_store.dart';
-import '../theme.dart';
-import '../widgets/components.dart';
-import '../widgets/icons.dart';
-import '../widgets/motion.dart';
+import '../core/theme/theme.dart';
+import '../core/widgets/components.dart';
+import '../core/widgets/icons.dart';
+import '../core/widgets/motion.dart';
 import 'home_shell.dart';
 import 'password_detail_screen.dart';
 

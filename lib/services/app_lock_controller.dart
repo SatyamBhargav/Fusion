@@ -5,8 +5,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'auth_service.dart';
 import 'biometric_auth.dart';
-import 'hashing.dart';
-import 'storage.dart';
+import '../core/security/hashing.dart';
+import '../core/storage/secure_storage.dart';
 
 typedef PinHasher = Future<String> Function(String salt, String pin);
 

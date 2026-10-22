@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../services/password_generator.dart';
-import '../theme.dart';
-import '../widgets/components.dart';
-import '../widgets/icons.dart';
-import '../widgets/motion.dart';
+import '../core/theme/theme.dart';
+import '../core/widgets/components.dart';
+import '../core/widgets/icons.dart';
+import '../core/widgets/motion.dart';
 import 'login_screen.dart';
 import 'signup_screen.dart';
 

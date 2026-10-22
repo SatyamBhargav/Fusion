@@ -5,11 +5,11 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../services/auth_service.dart';
-import '../theme.dart';
-import '../widgets/components.dart';
-import '../widgets/feedback.dart';
-import '../widgets/icons.dart';
-import '../widgets/motion.dart';
+import '../core/theme/theme.dart';
+import '../core/widgets/components.dart';
+import '../core/widgets/feedback.dart';
+import '../core/widgets/icons.dart';
+import '../core/widgets/motion.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
   const ResetPasswordScreen({super.key, required this.email});

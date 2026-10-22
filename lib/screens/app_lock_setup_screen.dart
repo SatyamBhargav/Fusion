@@ -5,12 +5,12 @@ import 'package:provider/provider.dart';
 import '../services/app_lock_controller.dart';
 import '../services/auth_service.dart';
 import '../services/biometric_auth.dart';
-import '../theme.dart';
-import '../widgets/components.dart';
-import '../widgets/feedback.dart';
-import '../widgets/icons.dart';
-import '../widgets/motion.dart';
-import '../widgets/pin_pad.dart';
+import '../core/theme/theme.dart';
+import '../core/widgets/components.dart';
+import '../core/widgets/feedback.dart';
+import '../core/widgets/icons.dart';
+import '../core/widgets/motion.dart';
+import '../features/app_lock/presentation/widgets/pin_pad.dart';
 
 enum _Step { current, create, confirm, biometric }
 

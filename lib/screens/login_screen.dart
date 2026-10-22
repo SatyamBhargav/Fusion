@@ -4,11 +4,11 @@ import 'package:provider/provider.dart';
 
 import '../services/app_lock_controller.dart';
 import '../services/auth_service.dart';
-import '../theme.dart';
-import '../utils.dart';
-import '../widgets/components.dart';
-import '../widgets/icons.dart';
-import '../widgets/motion.dart';
+import '../core/theme/theme.dart';
+import '../core/utils/utils.dart';
+import '../core/widgets/components.dart';
+import '../core/widgets/icons.dart';
+import '../core/widgets/motion.dart';
 import 'forgot_password_screen.dart';
 import 'signup_screen.dart';
 

@@ -9,9 +9,9 @@ import 'package:fusion/services/app_lock_controller.dart';
 import 'package:fusion/services/auth_service.dart';
 import 'package:fusion/services/biometric_auth.dart';
 import 'package:fusion/services/vault_store.dart';
-import 'package:fusion/theme.dart';
-import 'package:fusion/widgets/components.dart';
-import 'package:fusion/widgets/pin_pad.dart';
+import 'package:fusion/core/theme/theme.dart';
+import 'package:fusion/core/widgets/components.dart';
+import 'package:fusion/features/app_lock/presentation/widgets/pin_pad.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 

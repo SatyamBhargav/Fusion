@@ -11,10 +11,10 @@ import 'services/app_lock_controller.dart';
 import 'services/auth_service.dart';
 import 'services/theme_controller.dart';
 import 'services/vault_store.dart';
-import 'theme.dart';
+import 'core/theme/theme.dart';
 import 'widgets/app_lock_guard.dart';
-import 'widgets/components.dart';
-import 'widgets/motion.dart';
+import 'core/widgets/components.dart';
+import 'core/widgets/motion.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

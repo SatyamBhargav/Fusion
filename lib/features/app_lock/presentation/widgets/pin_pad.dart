@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../services/app_lock_controller.dart';
-import '../theme.dart';
-import 'icons.dart';
-import 'motion.dart';
+import '../../../../services/app_lock_controller.dart';
+import '../../../../core/theme/theme.dart';
+import '../../../../core/widgets/icons.dart';
+import '../../../../core/widgets/motion.dart';
 
 /// The row of dots above the keypad showing how many digits are in.
 class PinDots extends StatelessWidget {

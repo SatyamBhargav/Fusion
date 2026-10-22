@@ -6,12 +6,12 @@ import 'package:url_launcher/url_launcher.dart';
 import '../services/password_generator.dart';
 import '../services/vault_item.dart';
 import '../services/vault_store.dart';
-import '../theme.dart';
-import '../utils.dart';
-import '../widgets/components.dart';
-import '../widgets/feedback.dart';
-import '../widgets/icons.dart';
-import '../widgets/motion.dart';
+import '../core/theme/theme.dart';
+import '../core/utils/utils.dart';
+import '../core/widgets/components.dart';
+import '../core/widgets/feedback.dart';
+import '../core/widgets/icons.dart';
+import '../core/widgets/motion.dart';
 import 'login_form_screen.dart';
 
 class PasswordDetailScreen extends StatefulWidget {

@@ -4,12 +4,12 @@ import 'package:provider/provider.dart';
 
 import '../services/vault_item.dart';
 import '../services/vault_store.dart';
-import '../theme.dart';
-import '../utils.dart';
-import '../widgets/components.dart';
-import '../widgets/feedback.dart';
-import '../widgets/icons.dart';
-import '../widgets/motion.dart';
+import '../core/theme/theme.dart';
+import '../core/utils/utils.dart';
+import '../core/widgets/components.dart';
+import '../core/widgets/feedback.dart';
+import '../core/widgets/icons.dart';
+import '../core/widgets/motion.dart';
 import 'generator_screen.dart';
 
 /// Add or edit a login — either a stored password or a social sign-in.
