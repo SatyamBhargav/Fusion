@@ -8,3 +8,11 @@ const fusionStorage = FlutterSecureStorage(
     accessibility: KeychainAccessibility.first_unlock_this_device,
   ),
 );
+
+/// Storage keys. Existing installs depend on these, so never rename them.
+abstract final class StorageKeys {
+  static const account = 'fusion.account.v1';
+  static const appLock = 'fusion.applock.v1';
+  static const theme = 'fusion.theme.v1';
+  static const vault = 'fusion.vault.v1';
+}

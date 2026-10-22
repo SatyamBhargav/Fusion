@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../services/password_generator.dart';
+import '../security/password_strength.dart';
 import '../theme/theme.dart';
 import '../utils/utils.dart';
 import 'icons.dart';

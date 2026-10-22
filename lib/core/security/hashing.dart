@@ -15,6 +15,9 @@ String stretchHash(String salt, String secret) {
   return base64Encode(digest);
 }
 
+/// Hashes a secret with a salt. Swappable so tests needn't wait on isolates.
+typedef PasswordHasher = Future<String> Function(String salt, String secret);
+
 String _hashWorker(List<String> args) => stretchHash(args[0], args[1]);
 
 /// Runs [stretchHash] on a background isolate so the UI keeps animating.

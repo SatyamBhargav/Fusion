@@ -1,4 +1,5 @@
-import 'package:fusion/services/biometric_auth.dart';
+import 'package:fusion/features/app_lock/data/datasources/biometric_data_source.dart';
+import 'package:fusion/features/app_lock/domain/entities/biometric_kind.dart';
 
 class FakeBiometricAuth implements BiometricAuth {
   FakeBiometricAuth({this.kind = BiometricKind.face, this.result = true});
