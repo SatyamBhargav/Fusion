@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fusion/screens/settings_screen.dart';
+import 'package:fusion/services/app_lock_controller.dart';
 import 'package:fusion/services/auth_service.dart';
 import 'package:fusion/services/theme_controller.dart';
 import 'package:fusion/services/vault_store.dart';
@@ -10,13 +11,23 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
+import 'fakes.dart';
+
 Future<ThemeController> _pumpSettings(WidgetTester tester) async {
   final theme = ThemeController();
   await theme.init();
+  final auth = AuthService();
+  final lock = AppLockController(
+    auth: auth,
+    biometrics: FakeBiometricAuth(),
+    hasher: fastHash,
+  );
+  await lock.init();
   await tester.pumpWidget(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => AuthService()),
+        ChangeNotifierProvider<AuthService>.value(value: auth),
+        ChangeNotifierProvider<AppLockController>.value(value: lock),
         ChangeNotifierProvider(create: (_) => VaultStore()),
         ChangeNotifierProvider<ThemeController>.value(value: theme),
       ],

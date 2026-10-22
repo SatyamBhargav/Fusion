@@ -1,26 +1,14 @@
 import 'dart:convert';
 import 'dart:math' as math;
 
-import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import 'hashing.dart';
 import 'storage.dart';
 
 typedef AuthError = ({String field, String message});
 typedef ResetRequest = ({String? code, String? error});
-
-/// Runs on a background isolate so the UI keeps animating while hashing.
-String _hashWorker(List<String> args) {
-  final salt = args[0];
-  final password = args[1];
-  final bytes = utf8.encode('$salt::$password');
-  var digest = sha256.convert(bytes).bytes;
-  for (var i = 0; i < 20000; i++) {
-    digest = sha256.convert([...digest, ...bytes]).bytes;
-  }
-  return base64Encode(digest);
-}
 
 /// Local-only account: one master password per device, stored as a salted,
 /// stretched SHA-256 hash in secure storage. Nothing leaves the device.
@@ -33,6 +21,7 @@ class AuthService extends ChangeNotifier {
 
   bool _ready = false;
   bool _loggedIn = false;
+  bool _passwordVerified = false;
   String? _name;
   String? _email;
   String? _salt;
@@ -42,6 +31,10 @@ class AuthService extends ChangeNotifier {
 
   bool get ready => _ready;
   bool get loggedIn => _loggedIn;
+
+  /// True when this session was opened with the master password (not the
+  /// app lock), e.g. so a forgotten PIN can be replaced without the old one.
+  bool get passwordVerified => _loggedIn && _passwordVerified;
   bool get hasAccount => _hash != null;
   String? get name => _name;
   String? get email => _email;
@@ -66,20 +59,6 @@ class AuthService extends ChangeNotifier {
     }
     _ready = true;
     notifyListeners();
-  }
-
-  static String _newSalt() {
-    final r = math.Random.secure();
-    return base64UrlEncode(List<int>.generate(16, (_) => r.nextInt(256)));
-  }
-
-  static bool _equals(String a, String b) {
-    if (a.length != b.length) return false;
-    var diff = 0;
-    for (var i = 0; i < a.length; i++) {
-      diff |= a.codeUnitAt(i) ^ b.codeUnitAt(i);
-    }
-    return diff == 0;
   }
 
   static String _norm(String email) => email.trim().toLowerCase();
@@ -110,8 +89,8 @@ class AuthService extends ChangeNotifier {
         message: 'This device already has a Fusion vault. Log in instead.',
       );
     }
-    final salt = _newSalt();
-    final hash = await compute(_hashWorker, [salt, password]);
+    final salt = newSalt();
+    final hash = await hashInBackground(salt, password);
     final cleanName = name.trim();
     final cleanEmail = _norm(email);
     // Persist first; only update in-memory state once the write succeeded.
@@ -121,6 +100,7 @@ class AuthService extends ChangeNotifier {
     _salt = salt;
     _hash = hash;
     _loggedIn = true;
+    _passwordVerified = true;
     notifyListeners();
     return null;
   }
@@ -135,11 +115,12 @@ class AuthService extends ChangeNotifier {
     if (_norm(email) != _email) {
       return (field: 'email', message: 'That email doesn’t match this vault.');
     }
-    final hash = await compute(_hashWorker, [_salt!, password]);
-    if (!_equals(hash, _hash!)) {
+    final hash = await hashInBackground(_salt!, password);
+    if (!constantTimeEquals(hash, _hash!)) {
       return (field: 'password', message: 'Wrong master password. Try again.');
     }
     _loggedIn = true;
+    _passwordVerified = true;
     notifyListeners();
     return null;
   }
@@ -166,14 +147,14 @@ class AuthService extends ChangeNotifier {
     if (expected == null || expiry == null || DateTime.now().isAfter(expiry)) {
       return (field: 'code', message: 'That code has expired. Send a new one.');
     }
-    if (!_equals(code, expected)) {
+    if (!constantTimeEquals(code, expected)) {
       return (
         field: 'code',
         message: 'That code isn’t right. Check and try again.',
       );
     }
-    final salt = _newSalt();
-    final hash = await compute(_hashWorker, [salt, newPassword]);
+    final salt = newSalt();
+    final hash = await hashInBackground(salt, newPassword);
     await _save(name: _name, email: _email, salt: salt, hash: hash);
     _hash = hash;
     _salt = salt;
@@ -183,8 +164,17 @@ class AuthService extends ChangeNotifier {
     return null;
   }
 
+  /// Opens the vault after the app lock (PIN or biometrics) let the user in.
+  void unlockWithAppLock() {
+    if (!hasAccount || _loggedIn) return;
+    _loggedIn = true;
+    _passwordVerified = false;
+    notifyListeners();
+  }
+
   void logout() {
     _loggedIn = false;
+    _passwordVerified = false;
     notifyListeners();
   }
 
@@ -196,6 +186,7 @@ class AuthService extends ChangeNotifier {
     _salt = null;
     _hash = null;
     _loggedIn = false;
+    _passwordVerified = false;
     notifyListeners();
   }
 }

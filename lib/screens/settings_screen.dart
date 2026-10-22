@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
+import '../services/app_lock_controller.dart';
 import '../services/auth_service.dart';
+import '../services/biometric_auth.dart';
 import '../services/theme_controller.dart';
 import '../services/vault_store.dart';
 import '../theme.dart';
@@ -10,6 +12,7 @@ import '../widgets/components.dart';
 import '../widgets/feedback.dart';
 import '../widgets/icons.dart';
 import '../widgets/motion.dart';
+import 'app_lock_setup_screen.dart';
 import 'home_shell.dart';
 
 /// Order of the appearance toggle's segments.
@@ -24,6 +27,9 @@ class SettingsScreen extends StatelessWidget {
     final auth = context.watch<AuthService>();
     final store = context.watch<VaultStore>();
     final theme = context.watch<ThemeController>();
+    final lock = context.watch<AppLockController>();
+    final hasBiometric = lock.biometricKind != BiometricKind.none;
+    final bioLabel = lock.biometricKind.label;
     final name = (auth.name ?? '').trim();
     final initial = name.isEmpty ? 'F' : name.substring(0, 1).toUpperCase();
     final count = store.items.length;
@@ -244,12 +250,69 @@ class SettingsScreen extends StatelessWidget {
               ),
               child: Column(
                 children: [
+                  if (hasBiometric) ...[
+                    _SwitchRow(
+                      icon: lock.biometricKind == BiometricKind.face
+                          ? FIcons.faceId
+                          : FIcons.fingerprint,
+                      title: 'Unlock with $bioLabel',
+                      subtitle: 'Skip typing your PIN',
+                      value: lock.biometricEnabled,
+                      onChanged: (on) async {
+                        final messenger = ScaffoldMessenger.of(context);
+                        if (!on) {
+                          await lock.setBiometric(false);
+                          return;
+                        }
+                        final ok = await lock.confirmBiometric(
+                          'Turn on $bioLabel for Fusion',
+                        );
+                        if (ok) {
+                          await lock.setBiometric(true);
+                        } else {
+                          showFusionToastOn(
+                            messenger,
+                            'Couldn’t verify $bioLabel',
+                            icon: FIcons.info,
+                          );
+                        }
+                      },
+                    ),
+                    Divider(height: 1, color: fc.divider),
+                  ],
+                  _SettingsRow(
+                    icon: FIcons.key,
+                    title: 'Change PIN',
+                    subtitle: 'Pick a new 6-digit PIN',
+                    onTap: () => Navigator.of(
+                      context,
+                    ).push(fusionRoute(const AppLockSetupScreen(change: true))),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          FadeSlideIn(
+            delay: const Duration(milliseconds: 300),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+              decoration: BoxDecoration(
+                color: fc.surface,
+                borderRadius: BorderRadius.circular(22),
+                border: Border.all(color: fc.line, width: 1.5),
+              ),
+              child: Column(
+                children: [
                   _SettingsRow(
                     icon: FIcons.lock,
                     title: 'Lock vault',
-                    subtitle: 'Ask for your master password again',
+                    subtitle: lock.canUseBiometric
+                        ? 'Ask for your PIN or $bioLabel'
+                        : 'Ask for your PIN',
                     onTap: () {
                       context.read<VaultStore>().reset();
+                      lock.skipNextAutoPrompt();
                       context.read<AuthService>().logout();
                     },
                   ),
@@ -281,7 +344,7 @@ class SettingsScreen extends StatelessWidget {
           ),
           const SizedBox(height: 28),
           const FadeSlideIn(
-            delay: Duration(milliseconds: 300),
+            delay: Duration(milliseconds: 360),
             child: _VersionLabel(),
           ),
         ],
@@ -321,6 +384,61 @@ class _VersionLabelState extends State<_VersionLabel> {
           ],
         );
       },
+    );
+  }
+}
+
+/// A settings row ending in a switch; tapping anywhere on it toggles.
+class _SwitchRow extends StatelessWidget {
+  const _SwitchRow({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.value,
+    required this.onChanged,
+  });
+
+  final String icon;
+  final String title;
+  final String subtitle;
+  final bool value;
+  final ValueChanged<bool> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final fc = context.fc;
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () => onChanged(!value),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: Row(
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: fc.violetTint,
+                borderRadius: BorderRadius.circular(13),
+              ),
+              child: FIcon(icon, size: 19, color: fc.violet),
+            ),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(title, style: FT.body(15, weight: FontWeight.w700)),
+                  const SizedBox(height: 2),
+                  Text(subtitle, style: FT.body(13, color: fc.muted)),
+                ],
+              ),
+            ),
+            FusionSwitch(value: value, onChanged: onChanged, label: title),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
+import '../services/app_lock_controller.dart';
 import '../services/auth_service.dart';
 import '../theme.dart';
 import '../utils.dart';
@@ -89,6 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     final fc = context.fc;
     final auth = context.watch<AuthService>();
+    final lock = context.watch<AppLockController>();
     final canPop = Navigator.of(context).canPop();
     final first = auth.firstName;
 
@@ -210,6 +212,17 @@ class _LoginScreenState extends State<LoginScreen> {
                             onTap: _submit,
                           ),
                         ),
+                        if (lock.masterPasswordRequested &&
+                            lock.hasPin &&
+                            !lock.pinLockedOut) ...[
+                          const SizedBox(height: 8),
+                          Center(
+                            child: TextLink(
+                              'Unlock with PIN instead',
+                              onTap: lock.cancelMasterPassword,
+                            ),
+                          ),
+                        ],
                         const SizedBox(height: 32),
                         if (!auth.hasAccount)
                           Center(

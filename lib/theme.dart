@@ -324,6 +324,16 @@ SystemUiOverlayStyle statusBarFor(BuildContext context) =>
     ? lightStatusBar
     : darkStatusBar;
 
+/// Closes [route] even if something (like the app lock) was pushed over it
+/// while it was busy: pops when on top, otherwise removes just that route.
+void closeRoute<T>(NavigatorState nav, Route<T> route, [T? result]) {
+  if (route.isCurrent) {
+    nav.pop(result);
+  } else if (route.isActive) {
+    nav.removeRoute(route, result);
+  }
+}
+
 /// The house page transition: a short slide + fade.
 Route<T> fusionRoute<T>(Widget page) {
   return PageRouteBuilder<T>(

@@ -101,6 +101,7 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
 
     final store = context.read<VaultStore>();
     final nav = Navigator.of(context);
+    final route = ModalRoute.of(context);
     final messenger = ScaffoldMessenger.of(context);
     final isPassword = _kind == LoginKind.password;
     final item = VaultItem(
@@ -135,7 +136,8 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
     }
     if (!mounted) return;
     HapticFeedback.mediumImpact();
-    nav.pop();
+    // The app lock may have been pushed over this screen during the save.
+    if (route != null) closeRoute(nav, route);
     showFusionToastOn(
       messenger,
       _isEdit ? 'Changes saved' : '${item.name} saved to vault',

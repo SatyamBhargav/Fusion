@@ -55,6 +55,12 @@ class FIcons {
       '<path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/>';
   static const contrast =
       '<circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="#000000"/>';
+  static const fingerprint =
+      '<path d="M12 10a2 2 0 0 0-2 2c0 1-.1 2.5-.26 4"/><path d="M14 13.1c0 2.4 0 6.4-1 8.9"/><path d="M17.3 21c.1-.6.4-2.3.5-3"/><path d="M2 12a10 10 0 0 1 18-6"/><path d="M2 16h.01"/><path d="M21.8 16c.2-2 .1-5.4 0-6"/><path d="M5 19.5C5.5 18 6 15 6 12a6 6 0 0 1 .34-2"/><path d="M8.65 22c.2-.66.45-1.3.57-2"/><path d="M9 6.8a6 6 0 0 1 9 5.2v2"/>';
+  static const faceId =
+      '<path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01M15 9h.01"/>';
+  static const backspace =
+      '<path d="M9 5h11a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H9l-6-7z"/><path d="M12 9l6 6M18 9l-6 6"/>';
 }
 
 class FIcon extends StatelessWidget {
