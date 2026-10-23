@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:fusion/services/hashing.dart';
+import 'package:fusion/core/security/hashing.dart';
 
 void main() {
   group('stretchHash', () {
